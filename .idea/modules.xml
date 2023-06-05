@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../AgoraNatura/agora_natura/.idea/agora_natura.iml" filepath="$PROJECT_DIR$/../../AgoraNatura/agora_natura/.idea/agora_natura.iml" />
+      <module fileurl="file://$USER_HOME$/MONICA/hohenfinow/.idea/hohenfinow.iml" filepath="$USER_HOME$/MONICA/hohenfinow/.idea/hohenfinow.iml" />
+      <module fileurl="file://$USER_HOME$/MONICA/hohenheim/.idea/hohenheim.iml" filepath="$USER_HOME$/MONICA/hohenheim/.idea/hohenheim.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/klimertrag.iml" filepath="$PROJECT_DIR$/.idea/klimertrag.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../scripts/.idea/scripts.iml" filepath="$PROJECT_DIR$/../scripts/.idea/scripts.iml" />
+    </modules>
+  </component>
+</project>
