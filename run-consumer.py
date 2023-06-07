@@ -34,6 +34,11 @@ import soil_io3
 import monica_run_lib as Mrunlib
 
 PATHS = {
+    "cj-local-remote": {
+        "path-to-data-dir": "data/",
+        "path-to-output-dir": "D:/projects/KlimErtrag/out_remote_local/",
+        "path-to-csv-output-dir": "D:/projects/KlimErtrag/out_remote_local/"
+    },
     "mbm-local-remote": {
         "path-to-data-dir": "data/",
         "path-to-output-dir": "out/",
@@ -51,34 +56,28 @@ TEMPLATE_LANDUSE_PATH = "{local_path_to_data_dir}germany/landuse_1000_31469_gk5.
 USE_LANDUSE = False
 
 def create_output(msg):
-    indexval_and_section_to_vals = defaultdict(dict)
+    cm_count_to_vals = defaultdict(dict)
     for data in msg.get("data", []):
         results = data.get("results", [])
 
-        is_crop_section = data.get("origSpec", "") == '"crop"'
         is_daily_section = data.get("origSpec", "") == '"daily"'
-        is_yearly_section = data.get("origSpec", "") == '"yearly"'
 
         for vals in results:
-            if is_crop_section and "CM-count" in vals and "Year" in vals:
-                indexval_and_section_to_vals[(f'{vals["CM-count"]}_Year_{vals["Year"]}', "season")].update(vals)
-            elif is_daily_section and "Date" in vals:
-                indexval_and_section_to_vals[(vals["Date"], "daily")].update(vals)
-            elif is_yearly_section and "Year" in vals:
-                indexval_and_section_to_vals[(vals["Year"], "yearly")].update(vals)
-            elif "Year" in vals:
-                indexval_and_section_to_vals[(f'Year_{vals["Year"]}', "undef")].update(vals)
+            if "CM-count" in vals:
+                cm_count_to_vals[vals["CM-count"]].update(vals)
+            elif is_daily_section:
+                cm_count_to_vals[vals["Date"]].update(vals)
 
-    #cmcs = list([t[0] for t in cm_count_to_vals.keys()])
-    #cmcs.sort()
-    #last_cmc = cmcs[-1]
-    #if "Year" not in cm_count_to_vals[last_cmc]:
-    #    cm_count_to_vals.pop(last_cmc)
+    cmcs = list(cm_count_to_vals.keys())
+    cmcs.sort()
+    last_cmc = cmcs[-1]
+    if "year" not in cm_count_to_vals[last_cmc]:
+        cm_count_to_vals.pop(last_cmc)
 
-    return indexval_and_section_to_vals
+    return cm_count_to_vals
 
 
-def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, path_to_csv_output_dir, setup_id, is_bgr, is_yields):
+def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, path_to_csv_output_dir, setup_id, is_bgr, is_yields, is_pheno):
     "write grids row by row"
     
     if not hasattr(write_row_to_grids, "nodata_row_count"):
@@ -90,15 +89,23 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
     if is_bgr:
         output_grids = {}
         for i in range(1,21):
-            output_grids[(f'Mois_{i}', "daily")] = {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4}
-            output_grids[(f'STemp_{i}', "daily")] = {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4}
+            output_grids[f'Mois_{i}'] = {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4}
+            output_grids[f'STemp_{i}'] = {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4}
         output_keys = ["Mois", "STemp"]
     elif is_yields:
         output_grids = {
-            ("Yield", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
-            ("Act_ET_sum_year", "yearly"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
-            ("Act_ET_sum_march_to_july", "undef"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
-            #"TraDef": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "Yield": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1}
+            # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "oxredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "precipsum": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "nstressavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "heatredlast": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "frostredlast": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2}
+            # "nstresslast": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "oxredlast": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "tradeflast": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2}
             #"HeatRed": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             #"FrostRed": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             #"Yield-31-7": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
@@ -111,100 +118,115 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
             #"Pot_ET": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1}
         }
         output_keys = list(output_grids.keys())
+    elif is_pheno:
+        output_grids = {
+            # "Yield": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
+            # "sdoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s1doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s2doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "sedoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s3doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s4doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s5doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            # "s6doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s7doy": {"data" : make_dict_nparr(), "cast-to": "int"}
+            # "hdoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+        }
+        output_keys = list(output_grids.keys())
     else:
         output_grids = {
-            ("Yield", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
+            # "Yield": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 1},
             
-            ("sdoy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("ssm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("ssm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("ssm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "sdoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "ssm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "ssm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "ssm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
             
-            ("s2doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s2sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s2sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s2sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s2doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s2sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s2sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s2sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("sedoy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("sesm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("sesm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("sesm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "sedoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "sesm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "sesm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "sesm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("s3doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s3sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s3sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s3sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s3doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s3sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s3sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s3sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("s4doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s4sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s4sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s4sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s4doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s4sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s4sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s4sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("s5doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s5sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s5sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s5sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s5doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s5sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s5sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s5sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("s6doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s6sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s6sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s6sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s6doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s6sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s6sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s6sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("s7doy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("s7sm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s7sm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("s7sm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "s7doy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "s7sm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s7sm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "s7sm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
 
-            ("hdoy", "season"): {"data" : make_dict_nparr(), "cast-to": "int"},
-            ("hsm03", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("hsm36", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
-            ("hsm69", "season"): {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            # "hdoy": {"data" : make_dict_nparr(), "cast-to": "int"},
+            "hsm03": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "hsm36": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
+            "hsm69": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 4},
         }
         output_keys = list(output_grids.keys())
 
-    indexval_and_section_to_crop = {}
+    cmc_to_crop = {}
 
     is_no_data_row = True
     # skip this part if we write just a nodata line
     if row in row_col_data:
-        no_data_cols = 0
+        no_data_cols = ncols
         for col in range(0, ncols):
             if col in row_col_data[row]:
                 rcd_val = row_col_data[row][col]
                 if rcd_val == -9999:
-                    no_data_cols += 1
                     continue
                 else:
-                    indexval_and_section_to_vals = defaultdict(lambda: defaultdict(list))
+                    no_data_cols -= 1
+                    cmc_and_year_to_vals = defaultdict(lambda: defaultdict(list))
                     for cell_data in rcd_val:
                         # if we got multiple datasets per cell, iterate over them and aggregate them in the following step
-                        for (indexval, section), data in cell_data.items():
-                            for key in [key for (key, sec) in output_keys if sec == section]:
+                        for cm_count, data in cell_data.items():
+                            for key in output_keys:
                                 # store mapping cm_count to crop name for later file name creation
-                                if (indexval, section) not in indexval_and_section_to_crop and "Crop" in data:
-                                    indexval_and_section_to_crop[(indexval, section)] = data["Crop"]
+                                if cm_count not in cmc_to_crop and "Crop" in data:
+                                    cmc_to_crop[cm_count] = data["Crop"]
 
                                 # only further process/store data we actually received
                                 if key in data:
                                     v = data[key]
                                     if isinstance(v, list):
                                         for i, v_ in enumerate(v):
-                                            indexval_and_section_to_vals[(indexval, section)][f'{key}_{i+1}'].append(v_)
+                                            cmc_and_year_to_vals[(cm_count, data["Year"])][f'{key}_{i+1}'].append(v_)
                                     else:
-                                        indexval_and_section_to_vals[(indexval, section)][key].append(v)
+                                        cmc_and_year_to_vals[(cm_count, data["Year"])][key].append(v)
                                 # if a key is missing, because that monica event was never raised/reached, create the empty list
                                 # so a no-data value is being produced
                                 else:
-                                    indexval_and_section_to_vals[(indexval, section)][key]
+                                    cmc_and_year_to_vals[(cm_count, data["Year"])][key]
 
                     # potentially aggregate multiple data per cell and finally store them for this row
-                    for (indexval, section), key_to_vals in indexval_and_section_to_vals.items():
+                    for (cm_count, year), key_to_vals in cmc_and_year_to_vals.items():
                         for key, vals in key_to_vals.items():
-                            output_vals = output_grids[(key, section)]["data"]
+                            output_vals = output_grids[key]["data"]
                             if len(vals) > 0:
-                                output_vals[indexval][col] = sum(vals) / len(vals)
+                                output_vals[(cm_count, year)][col] = sum(vals) / len(vals)
                             else:
-                                output_vals[indexval][col] = -9999
+                                output_vals[(cm_count, year)][col] = -9999
 
         is_no_data_row = no_data_cols == ncols
 
@@ -217,7 +239,7 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
             file_.write(rowstr +  "\n")
 
     # iterate over all prepared data for a single row and write row
-    for (key, section), y2d_ in output_grids.items():
+    for key, y2d_ in output_grids.items():
         y2d = y2d_["data"]
         cast_to = y2d_["cast-to"]
         digits = y2d_.get("digits", 0)
@@ -226,10 +248,10 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
         else:
             mold = lambda x: str(round(x, digits))
 
-        for indexval, row_arr in y2d.items():
-            crop = indexval_and_section_to_crop[(indexval, section)] + "_" if (indexval, section) in indexval_and_section_to_crop else ""    
+        for (cm_count, year), row_arr in y2d.items():
+            crop = cmc_to_crop[cm_count] if cm_count in cmc_to_crop else "none"    
             crop = crop.replace("/", "").replace(" ", "")
-            path_to_file = path_to_output_dir + crop + key + "_" + str(indexval) + ".asc"
+            path_to_file = path_to_output_dir + crop + "_" + key + "_" + str(year) + "_" + str(cm_count) + ".asc"
 
             if not os.path.isfile(path_to_file):
                 with open(path_to_file, "w") as _:
@@ -264,8 +286,8 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
     "collect data from workers"
 
     config = {
-        "mode": "mbm-local-remote",
-        "port": server["port"] if server["port"] else "7777",
+        "mode": "mbm-local-remote",  ## remote "mbm-local-remote", local "cj-local-remote"
+        "port": server["port"] if server["port"] else "7777", ## local 7778,  remote 7777
         "server": server["server"] if server["server"] else "login01.cluster.zalf.de", 
         "start-row": "0",
         "end-row": "-1",
@@ -381,6 +403,7 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
             is_bgr = custom_id["bgr"]
             is_yields = custom_id["yields"]
             is_nodata = custom_id["nodata"]
+            is_pheno = custom_id["pheno"]
 
             data = setup_id_to_data[setup_id]
 
@@ -404,10 +427,12 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
 
             process_message.received_env_count = process_message.received_env_count + 1
 
-            while data["next-row"] in data["row-col-data"] and data["datacell-count"][data["next-row"]] == 0:
+            while (data["next-row"] in data["row-col-data"] and data["datacell-count"][data["next-row"]] == 0) \
+                or (len(data["datacell-count"]) > data["next-row"] and data["datacell-count"][data["next-row"]] == 0):
                 
                 path_to_out_dir = config["out"] + str(setup_id) + "/"
                 path_to_csv_out_dir = config["csv-out"] + str(setup_id) + "/"
+                print(path_to_out_dir)
                 if not data["out_dir_exists"]:
                     if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
                         data["out_dir_exists"] = True
@@ -429,7 +454,7 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
                             exit(1)
                 
                 write_row_to_grids(data["row-col-data"], data["next-row"], data["ncols"], data["header"], \
-                    path_to_out_dir, path_to_csv_out_dir, setup_id, is_bgr, is_yields)
+                    path_to_out_dir, path_to_csv_out_dir, setup_id, is_bgr, is_yields, is_pheno)
                 
                 debug_msg = "wrote row: "  + str(data["next-row"]) + " next-row: " + str(data["next-row"]+1) + " rows unwritten: " + str(list(data["row-col-data"].keys()))
                 print(debug_msg)
@@ -461,6 +486,7 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
             process_message.wnof_count += 1
 
             path_to_out_dir = config["out"] + str(setup_id) + "/" + str(row) + "/"
+            print(path_to_out_dir)
             if not os.path.exists(path_to_out_dir):
                 try:
                     os.makedirs(path_to_out_dir)
@@ -470,8 +496,8 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
 
             #with open("out/out-" + str(i) + ".csv", 'wb') as _:
             with open(path_to_out_dir + "col-" + str(col) + ".csv", "w", newline='') as _:
-                writer = csv.writer(_, delimiter=",")
 
+                writer = csv.writer(_, delimiter=",")
                 for data_ in msg.get("data", []):
                     results = data_.get("results", [])
                     orig_spec = data_.get("origSpec", "")
@@ -499,7 +525,7 @@ def run_consumer(leave_after_finished_run = True, server = {"server": None, "por
     while not leave:
         try:
             #start_time_recv = timeit.default_timer()
-            msg = socket.recv_json(encoding="latin-1")
+            msg = socket.recv_json() #encoding="latin-1"
             #elapsed = timeit.default_timer() - start_time_recv
             #print("time to receive message" + str(elapsed))
             #start_time_proc = timeit.default_timer()
