@@ -40,7 +40,8 @@ PATHS = {
     # adjust the local path to your environment
     "mbm-local-remote": {
         "path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",  # mounted path to archive or hard drive with climate data
-        "path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        #"path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "path-to-soil-dir": "/home/berg/Desktop/soil/",
         "monica-path-to-climate-dir": "/monica_data/climate-data/",  # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
@@ -61,12 +62,12 @@ TEMPLATE_PATH_CLIMATE_CSV = "{gcm}/{rcm}/{scenario}/{ensmem}/{version}/row-{crow
 def run_producer(server = {"server": None, "port": None}):
 
     context = zmq.Context()
-    socket = context.socket(zmq.PUSH) # pylint: disable=no-member
+    socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
-        "mode": "mbm-local-remote", ## local:"cj-local-remote" remote "mbm-local-remote"
-        "server-port": server["port"] if server["port"] else "6666", ## local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
+        "mode": "mbm-local-remote",  # local:"cj-local-remote" remote "mbm-local-remote"
+        "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
+        "server": server["server"] if server["server"] else "localhost",  #"login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
@@ -74,11 +75,11 @@ def run_producer(server = {"server": None, "port": None}):
         "region": "nigeria",
         "resolution": "5min",  #30sec,
         "path_to_dem_grid": "",
-        "sim.json": "sim_final.json",
-        "crop.json": "crop_final.json",
+        "sim.json": "sim.json",
+        "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_final.csv",
-        "run-setups": "[1]"
+        "setups-file": "sim_setups.csv",
+        "run-setups": "[0]"
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -97,10 +98,10 @@ def run_producer(server = {"server": None, "port": None}):
         "nigeria": {"tl": {"lat": 14.75, "lon": 1.75}, "br": {"lat": 3.25, "lon": 16.25}},
         "africa": {"tl": {"lat": 14.75, "lon": 1.75}, "br": {"lat": 3.25, "lon": 16.25}},
         "earth": {
-            "5_min": {"tl": {"lat": 83.95833588, "lon": -179.95832825},
-                      "br": {"lat": -55.95833206, "lon": 179.50000000}},
-            "30_sec": {"tl": {"lat": 83.99578094, "lon": -179.99583435},
-                       "br": {"lat": -55.99583435, "lon": 179.99568176}}
+            "5min": {"tl": {"lat": 83.95833588, "lon": -179.95832825},
+                     "br": {"lat": -55.95833206, "lon": 179.50000000}},
+            "30sec": {"tl": {"lat": 83.99578094, "lon": -179.99583435},
+                      "br": {"lat": -55.99583435, "lon": 179.99568176}}
         }
     }
 
@@ -155,8 +156,8 @@ def run_producer(server = {"server": None, "port": None}):
     path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
     if config["resolution"] == "5min":
         soil_data = {
-            "sand": {"var": "SAND", "file": "Sand5min.nc", "conv_factor": 0.01},  # % -> fraction
-            "clay": {"var": "CLAY", "file": "Clay5min.nc", "conv_factor": 1000.0},  # % -> fraction
+            "sand": {"var": "SAND", "file": "SAND5min.nc", "conv_factor": 0.01},  # % -> fraction
+            "clay": {"var": "CLAY", "file": "CLAY5min.nc", "conv_factor": 0.01},  # % -> fraction
             "corg": {"var": "OC", "file": "OC5min.nc", "conv_factor": 0.01},  # scale factor
             "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0}  # scale factor * 1 g/cm3 = 1000 kg/m3
         }
@@ -172,14 +173,20 @@ def run_producer(server = {"server": None, "port": None}):
     def create_soil_profile(row, col):
         # skip first 4.5cm layer and just use 7 layers
         layers = []
+
+        # find the fill value for the soil data
+        fill_value = soil_vars["sand"].getncattr("missing_value")
+        if soil_vars["sand"][0, row, col] == fill_value:
+            return None
+
         for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
                                                  (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 70)][1:]:
             layers.append({
                 "Thickness": [monica_depth_m, "m"],
-                "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * 0.01, "%"],
-                "SoilBulkDensity": [soil_vars["bd"][i, row, col] * 0.01 * soil_data["bd"]["conv_factor"], "%"],
-                "Sand": [soil_vars["sand"][i, row, col] * soil_data["bd"]["conv_factor"], "%"],
-                "Clay": [soil_vars["clay"][i, row, col] * soil_data["bd"]["conv_factor"], "%"]
+                "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * soil_data["corg"]["conv_factor"], "%"],
+                "SoilBulkDensity": [soil_vars["bd"][i, row, col] * soil_data["bd"]["conv_factor"], "kg m-3"],
+                "Sand": [soil_vars["sand"][i, row, col] * soil_data["sand"]["conv_factor"], "fraction"],
+                "Clay": [soil_vars["clay"][i, row, col] * soil_data["clay"]["conv_factor"], "fraction"]
             })
         return layers
 
@@ -235,26 +242,46 @@ def run_producer(server = {"server": None, "port": None}):
         s_lat_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lat"]
         s_lon_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lon"]
 
-        for lat_scaled in range(int(lat_lon_bounds["tl"]["lat"] * s_res_scale_factor),
-                                int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) - 1,
-                                -int(s_resolution * s_res_scale_factor)):
+        lats_scaled = range(int(lat_lon_bounds["tl"]["lat"] * s_res_scale_factor),
+                            int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) - 1,
+                            -int(s_resolution * s_res_scale_factor))
+        no_of_lats = len(lats_scaled)
+        s_row_0 = int((s_lat_0 - (lats_scaled[0] / s_res_scale_factor)) / s_resolution)
+        for lat_scaled in lats_scaled:
             lat = lat_scaled / s_res_scale_factor
 
             print(lat,)
 
-            for lon_scaled in range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
-                                    int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) + 1,
-                                    int(s_resolution * s_res_scale_factor)):
+            lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
+                                int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) + 1,
+                                int(s_resolution * s_res_scale_factor))
+            no_of_lons = len(lons_scaled)
+            s_col_0 = int(((lons_scaled[0] / s_res_scale_factor) - s_lon_0) / s_resolution)
+            for lon_scaled in lons_scaled:
                 lon = lon_scaled / s_res_scale_factor
                 print(lon,)
 
                 c_col = int((lon - c_lon_0) / c_resolution)
-                c_row = int((lat - c_lat_0) / c_resolution)
+                c_row = int((c_lat_0 - lat) / c_resolution)
 
                 s_col = int((lon - s_lon_0) / s_resolution)
-                s_row = int((lat - s_lat_0) / s_resolution)
+                s_row = int((s_lat_0 - lat) / s_resolution)
 
                 soil_profile = create_soil_profile(s_row, s_col)
+                if soil_profile is None:
+                    env_template["customId"] = {
+                        "setup_id": setup_id,
+                        "lat": lat, "lon": lon,
+                        "no_of_lons": no_of_lons, "no_of_lats": no_of_lats,
+                        "s_row": s_row, "s_col": s_col,
+                        "s_row_0": s_row_0, "s_col_0": s_col_0,
+                        "c_row": int(c_row), "c_col": int(c_col),
+                        "env_id": sent_env_count,
+                        "nodata": True
+                    }
+                    socket.send_json(env_template)
+                    continue
+
 
                 height_nn = 100  #dem_interpolate(demr, demh)
                 slope = 0.1  #slope_interpolate(slr, slh)
@@ -294,6 +321,7 @@ def run_producer(server = {"server": None, "port": None}):
                 env_template["customId"] = {
                     "setup_id": setup_id,
                     "lat": lat, "lon": lon,
+                    "no_of_lons": no_of_lons, "no_of_lats": no_of_lats,
                     "srow": s_row, "scol": s_col,
                     "crow": int(c_row), "ccol": int(c_col),
                     "env_id": sent_env_count,

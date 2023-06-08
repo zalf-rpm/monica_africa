@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="Add script for final plots of report">
+    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="dev dump">
+      <change afterPath="$PROJECT_DIR$/sim_setups_.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crop.json" beforeDir="false" afterPath="$PROJECT_DIR$/crop.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crop_final.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-consumer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-consumer_final.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-producer_final.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim.json" beforeDir="false" afterPath="$PROJECT_DIR$/sim.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim_final.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim_setups.csv" beforeDir="false" afterPath="$PROJECT_DIR$/sim_setups.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim_setups_final.csv" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,18 +51,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "configurable.group.project",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\projects\KlimErtrag\klimertrag" />
@@ -115,7 +120,8 @@
       <workItem from="1648556161846" duration="886000" />
       <workItem from="1648734942688" duration="6905000" />
       <workItem from="1685969864637" duration="312000" />
-      <workItem from="1685970189390" duration="16614000" />
+      <workItem from="1685970189390" duration="22532000" />
+      <workItem from="1686232600652" duration="4863000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -131,7 +137,14 @@
       <option name="project" value="LOCAL" />
       <updated>1647422086408</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="dev dump">
+      <created>1686154225505</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1686154225505</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -151,9 +164,22 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add analysis scripts and necessary reference data" />
     <MESSAGE value="Add script for final plots of report" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add script for final plots of report" />
+    <MESSAGE value="dev dump" />
+    <option name="LAST_COMMIT_MESSAGE" value="dev dump" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run-producer.py</url>
+          <line>190</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1686231558202" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$prepare_input_files.coverage" NAME="prepare_input_files Coverage Results" MODIFIED="1645540979552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$dummy.coverage" NAME="dummy Coverage Results" MODIFIED="1647616452099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
