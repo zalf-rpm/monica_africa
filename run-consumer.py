@@ -63,13 +63,13 @@ def create_output(msg):
     cmcs = list(cm_count_to_vals.keys())
     cmcs.sort()
     last_cmc = cmcs[-1]
-    if "year" not in cm_count_to_vals[last_cmc]:
+    if "Year" not in cm_count_to_vals[last_cmc]:
         cm_count_to_vals.pop(last_cmc)
 
     return cm_count_to_vals
 
 
-def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, path_to_csv_output_dir, setup_id):
+def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, path_to_csv_output_dir, setup_id):
     "write grids row by row"
 
     if not hasattr(write_row_to_grids, "nodata_row_count"):
@@ -77,7 +77,7 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
         write_row_to_grids.list_of_output_files = defaultdict(list)
 
     def make_dict_nparr():
-        return defaultdict(lambda: np.full((ncols,), -9999, dtype=np.float))
+        return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=np.float))
 
     output_grids = {
         "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 1}
@@ -92,8 +92,8 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
     is_no_data_row = True
     # skip this part if we write just a nodata line
     if row in row_col_data:
-        no_data_cols = ncols
-        for col in range(0, ncols):
+        no_data_cols = no_of_cols
+        for col in range(col_0, col_0 + no_of_cols + 1):
             if col in row_col_data[row]:
                 rcd_val = row_col_data[row][col]
                 if rcd_val == -9999:
@@ -114,7 +114,7 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
                                     v = data[key]
                                     if isinstance(v, list):
                                         for i, v_ in enumerate(v):
-                                            cmc_and_year_to_vals[(cm_count, data["Year"])][f'{key}_{i + 1}'].append(v_)
+                                            cmc_and_year_to_vals[(cm_count, data["Year"])][f"{key}_{i + 1}"].append(v_)
                                     else:
                                         cmc_and_year_to_vals[(cm_count, data["Year"])][key].append(v)
                                 # if a key is missing, because that monica event was never raised/reached, create the empty list
@@ -127,18 +127,18 @@ def write_row_to_grids(row_col_data, row, ncols, header, path_to_output_dir, pat
                         for key, vals in key_to_vals.items():
                             output_vals = output_grids[key]["data"]
                             if len(vals) > 0:
-                                output_vals[(cm_count, year)][col] = sum(vals) / len(vals)
+                                output_vals[(cm_count, year)][col - col_0] = sum(vals) / len(vals)
                             else:
-                                output_vals[(cm_count, year)][col] = -9999
+                                output_vals[(cm_count, year)][col - col_0] = -9999
 
-        is_no_data_row = no_data_cols == ncols
+        is_no_data_row = no_data_cols == no_of_cols
 
     if is_no_data_row:
         write_row_to_grids.nodata_row_count[setup_id] += 1
 
     def write_nodata_rows(file_):
         for _ in range(write_row_to_grids.nodata_row_count[setup_id]):
-            rowstr = " ".join(["-9999" for __ in range(ncols)])
+            rowstr = " ".join(["-9999" for __ in range(no_of_cols)])
             file_.write(rowstr + "\n")
 
     # iterate over all prepared data for a single row and write row
@@ -220,13 +220,13 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
 
     header = ""
     setup_id_to_data = defaultdict(lambda: {
-        "no_of_lons": None,
-        "no_of_lats": None,
+        "no_of_cols": None,
+        "no_of_rows": None,
         "header": header,
         "out_dir_exists": False,
-        "row-col-data": defaultdict(lambda: defaultdict(list)),
-        "lons_received": {},
-        "next_lat": None
+        "row_col_data": defaultdict(lambda: defaultdict(list)),
+        "cols@row_received": {},
+        "next_row": None
     })
 
     def process_message(msg):
@@ -250,30 +250,35 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
             col = custom_id["s_col"]
             lat = custom_id["lat"]
             lon = custom_id["lon"]
-            no_of_lons = custom_id["no_of_lons"]
-            no_of_lats = custom_id["no_of_lats"]
-            if lat not in data["lons_received"]:
-                data["lons_received"][lat] = 1
+            no_of_cols = custom_id["no_of_s_cols"]
+            no_of_rows = custom_id["no_of_s_rows"]
+            row_0 = custom_id["s_row_0"]
+            col_0 = custom_id["s_col_0"]
+            if row not in data["cols@row_received"]:
+                data["cols@row_received"][row] = 0
             if data["next_row"] is None:
-                data["next_row"] = custom_id["s_row_0"]
+                data["next_row"] = row_0
             is_nodata = custom_id["nodata"]
 
-            debug_msg = "received work result " + str(process_message.received_env_count) + " customId: " + str(
-                msg.get("customId", "")) + " next lat: " + str(data["next_lat"]) \
-                        + " lons@lat to go: " + str(no_of_lons - data["lons_received"]) + "@" \
-                        + str(lat) + " lons_per_lat: " + str(no_of_lons)
+            debug_msg = "received work result " + str(process_message.received_env_count) \
+                        + " customId: " + str(msg.get("customId", "")) \
+                        + " next row: " + str(data["next_row"]) \
+                        + " cols@row to go: " + str(no_of_cols - data["cols@row_received"][row]) + "@" \
+                        + str(row) + " cols_per_row: " + str(no_of_cols)
             print(debug_msg)
             # debug_file.write(debug_msg + "\n")
             if is_nodata:
-                data["row-col-data"][row][col] = -9999
+                data["row_col_data"][row][col] = -9999
             else:
-                data["row-col-data"][row][col].append(create_output(msg))
-            data["lons_received"] += 1
+                data["row_col_data"][row][col].append(create_output(msg))
+            data["cols@row_received"][row] += 1
 
             process_message.received_env_count = process_message.received_env_count + 1
 
-            while (data["next_row"] in data["row-col-data"] and data["lons_received"][data["next_row"]] == no_of_lons) \
-                    or (len(data["lons_received"]) > data["next_row"] and data["lons_received"][data["next_row"]] == 0):
+            while (data["next_row"] in data["row_col_data"] and
+                   data["cols@row_received"][data["next_row"]] == no_of_cols):   #\
+                    #or (len(data["cols@row_received"]) > data["next_row"] and
+                    #    data["cols@row_received"][data["next_row"]] == 0):
 
                 path_to_out_dir = config["out"] + str(setup_id) + "/"
                 path_to_csv_out_dir = config["csv-out"] + str(setup_id) + "/"
@@ -298,17 +303,19 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                             print("c: Couldn't create dir:", path_to_csv_out_dir, "! Exiting.")
                             exit(1)
 
-                write_row_to_grids(data["row-col-data"], data["next_row"], no_of_lons, data["header"],
+                write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
                                    path_to_out_dir, path_to_csv_out_dir, setup_id)
 
-                debug_msg = "wrote row: " + str(data["next_row"]) + " next_row: " + str(
-                    data["next_row"] + 1) + " rows unwritten: " + str(list(data["row-col-data"].keys()))
+                debug_msg = "wrote row: " + str(data["next_row"]) \
+                            + " next_row: " + str(data["next_row"] + 1) \
+                            + " rows unwritten: " + str(list(data["row_col_data"].keys()))
                 print(debug_msg)
                 # debug_file.write(debug_msg + "\n")
 
                 data["next_row"] += 1  # move to next row (to be written)
 
-                if leave_after_finished_run and data["next_row"] > no_of_lats - 1:
+                # this setup is finished
+                if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
                     process_message.setup_count += 1
 
         elif write_normal_output_files:

@@ -38,6 +38,16 @@ import monica_run_lib as Mrunlib
 
 PATHS = {
     # adjust the local path to your environment
+    "mbm-local-local": {
+        "path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",
+        # mounted path to archive or hard drive with climate data
+        # "path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "path-to-soil-dir": "/home/berg/Desktop/soil/",
+        "monica-path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",
+        # mounted path to archive accessable by monica executable
+        "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
+        "path-debug-write-folder": "./debug-out/",
+    },
     "mbm-local-remote": {
         "path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",  # mounted path to archive or hard drive with climate data
         #"path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
@@ -55,17 +65,13 @@ PATHS = {
     }
 }
 
-TEMPLATE_PATH_LATLON = "{path_to_climate_dir}/latlon-to-rowcol.json"
-TEMPLATE_PATH_CLIMATE_CSV = "{gcm}/{rcm}/{scenario}/{ensmem}/{version}/row-{crow}/col-{ccol}.csv"
-
-
 def run_producer(server = {"server": None, "port": None}):
 
     context = zmq.Context()
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
-        "mode": "mbm-local-remote",  # local:"cj-local-remote" remote "mbm-local-remote"
+        "mode": "mbm-local-local",  # local:"cj-local-remote" remote "mbm-local-remote"
         "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
         "server": server["server"] if server["server"] else "localhost",  #"login01.cluster.zalf.de",
         "start_lat": "83.95833588",
@@ -175,9 +181,10 @@ def run_producer(server = {"server": None, "port": None}):
         layers = []
 
         # find the fill value for the soil data
-        fill_value = soil_vars["sand"].getncattr("missing_value")
-        if soil_vars["sand"][0, row, col] == fill_value:
-            return None
+        for elem2 in soil_data.keys():
+            for i in range(8):
+                if np.ma.is_masked(soil_vars[elem2][i, row, col]):
+                    return None
 
         for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
                                                  (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 70)][1:]:
@@ -253,7 +260,7 @@ def run_producer(server = {"server": None, "port": None}):
             print(lat,)
 
             lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
-                                int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) + 1,
+                                int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,
                                 int(s_resolution * s_res_scale_factor))
             no_of_lons = len(lons_scaled)
             s_col_0 = int(((lons_scaled[0] / s_res_scale_factor) - s_lon_0) / s_resolution)
@@ -272,14 +279,16 @@ def run_producer(server = {"server": None, "port": None}):
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
-                        "no_of_lons": no_of_lons, "no_of_lats": no_of_lats,
                         "s_row": s_row, "s_col": s_col,
                         "s_row_0": s_row_0, "s_col_0": s_col_0,
+                        "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                         "c_row": int(c_row), "c_col": int(c_col),
                         "env_id": sent_env_count,
                         "nodata": True
                     }
                     socket.send_json(env_template)
+                    print("sent nodata env ", sent_env_count, " customId: ", env_template["customId"])
+                    sent_env_count += 1
                     continue
 
 
@@ -321,9 +330,10 @@ def run_producer(server = {"server": None, "port": None}):
                 env_template["customId"] = {
                     "setup_id": setup_id,
                     "lat": lat, "lon": lon,
-                    "no_of_lons": no_of_lons, "no_of_lats": no_of_lats,
-                    "srow": s_row, "scol": s_col,
-                    "crow": int(c_row), "ccol": int(c_col),
+                    "s_row": s_row, "s_col": s_col,
+                    "s_row_0": s_row_0, "s_col_0": s_col_0,
+                    "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
+                    "c_row": int(c_row), "c_col": int(c_col),
                     "env_id": sent_env_count,
                     "nodata": False
                 }

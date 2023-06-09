@@ -1,12 +1,21 @@
   {
 	"crops": {
-		"WW_dwd": {
+		"SM_dwd": {
 			"is-winter-crop": true,
 			"cropParams": {
-				"species": ["include-from-file", "crops/species/wheat.json"],
-				"cultivar": ["include-from-file", "crops/cultivars/winter-wheat_bs_dwd_pheno.json"]
+				"species": [
+					"include-from-file",
+					"crops/species/maize.json"
+				],
+				"cultivar": [
+					"include-from-file",
+					"crops/cultivars/silage-maize_bs_dwd_pheno.json"
+				]
 			},
-			"residueParams": ["include-from-file", "crops/residues/wheat.json"]
+			"residueParams": [
+				"include-from-file",
+				"crops/residues/maize.json"
+			]
 		}
 	},
 	"fert-params": {
@@ -19,20 +28,20 @@
 		{
 			"worksteps": [
 				{
-					"date": "0000-09-22",
+					"date": "0000-03-31",
 					"type": "Sowing",
 					"crop": [
 						"ref",
 						"crops",
-						"WW_dwd"
+						"SM_dwd"
 					]
 				},
 				{
 					"type": "NDemandFertilization",
-					"days": 60,
+					"days": 1,
 					"after": "Sowing",
 					"N-demand": [
-						40.0,
+						110.0,
 						"kg"
 					],
 					"depth": [
@@ -46,27 +55,10 @@
 				},
 				{
 					"type": "NDemandFertilization",
-					"days": 120,
+					"days": 30,
 					"after": "Sowing",
 					"N-demand": [
-						80.0,
-						"kg"
-					],
-					"depth": [
-						0.9,
-						"m"
-					],
-					"partition": [
-						"include-from-file",
-						"mineral-fertilisers/AN.json"
-					]
-				},
-				{
-					"type": "NDemandFertilization",
-					"days": 150,
-					"after": "Sowing",
-					"N-demand": [
-						40.0,
+						105.0,
 						"kg"
 					],
 					"depth": [
@@ -80,11 +72,11 @@
 				},
 				{
 					"type": "AutomaticHarvest",
-					"latest-date": "0001-09-05",
+					"latest-date": "0000-10-31",
 					"min-%-asw": 0,
 					"max-%-asw": 99.0,
-					"max-3d-precip-sum": 2,
-					"max-curr-day-precip": 0.1,
+					"max-3d-precip-sum": 5,
+					"max-curr-day-precip": 0.5,
 					"harvest-time": "maturity"
 				},
 				{
@@ -93,7 +85,7 @@
 					"after": "Harvest",
 					"amount": [
 						15000,
-						"kg N"
+						"kg"
 					],
 					"parameters": [
 						"include-from-file",
