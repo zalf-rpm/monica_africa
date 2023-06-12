@@ -136,6 +136,46 @@ def run_producer(server = {"server": None, "port": None}):
     # Load grids
     ## note numpy is able to load from a compressed file, ending with .gz or .bz2
 
+    # eco regions
+    path_to_eco_grid = paths["path-to-data-dir"] + "/eco_regions/agro_eco_regions.asc"
+    eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
+    eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
+
+    # load management data
+    management = Mrunlib.read_csv(paths["path-to-data-dir"] +
+                                  "/eco_regions/agro_ecological_regions_early_planting.csv", key="id")
+
+    def mgmt_date_to_rel_date(mgmt_date):
+        day_str, month_short_name = mgmt_date.split("-")
+        month_str = "00"
+        if month_short_name == "Jan":
+            month_str = "01"
+        elif month_short_name == "Feb":
+            month_str = "02"
+        elif month_short_name == "Mar":
+            month_str = "03"
+        elif month_short_name == "Apr":
+            month_str = "04"
+        elif month_short_name == "May":
+            month_str = "05"
+        elif month_short_name == "Jun":
+            month_str = "06"
+        elif month_short_name == "Jul":
+            month_str = "07"
+        elif month_short_name == "Aug":
+            month_str = "08"
+        elif month_short_name == "Sep":
+            month_str = "09"
+        elif month_short_name == "Oct":
+            month_str = "10"
+        elif month_short_name == "Nov":
+            month_str = "11"
+        elif month_short_name == "Dec":
+            month_str = "12"
+
+        return "0000-" + month_str + "-" + day_str
+
+
     # height data for germany
     #path_to_dem_grid = paths["path-to-data-dir"] + "Elevation.asc.gz"
     #dem_epsg_code = int(path_to_dem_grid.split("/")[-1].split("_")[2])
@@ -249,6 +289,12 @@ def run_producer(server = {"server": None, "port": None}):
         s_lat_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lat"]
         s_lon_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lon"]
 
+        aer_lat_0 = float(eco_metadata["yllcorner"]) \
+                    + (float(eco_metadata["cellsize"]) * float(eco_metadata["nrows"])) \
+                    - (float(eco_metadata["cellsize"]) / 2.0)
+        aer_lon_0 = float(eco_metadata["xllcorner"]) + (float(eco_metadata["cellsize"]) / 2.0)
+        aer_resolution = float(eco_metadata["cellsize"])
+
         lats_scaled = range(int(lat_lon_bounds["tl"]["lat"] * s_res_scale_factor),
                             int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) - 1,
                             -int(s_resolution * s_res_scale_factor))
@@ -274,8 +320,23 @@ def run_producer(server = {"server": None, "port": None}):
                 s_col = int((lon - s_lon_0) / s_resolution)
                 s_row = int((s_lat_0 - lat) / s_resolution)
 
+                # set management
+                aer_col = int((lon - aer_lon_0) / s_resolution)
+                aer_row = int((aer_lat_0 - lat) / s_resolution)
+
+                aer = 0
+                if aer_row < 0 or aer_row >= int(eco_metadata["nrows"]) or \
+                    aer_col < 0 or aer_col >= int(eco_metadata["ncols"]):
+                    aer = eco_grid[aer_row, aer_col]
+                    if aer > 0 and aer in management:
+                        mgmt = management[aer]
+                        env_template["cropRotation"][0]["worksteps"][0]["date"] = mgmt_date_to_rel_date(mgmt["tillage"])
+
+
+
+
                 soil_profile = create_soil_profile(s_row, s_col)
-                if soil_profile is None:
+                if soil_profile is None or aer == 0 or aer not in management:
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
@@ -290,6 +351,10 @@ def run_producer(server = {"server": None, "port": None}):
                     print("sent nodata env ", sent_env_count, " customId: ", env_template["customId"])
                     sent_env_count += 1
                     continue
+
+
+
+
 
 
                 height_nn = 100  #dem_interpolate(demr, demh)
