@@ -218,11 +218,10 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
     leave = False
     write_normal_output_files = False
 
-    header = ""
     setup_id_to_data = defaultdict(lambda: {
+        "header": None,
         "no_of_cols": None,
         "no_of_rows": None,
-        "header": header,
         "out_dir_exists": False,
         "row_col_data": defaultdict(lambda: defaultdict(list)),
         "cols@row_received": {},
@@ -248,8 +247,6 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
 
             row = custom_id["s_row"]
             col = custom_id["s_col"]
-            lat = custom_id["lat"]
-            lon = custom_id["lon"]
             no_of_cols = custom_id["no_of_s_cols"]
             no_of_rows = custom_id["no_of_s_rows"]
             row_0 = custom_id["s_row_0"]
@@ -258,6 +255,14 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                 data["cols@row_received"][row] = 0
             if data["next_row"] is None:
                 data["next_row"] = row_0
+            if data["header"] is None:
+                data["header"] = f"""ncols        {no_of_cols}
+nrows        {no_of_rows}
+xllcorner    {custom_id["b_lon_0"]}
+yllcorner    {custom_id["b_lat_0"] - (no_of_rows * custom_id["s_resolution"])}
+cellsize     {custom_id["s_resolution"]}
+NODATA_value -9999
+"""
             is_nodata = custom_id["nodata"]
 
             debug_msg = "received work result " + str(process_message.received_env_count) \

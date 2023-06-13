@@ -49,37 +49,40 @@ PATHS = {
         "path-debug-write-folder": "./debug-out/",
     },
     "mbm-local-remote": {
-        "path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",  # mounted path to archive or hard drive with climate data
-        #"path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "path-to-climate-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/climate/",
+        # mounted path to archive or hard drive with climate data
+        # "path-to-soil-dir": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
         "path-to-soil-dir": "/home/berg/Desktop/soil/",
-        "monica-path-to-climate-dir": "/monica_data/climate-data/",  # mounted path to archive accessable by monica executable
+        "monica-path-to-climate-dir": "/monica_data/climate-data/",
+        # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
     },
     "remoteProducer-remoteMonica": {
         "path-to-climate-dir": "/data/",  # mounted path to archive or hard drive with climate data
-        "monica-path-to-climate-dir": "/monica_data/climate-data/",  # mounted path to archive accessable by monica executable
+        "monica-path-to-climate-dir": "/monica_data/climate-data/",
+        # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-to-soil-dir": "./data/soil/global_soil_dataset_for_earth_system_modeling/",
         "path-debug-write-folder": "/out/debug-out/",
     }
 }
 
-def run_producer(server = {"server": None, "port": None}):
 
+def run_producer(server={"server": None, "port": None}):
     context = zmq.Context()
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
         "mode": "mbm-local-local",  # local:"cj-local-remote" remote "mbm-local-remote"
         "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "localhost",  #"login01.cluster.zalf.de",
+        "server": server["server"] if server["server"] else "localhost",  # "login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
         "end_lon": "179.50000000",
         "region": "nigeria",
-        "resolution": "5min",  #30sec,
+        "resolution": "5min",  # 30sec,
         "path_to_dem_grid": "",
         "sim.json": "sim.json",
         "crop.json": "crop.json",
@@ -126,15 +129,12 @@ def run_producer(server = {"server": None, "port": None}):
     run_setups = json.loads(config["run-setups"])
     print("read sim setups: ", config["setups-file"])
 
-    #transforms geospatial coordinates from one coordinate reference system to another
+    # transforms geospatial coordinates from one coordinate reference system to another
     # transform wgs84 into gk5
-    #soil_crs_to_x_transformers = {}
-    #wgs84_crs = CRS.from_epsg(4326)
-    #utm32_crs = CRS.from_epsg(25832)
-    #transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
-
-    # Load grids
-    ## note numpy is able to load from a compressed file, ending with .gz or .bz2
+    # soil_crs_to_x_transformers = {}
+    wgs84_crs = CRS.from_epsg(4326)
+    # utm32_crs = CRS.from_epsg(25832)
+    # transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
 
     # eco regions
     path_to_eco_grid = paths["path-to-data-dir"] + "/eco_regions/agro_eco_regions.asc"
@@ -175,28 +175,25 @@ def run_producer(server = {"server": None, "port": None}):
 
         return "0000-" + month_str + "-" + day_str
 
-
     # height data for germany
-    #path_to_dem_grid = paths["path-to-data-dir"] + "Elevation.asc.gz"
-    #dem_epsg_code = int(path_to_dem_grid.split("/")[-1].split("_")[2])
-    #dem_crs = CRS.from_epsg(dem_epsg_code)
-    #if dem_crs not in soil_crs_to_x_transformers:
-    #    soil_crs_to_x_transformers[dem_crs] = Transformer.from_crs(soil_crs, dem_crs)
-    #dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid)
-    #dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=6)
-    #dem_interpolate = Mrunlib.create_ascii_grid_interpolator(dem_grid, dem_metadata)
-    #print("read: ", path_to_dem_grid)
+    path_to_dem_grid = paths["path-to-data-dir"] + "elevation_1000_25832_etrs89-utm32n.asc"
+    dem_epsg_code = int(path_to_dem_grid.split("/")[-1].split("_")[2])
+    dem_crs = CRS.from_epsg(dem_epsg_code)
+    latlon_to_dem_transformer = Transformer.from_crs(wgs84_crs, dem_crs, always_xy=True)
+    dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid)
+    dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=6)
+    dem_interpolate = Mrunlib.create_ascii_grid_interpolator(dem_grid, dem_metadata)
+    print("read: ", path_to_dem_grid)
 
     # slope data
-    #path_to_slope_grid = paths["path-to-data-dir"] + DATA_GRID_SLOPE
-    #slope_epsg_code = int(path_to_slope_grid.split("/")[-1].split("_")[2])
-    #slope_crs = CRS.from_epsg(slope_epsg_code)
-    #if slope_crs not in soil_crs_to_x_transformers:
-    #    soil_crs_to_x_transformers[slope_crs] = Transformer.from_crs(soil_crs, slope_crs)
-    #slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid)
-    #slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
-    #slope_interpolate = Mrunlib.create_ascii_grid_interpolator(slope_grid, slope_metadata)
-    #print("read: ", path_to_slope_grid)
+    path_to_slope_grid = paths["path-to-data-dir"] + "slope_1000_25832_etrs89-utm32n.asc"
+    slope_epsg_code = int(path_to_slope_grid.split("/")[-1].split("_")[2])
+    slope_crs = CRS.from_epsg(slope_epsg_code)
+    latlon_to_slope_transformer = Transformer.from_crs(wgs84_crs, slope_crs, always_xy=True)
+    slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid)
+    slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
+    slope_interpolate = Mrunlib.create_ascii_grid_interpolator(slope_grid, slope_metadata)
+    print("read: ", path_to_slope_grid)
 
     # open netcdfs
     path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
@@ -205,10 +202,11 @@ def run_producer(server = {"server": None, "port": None}):
             "sand": {"var": "SAND", "file": "SAND5min.nc", "conv_factor": 0.01},  # % -> fraction
             "clay": {"var": "CLAY", "file": "CLAY5min.nc", "conv_factor": 0.01},  # % -> fraction
             "corg": {"var": "OC", "file": "OC5min.nc", "conv_factor": 0.01},  # scale factor
-            "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0}  # scale factor * 1 g/cm3 = 1000 kg/m3
+            "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0}
+            # scale factor * 1 g/cm3 = 1000 kg/m3
         }
     else:
-        soil_data = None #["Sand5min.nc", "Clay5min.nc", "OC5min.nc", "BD5min.nc"]
+        soil_data = None  # ["Sand5min.nc", "Clay5min.nc", "OC5min.nc", "BD5min.nc"]
     soil_datasets = {}
     soil_vars = {}
     for elem, data in soil_data.items():
@@ -245,7 +243,7 @@ def run_producer(server = {"server": None, "port": None}):
 
         if setup_id not in setups:
             continue
-        start_setup_time = time.perf_counter()      
+        start_setup_time = time.perf_counter()
 
         setup = setups[setup_id]
         gcm = setup["gcm"]
@@ -259,9 +257,9 @@ def run_producer(server = {"server": None, "port": None}):
         if setup["start_date"]:
             sim_json["climate.csv-options"]["start-date"] = str(setup["start_date"])
         if setup["end_date"]:
-            sim_json["climate.csv-options"]["end-date"] = str(setup["end_date"]) 
+            sim_json["climate.csv-options"]["end-date"] = str(setup["end_date"])
 
-        # read template site.json
+            # read template site.json
         with open(setup.get("site.json", config["site.json"])) as _:
             site_json = json.load(_)
 
@@ -272,7 +270,8 @@ def run_producer(server = {"server": None, "port": None}):
         with open(setup.get("crop.json", config["crop.json"])) as _:
             crop_json = json.load(_)
 
-        crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = setup["use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
+        crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = setup[
+            "use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
 
         # create environment template from json templates
         env_template = monica_io3.create_env_json_from_json_config({
@@ -288,6 +287,8 @@ def run_producer(server = {"server": None, "port": None}):
 
         s_lat_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lat"]
         s_lon_0 = region_to_lat_lon_bounds["earth"][config["resolution"]]["tl"]["lon"]
+        b_lat_0 = lat_lon_bounds["tl"]["lat"]
+        b_lon_0 = lat_lon_bounds["tl"]["lon"]
 
         aer_lat_0 = float(eco_metadata["yllcorner"]) \
                     + (float(eco_metadata["cellsize"]) * float(eco_metadata["nrows"])) \
@@ -303,7 +304,7 @@ def run_producer(server = {"server": None, "port": None}):
         for lat_scaled in lats_scaled:
             lat = lat_scaled / s_res_scale_factor
 
-            print(lat,)
+            print(lat, )
 
             lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
                                 int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,
@@ -312,7 +313,7 @@ def run_producer(server = {"server": None, "port": None}):
             s_col_0 = int(((lons_scaled[0] / s_res_scale_factor) - s_lon_0) / s_resolution)
             for lon_scaled in lons_scaled:
                 lon = lon_scaled / s_res_scale_factor
-                print(lon,)
+                print(lon, )
 
                 c_col = int((lon - c_lon_0) / c_resolution)
                 c_row = int((c_lat_0 - lat) / c_resolution)
@@ -325,21 +326,32 @@ def run_producer(server = {"server": None, "port": None}):
                 aer_row = int((aer_lat_0 - lat) / s_resolution)
 
                 aer = 0
-                if aer_row < 0 or aer_row >= int(eco_metadata["nrows"]) or \
-                    aer_col < 0 or aer_col >= int(eco_metadata["ncols"]):
+                if 0 <= aer_row < int(eco_metadata["nrows"]) \
+                        and 0 <= aer_col < int(eco_metadata["ncols"]):
                     aer = eco_grid[aer_row, aer_col]
                     if aer > 0 and aer in management:
                         mgmt = management[aer]
-                        env_template["cropRotation"][0]["worksteps"][0]["date"] = mgmt_date_to_rel_date(mgmt["tillage"])
-
-
-
+                        for ws in env_template["cropRotation"][0]["worksteps"]:
+                            if ws["type"] == "Sowing":
+                                ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
+                                ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                            elif ws["type"] == "AutomaticHarvest":
+                                ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
+                            elif ws["type"] == "Tillage":
+                                ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
+                            elif ws["type"] == "MineralFertilization":
+                                app_no = int(ws["application"])
+                                app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
+                                ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
+                                ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
 
                 soil_profile = create_soil_profile(s_row, s_col)
                 if soil_profile is None or aer == 0 or aer not in management:
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
+                        "b_lat_0": b_lat_0, "b_lon_0": b_lon_0,
+                        "s_resolution": s_resolution,
                         "s_row": s_row, "s_col": s_col,
                         "s_row_0": s_row_0, "s_col_0": s_col_0,
                         "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
@@ -352,16 +364,14 @@ def run_producer(server = {"server": None, "port": None}):
                     sent_env_count += 1
                     continue
 
+                dem_r, dem_h = latlon_to_dem_transformer.transform(lon, lat)
+                height_nn = float(dem_interpolate(dem_r, dem_h))
+                slope_r, slope_h = latlon_to_dem_transformer.transform(lon, lat)
+                slope = slope_interpolate(slope_r, slope_h)
 
+                env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
+                    "LeafExtensionModifier"]
 
-
-
-
-                height_nn = 100  #dem_interpolate(demr, demh)
-                slope = 0.1  #slope_interpolate(slr, slh)
-
-                env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup["LeafExtensionModifier"]
-                    
                 env_template["params"]["siteParameters"]["SoilProfileParameters"] = soil_profile
 
                 if setup["elevation"]:
@@ -374,14 +384,19 @@ def run_producer(server = {"server": None, "port": None}):
                     env_template["params"]["siteParameters"]["Latitude"] = lat
 
                 if setup["FieldConditionModifier"]:
-                    env_template["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"]["FieldConditionModifier"] = float(setup["FieldConditionModifier"])
+                    env_template["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"][
+                        "FieldConditionModifier"] = float(setup["FieldConditionModifier"])
 
-                env_template["params"]["simulationParameters"]["UseNMinMineralFertilisingMethod"] = setup["fertilization"]
+                env_template["params"]["simulationParameters"]["UseNMinMineralFertilisingMethod"] = setup[
+                    "fertilization"]
                 env_template["params"]["simulationParameters"]["UseAutomaticIrrigation"] = setup["irrigation"]
                 env_template["params"]["simulationParameters"]["NitrogenResponseOn"] = setup["NitrogenResponseOn"]
-                env_template["params"]["simulationParameters"]["WaterDeficitResponseOn"] = setup["WaterDeficitResponseOn"]
-                env_template["params"]["simulationParameters"]["EmergenceMoistureControlOn"] = setup["EmergenceMoistureControlOn"]
-                env_template["params"]["simulationParameters"]["EmergenceFloodingControlOn"] = setup["EmergenceFloodingControlOn"]
+                env_template["params"]["simulationParameters"]["WaterDeficitResponseOn"] = setup[
+                    "WaterDeficitResponseOn"]
+                env_template["params"]["simulationParameters"]["EmergenceMoistureControlOn"] = setup[
+                    "EmergenceMoistureControlOn"]
+                env_template["params"]["simulationParameters"]["EmergenceFloodingControlOn"] = setup[
+                    "EmergenceFloodingControlOn"]
 
                 env_template["csvViaHeaderOptions"] = sim_json["climate.csv-options"]
                 path_template = "{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz"
@@ -395,6 +410,8 @@ def run_producer(server = {"server": None, "port": None}):
                 env_template["customId"] = {
                     "setup_id": setup_id,
                     "lat": lat, "lon": lon,
+                    "s_lat_0": s_lat_0, "s_lon_0": s_lon_0,
+                    "s_resolution": s_resolution,
                     "s_row": s_row, "s_col": s_col,
                     "s_row_0": s_row_0, "s_col_0": s_col_0,
                     "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
@@ -409,13 +426,13 @@ def run_producer(server = {"server": None, "port": None}):
                 sent_env_count += 1
 
         stop_setup_time = time.perf_counter()
-        print("Setup ", (sent_env_count-1), " envs took ", (stop_setup_time - start_setup_time), " seconds")
+        print("Setup ", (sent_env_count - 1), " envs took ", (stop_setup_time - start_setup_time), " seconds")
 
     stop_time = time.perf_counter()
 
     # write summary of used json files
     try:
-        print("sending ", (sent_env_count-1), " envs took ", (stop_time - start_time), " seconds")
+        print("sending ", (sent_env_count - 1), " envs took ", (stop_time - start_time), " seconds")
         print("exiting run_producer()")
     except Exception:
         raise

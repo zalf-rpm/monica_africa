@@ -26,19 +26,22 @@
           "crop": ["ref", "crops", "SM"]
         },
         {
-          "type": "NFertilization",
+          "type": "MineralFertilization",
+          "application": 1,
           "date": "0000-04-01",
           "amount": [0.0, "kg"],
           "partition": ["include-from-file", "mineral-fertilisers/AN.json"]
         },
         {
-          "type": "NFertilization",
+          "type": "MineralFertilization",
+          "application": 2,
           "date": "0000-05-01",
           "amount": [0.0, "kg"],
           "partition": ["include-from-file", "mineral-fertilisers/AN.json"]
         },
         {
-          "type": "NFertilization",
+          "type": "MineralFertilization",
+          "application": 3,
           "date": "0000-06-01",
           "amount": [0.0, "kg"],
           "partition": ["include-from-file", "mineral-fertilisers/AN.json"]

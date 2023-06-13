@@ -16,6 +16,7 @@
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
 import csv
+import gzip
 import json
 import numpy as np
 from scipy.interpolate import NearestNDInterpolator
@@ -68,18 +69,27 @@ def read_sim_setups(path_to_setups_csv):
             setups[int(data["run-id"])] = data
         return setups
 
+
 def read_header(path_to_ascii_grid_file):
-    "read metadata from esri ascii grid file"
-    metadata = {}
-    header_str = ""
-    with open(path_to_ascii_grid_file) as _:
+    """read metadata from esri ascii grid file"""
+
+    def read_header_from(f):
+        metadata = {}
+        header_str = ""
         for i in range(0, 6):
-            line = _.readline()
+            line = f.readline()
             header_str += line
-            sline = [x for x in line.split() if len(x) > 0]
-            if len(sline) > 1:
-                metadata[sline[0].strip().lower()] = float(sline[1].strip())
-    return metadata, header_str
+            s_line = [x for x in line.split() if len(x) > 0]
+            if len(s_line) > 1:
+                metadata[s_line[0].strip().lower()] = float(s_line[1].strip())
+        return metadata, header_str
+
+    if path_to_ascii_grid_file[-3:] == ".gz":
+        with gzip.open(path_to_ascii_grid_file, mode="rt") as _:
+            return read_header_from(_)
+
+    with open(path_to_ascii_grid_file, mode="rt") as _:
+        return read_header_from(_)
 
 def create_ascii_grid_interpolator(grid, meta_data, ignore_nodata=True):
     "read an ascii grid into a map, without the no-data values"
