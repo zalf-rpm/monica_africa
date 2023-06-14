@@ -104,8 +104,8 @@ def run_producer(server={"server": None, "port": None}):
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]
 
     region_to_lat_lon_bounds = {
-        "nigeria": {"tl": {"lat": 14.75, "lon": 1.75}, "br": {"lat": 3.25, "lon": 16.25}},
-        "africa": {"tl": {"lat": 14.75, "lon": 1.75}, "br": {"lat": 3.25, "lon": 16.25}},
+        "nigeria": {"tl": {"lat": 14.0, "lon": 2.7}, "br": {"lat": 4.25, "lon": 14.7}},
+        "africa": {"tl": {"lat": 37.4, "lon": -17.55}, "br": {"lat": -34.9, "lon": 51.5}},
         "earth": {
             "5min": {"tl": {"lat": 83.95833588, "lon": -179.95832825},
                      "br": {"lat": -55.95833206, "lon": 179.50000000}},
@@ -136,10 +136,19 @@ def run_producer(server={"server": None, "port": None}):
     # utm32_crs = CRS.from_epsg(25832)
     # transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
 
+    def get_lat_0_lon_0_resolution_from_grid_metadata(metadata):
+        lat_0 = float(metadata["yllcorner"]) \
+                    + (float(metadata["cellsize"]) * float(metadata["nrows"])) \
+                    - (float(metadata["cellsize"]) / 2.0)
+        lon_0 = float(metadata["xllcorner"]) + (float(metadata["cellsize"]) / 2.0)
+        resolution = float(metadata["cellsize"])
+        return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
+
     # eco regions
     path_to_eco_grid = paths["path-to-data-dir"] + "/eco_regions/agro_eco_regions.asc"
     eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
     eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
+    aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
 
     # load management data
     management = Mrunlib.read_csv(paths["path-to-data-dir"] +
@@ -176,24 +185,18 @@ def run_producer(server={"server": None, "port": None}):
         return "0000-" + month_str + "-" + day_str
 
     # height data for germany
-    path_to_dem_grid = paths["path-to-data-dir"] + "elevation_1000_25832_etrs89-utm32n.asc"
-    dem_epsg_code = int(path_to_dem_grid.split("/")[-1].split("_")[2])
-    dem_crs = CRS.from_epsg(dem_epsg_code)
-    latlon_to_dem_transformer = Transformer.from_crs(wgs84_crs, dem_crs, always_xy=True)
-    dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid)
-    dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=6)
-    dem_interpolate = Mrunlib.create_ascii_grid_interpolator(dem_grid, dem_metadata)
-    print("read: ", path_to_dem_grid)
+    path_to_dem_grid = paths["path-to-data-dir"] + "elevation_0.009_4326_wgs84_nigeria.asc"
+    dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid, 5)
+    dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=5)
+    #print("read: ", path_to_dem_grid)
+    dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
 
     # slope data
-    path_to_slope_grid = paths["path-to-data-dir"] + "slope_1000_25832_etrs89-utm32n.asc"
-    slope_epsg_code = int(path_to_slope_grid.split("/")[-1].split("_")[2])
-    slope_crs = CRS.from_epsg(slope_epsg_code)
-    latlon_to_slope_transformer = Transformer.from_crs(wgs84_crs, slope_crs, always_xy=True)
-    slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid)
+    path_to_slope_grid = paths["path-to-data-dir"] + "slope_0.009_4326_wgs84_nigeria.asc"
+    slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid, 6)
     slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
-    slope_interpolate = Mrunlib.create_ascii_grid_interpolator(slope_grid, slope_metadata)
     print("read: ", path_to_slope_grid)
+    slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
 
     # open netcdfs
     path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
@@ -290,12 +293,6 @@ def run_producer(server={"server": None, "port": None}):
         b_lat_0 = lat_lon_bounds["tl"]["lat"]
         b_lon_0 = lat_lon_bounds["tl"]["lon"]
 
-        aer_lat_0 = float(eco_metadata["yllcorner"]) \
-                    + (float(eco_metadata["cellsize"]) * float(eco_metadata["nrows"])) \
-                    - (float(eco_metadata["cellsize"]) / 2.0)
-        aer_lon_0 = float(eco_metadata["xllcorner"]) + (float(eco_metadata["cellsize"]) / 2.0)
-        aer_resolution = float(eco_metadata["cellsize"])
-
         lats_scaled = range(int(lat_lon_bounds["tl"]["lat"] * s_res_scale_factor),
                             int(lat_lon_bounds["br"]["lat"] * s_res_scale_factor) - 1,
                             -int(s_resolution * s_res_scale_factor))
@@ -322,8 +319,8 @@ def run_producer(server={"server": None, "port": None}):
                 s_row = int((s_lat_0 - lat) / s_resolution)
 
                 # set management
-                aer_col = int((lon - aer_lon_0) / s_resolution)
-                aer_row = int((aer_lat_0 - lat) / s_resolution)
+                aer_col = int((lon - aer_ll0r["lon_0"]) / aer_ll0r["res"])
+                aer_row = int((aer_ll0r["lat_0"] - lat) / aer_ll0r["res"])
 
                 aer = 0
                 if 0 <= aer_row < int(eco_metadata["nrows"]) \
@@ -364,10 +361,17 @@ def run_producer(server={"server": None, "port": None}):
                     sent_env_count += 1
                     continue
 
-                dem_r, dem_h = latlon_to_dem_transformer.transform(lon, lat)
-                height_nn = float(dem_interpolate(dem_r, dem_h))
-                slope_r, slope_h = latlon_to_dem_transformer.transform(lon, lat)
-                slope = slope_interpolate(slope_r, slope_h)
+                # dem_r, dem_h = latlon_to_dem_transformer.transform(lon, lat)
+                # height_nn = float(dem_interpolate(dem_r, dem_h))
+                dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
+                dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
+                height_nn = dem_grid[dem_row, dem_col]
+
+                #slope_r, slope_h = latlon_to_dem_transformer.transform(lon, lat)
+                #slope = slope_interpolate(slope_r, slope_h)
+                slope_col = int((lon - slope_ll0r["lon_0"]) / slope_ll0r["res"])
+                slope_row = int((slope_ll0r["lat_0"] - lat) / slope_ll0r["res"])
+                slope = slope_grid[slope_row, slope_col]
 
                 env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
                     "LeafExtensionModifier"]

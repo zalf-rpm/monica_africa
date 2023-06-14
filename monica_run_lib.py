@@ -70,13 +70,13 @@ def read_sim_setups(path_to_setups_csv):
         return setups
 
 
-def read_header(path_to_ascii_grid_file):
+def read_header(path_to_ascii_grid_file, no_of_header_lines=6):
     """read metadata from esri ascii grid file"""
 
     def read_header_from(f):
         metadata = {}
         header_str = ""
-        for i in range(0, 6):
+        for i in range(0, no_of_header_lines):
             line = f.readline()
             header_str += line
             s_line = [x for x in line.split() if len(x) > 0]
@@ -92,19 +92,21 @@ def read_header(path_to_ascii_grid_file):
         return read_header_from(_)
 
 def create_ascii_grid_interpolator(grid, meta_data, ignore_nodata=True):
-    "read an ascii grid into a map, without the no-data values"
-    "grid - 2D array of values"
+    """
+    read an ascii grid into a map, without the no-data values
+    grid - 2D array of values
+    """
 
     rows, cols = grid.shape
 
-    cellsize = int(meta_data["cellsize"])
+    cell_size = int(meta_data["cellsize"])
     xll = int(meta_data["xllcorner"])
     yll = int(meta_data["yllcorner"])
-    nodata_value = meta_data["nodata_value"]
+    nodata_value = meta_data.get("nodata_value", None)
 
-    xll_center = xll + cellsize // 2
-    yll_center = yll + cellsize // 2
-    yul_center = yll_center + (rows - 1)*cellsize
+    xll_center = xll + cell_size // 2
+    yll_center = yll + cell_size // 2
+    yul_center = yll_center + (rows - 1)*cell_size
 
     points = []
     values = []
@@ -112,10 +114,10 @@ def create_ascii_grid_interpolator(grid, meta_data, ignore_nodata=True):
     for row in range(rows):
         for col in range(cols):
             value = grid[row, col]
-            if ignore_nodata and value == nodata_value:
+            if nodata_value and ignore_nodata and value == nodata_value:
                 continue
-            r = xll_center + col * cellsize
-            h = yul_center - row * cellsize
+            r = xll_center + col * cell_size
+            h = yul_center - row * cell_size
             points.append([r, h])
             values.append(value)
 

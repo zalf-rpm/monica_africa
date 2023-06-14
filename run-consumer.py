@@ -80,7 +80,9 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
         return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=np.float))
 
     output_grids = {
-        "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 1}
+        "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
         # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
         # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
         # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
