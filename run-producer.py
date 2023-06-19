@@ -58,6 +58,15 @@ PATHS = {
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
     },
+    "sanny-hpc_login-hpc_node": {
+        #"path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        # mounted path to archive or hard drive with climate data
+        "path-to-soil-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "monica-path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        # mounted path to archive accessable by monica executable
+        "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
+        "path-debug-write-folder": "./debug-out/",
+    },
     "remoteProducer-remoteMonica": {
         "path-to-climate-dir": "/data/",  # mounted path to archive or hard drive with climate data
         "monica-path-to-climate-dir": "/monica_data/climate-data/",
