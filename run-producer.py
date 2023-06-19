@@ -58,11 +58,11 @@ PATHS = {
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
     },
-    "sanny-hpc_login-hpc_node": {
+    "hpc-local-remote": {
         #"path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
         # mounted path to archive or hard drive with climate data
         "path-to-soil-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
-        "monica-path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "monica-path-to-climate-dir": "/monica_data/climate-data/",
         # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
@@ -72,7 +72,7 @@ PATHS = {
         "monica-path-to-climate-dir": "/monica_data/climate-data/",
         # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
-        "path-to-soil-dir": "./data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "path-to-soil-dir": "/data/soil/global_soil_dataset_for_earth_system_modeling/",
         "path-debug-write-folder": "/out/debug-out/",
     }
 }
@@ -163,6 +163,12 @@ def run_producer(server={"server": None, "port": None}):
     management = Mrunlib.read_csv(paths["path-to-data-dir"] +
                                   "/eco_regions/agro_ecological_regions_early_planting.csv", key="id")
 
+    def check_for_nill_dates(mgmt):
+        for key, value in mgmt.items():
+            if "date" in key and value == "Nill":
+                return False
+        return True
+    
     def mgmt_date_to_rel_date(mgmt_date):
         day_str, month_short_name = mgmt_date.split("-")
         month_str = "00"
@@ -337,22 +343,25 @@ def run_producer(server={"server": None, "port": None}):
                     aer = eco_grid[aer_row, aer_col]
                     if aer > 0 and aer in management:
                         mgmt = management[aer]
-                        for ws in env_template["cropRotation"][0]["worksteps"]:
-                            if ws["type"] == "Sowing":
-                                ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
-                                ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
-                            elif ws["type"] == "AutomaticHarvest":
-                                ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
-                            elif ws["type"] == "Tillage":
-                                ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
-                            elif ws["type"] == "MineralFertilization":
-                                app_no = int(ws["application"])
-                                app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
-                                ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
-                                ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
+                        valid_mgmt = False
+                        if check_for_nill_dates(mgmt):
+                            valid_mgmt = True
+                            for ws in env_template["cropRotation"][0]["worksteps"]:
+                                if ws["type"] == "Sowing":
+                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
+                                    ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                                elif ws["type"] == "AutomaticHarvest":
+                                    ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
+                                elif ws["type"] == "Tillage":
+                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
+                                elif ws["type"] == "MineralFertilization":
+                                    app_no = int(ws["application"])
+                                    app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
+                                    ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
+                                    ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
 
                 soil_profile = create_soil_profile(s_row, s_col)
-                if soil_profile is None or aer == 0 or aer not in management:
+                if soil_profile is None or aer == 0 or aer not in management or not valid_mgmt:
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
