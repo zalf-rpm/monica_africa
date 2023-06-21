@@ -72,7 +72,7 @@ PATHS = {
         "monica-path-to-climate-dir": "/monica_data/climate-data/",
         # mounted path to archive accessable by monica executable
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
-        "path-to-soil-dir": "/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        "path-to-soil-dir": "/project/soil/global_soil_dataset_for_earth_system_modeling/",
         "path-debug-write-folder": "/out/debug-out/",
     }
 }
