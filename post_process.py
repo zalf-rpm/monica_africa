@@ -19,7 +19,7 @@ import errno
 
 PATHS = {
     "local": {
-        "sourcepath" : "/beegfs/rpm/projects/monica/out/sschulz_3658_2023-23-June_141732/out/0",
+        "sourcepath" : "/mySource/",
         "outputpath" : "./out/merged/",
         "std" : "std/" , # path to std images
         "avg" : "avg/" , # path to avg images
@@ -75,11 +75,14 @@ def main() :
     for yearRange in yearRanges :
         for crop in crops :
             for type in types :
-                readFilesPerDecade(crop, type, yearRange, indexOffset, sourceFolder, stdFolder, avgFolder)
+                roundToDecimal = 0
+                if type == "LAI" :
+                    roundToDecimal = 2
+                readFilesPerDecade(crop, type, roundToDecimal, yearRange, indexOffset, sourceFolder, stdFolder, avgFolder)
         indexOffset += 10
 
 
-def readFilesPerDecade(crop, type, yearRange, indexOffset, sourcepath, stdFolder, avgFolder) :
+def readFilesPerDecade(crop, type, roundToDecimal, yearRange, indexOffset, sourcepath, stdFolder, avgFolder) :
     # read files per decade
     files = []
     index = indexOffset
@@ -96,8 +99,11 @@ def readFilesPerDecade(crop, type, yearRange, indexOffset, sourcepath, stdFolder
     # calculate standard deviation
     std = np.nanstd(files, axis=0)
     # round values to int
-    avg = np.round(avg, decimals=0)
-    std = np.round(std, decimals=0)
+    avg = np.round(avg, decimals=roundToDecimal)
+    std = np.round(std, decimals=roundToDecimal)
+
+    fmtStr = '%1.' + str(roundToDecimal) + 'f'
+
     # set nan values to -9999
     avg[np.isnan(avg)] = NONEVALUE
     std[np.isnan(std)] = NONEVALUE
@@ -106,12 +112,12 @@ def readFilesPerDecade(crop, type, yearRange, indexOffset, sourcepath, stdFolder
     fileAvg = os.path.join(avgFolder, fileAvg)
     #writeAsciiHeader(fileAvg, readAsciiHeader(file))
     # write file with acuracy of 0 decimals (int)
-    np.savetxt(fileAvg, avg, fmt='%1.0f', delimiter=' ', newline='\n', header=asciiHeaderString(readAsciiHeader( file)), footer='', comments='# ', encoding=None)
+    np.savetxt(fileAvg, avg, fmt=fmtStr, delimiter=' ', newline='\n', header=asciiHeaderString(readAsciiHeader( file)), footer='', comments='# ', encoding=None)
     fileStd = fileTemplateOutStd.format(crop, type, yearRange[0], yearRange[1])
     fileStd = os.path.join(stdFolder, fileStd)
     #writeAsciiHeader(fileStd, readAsciiHeader(file))
 
-    np.savetxt(fileStd, std, fmt='%1.0f', delimiter=' ', newline='\n', header=asciiHeaderString(readAsciiHeader( file)), footer='', comments='# ', encoding=None)
+    np.savetxt(fileStd, std, fmt=fmtStr, delimiter=' ', newline='\n', header=asciiHeaderString(readAsciiHeader( file)), footer='', comments='# ', encoding=None)
 
 
 
