@@ -236,21 +236,27 @@ def run_producer(server={"server": None, "port": None}):
         # skip first 4.5cm layer and just use 7 layers
         layers = []
 
+        layerDepth = 8
         # find the fill value for the soil data
         for elem2 in soil_data.keys():
             for i in range(8):
                 if np.ma.is_masked(soil_vars[elem2][i, row, col]):
-                    return None
+                    if i < layerDepth:
+                        layerDepth = i
+                    break
+                    #return None
+        layerDepth -= 1
 
         for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
-                                                 (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 70)][1:]:
-            layers.append({
-                "Thickness": [monica_depth_m, "m"],
-                "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * soil_data["corg"]["conv_factor"], "%"],
-                "SoilBulkDensity": [soil_vars["bd"][i, row, col] * soil_data["bd"]["conv_factor"], "kg m-3"],
-                "Sand": [soil_vars["sand"][i, row, col] * soil_data["sand"]["conv_factor"], "fraction"],
-                "Clay": [soil_vars["clay"][i, row, col] * soil_data["clay"]["conv_factor"], "fraction"]
-            })
+                                                 (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 0.7)][1:]:
+            if i <= layerDepth:
+                layers.append({
+                    "Thickness": [monica_depth_m, "m"],
+                    "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * soil_data["corg"]["conv_factor"], "%"],
+                    "SoilBulkDensity": [soil_vars["bd"][i, row, col] * soil_data["bd"]["conv_factor"], "kg m-3"],
+                    "Sand": [soil_vars["sand"][i, row, col] * soil_data["sand"]["conv_factor"], "fraction"],
+                    "Clay": [soil_vars["clay"][i, row, col] * soil_data["clay"]["conv_factor"], "fraction"]
+                })
         return layers
 
     sent_env_count = 1
