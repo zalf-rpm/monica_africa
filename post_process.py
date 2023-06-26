@@ -34,8 +34,8 @@ PATHS = {
 USER = "local" 
 NONEVALUE = -9999
 # start and end years for each decade
-yearRanges = [ (1970,1979), (1980,1989), (1990,1999) ]#, (2000, 2009), (2010,2019)]
-crops = ["maizesilagemaize"] # TBD use grain maize
+yearRanges = [ (1970,1979), (1980,1989), (1990,1999), (2000, 2009) ]#, (2010,2019)]
+crops = ["maizegrainmaize"] # TBD use grain maize
 types = ["Yield", "LAI", "AbBiom"]
 # e.g. maizesilagemaize_Yield_1987_18.asc 
 fileTemplateInput = "{0}_{1}_{2}_{3}.asc" # 0 = crop, 1 = type, 2 = year, 3 = index
