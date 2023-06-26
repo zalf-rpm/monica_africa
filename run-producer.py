@@ -247,6 +247,9 @@ def run_producer(server={"server": None, "port": None}):
                     #return None
         layerDepth -= 1
 
+        if layerDepth < 4:
+            return None
+        
         for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
                                                  (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 0.7)][1:]:
             if i <= layerDepth:
