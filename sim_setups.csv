@@ -1,2 +1,2 @@
 run-id,use_vernalisation_fix,sowing-date,harvest-date,crop-id,sim.json,crop.json,site.json,incl_hist,gcm,scenario,ensmem,start_date,end_date,elevation,slope,latitude,fertilization,NitrogenResponseOn,irrigation,WaterDeficitResponseOn,EmergenceMoistureControlOn,EmergenceFloodingControlOn,LeafExtensionModifier,CO2,O3,FieldConditionModifier,StageTemperatureSum,comment
-0,true,"","",,sim.json,crop.json,site.json,,GFDL-ESM4,historical,r1i1p1f1,1970-01-01,2004-12-31,true,true,true,false,true,false,true,false,false,false,,,,,
+0,true,"","",,sim.json,crop.json,site.json,,GFDL-ESM4,historical,r1i1p1f1,1970-01-01,2010-12-31,true,true,true,false,true,false,true,false,false,false,,,,,
