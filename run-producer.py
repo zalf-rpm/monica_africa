@@ -123,11 +123,6 @@ def run_producer(server={"server": None, "port": None}):
         }
     }
 
-    lat_lon_bounds = region_to_lat_lon_bounds.get(config["region"], {
-        "tl": {"lat": float(config["start_lat"]), "lon": float(config["start_lon"])},
-        "br": {"lat": float(config["end_lat"]), "lon": float(config["end_lon"])}
-    })
-
     # select paths
     paths = PATHS[config["mode"]]
     # connect to monica proxy (if local, it will try to connect to a locally started monica)
@@ -141,7 +136,7 @@ def run_producer(server={"server": None, "port": None}):
     # transforms geospatial coordinates from one coordinate reference system to another
     # transform wgs84 into gk5
     # soil_crs_to_x_transformers = {}
-    wgs84_crs = CRS.from_epsg(4326)
+    # wgs84_crs = CRS.from_epsg(4326)
     # utm32_crs = CRS.from_epsg(25832)
     # transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
 
@@ -158,10 +153,6 @@ def run_producer(server={"server": None, "port": None}):
     eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
     eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
     aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
-
-    # load management data
-    management = Mrunlib.read_csv(paths["path-to-data-dir"] +
-                                  "/eco_regions/agro_ecological_regions_early_planting.csv", key="id")
 
     def check_for_nill_dates(mgmt):
         for key, value in mgmt.items():
@@ -199,20 +190,6 @@ def run_producer(server={"server": None, "port": None}):
 
         return "0000-" + month_str + "-" + day_str
 
-    # height data for germany
-    path_to_dem_grid = paths["path-to-data-dir"] + "elevation_0.009_4326_wgs84_nigeria.asc"
-    dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid, 5)
-    dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=5)
-    #print("read: ", path_to_dem_grid)
-    dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
-
-    # slope data
-    path_to_slope_grid = paths["path-to-data-dir"] + "slope_0.009_4326_wgs84_nigeria.asc"
-    slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid, 6)
-    slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
-    print("read: ", path_to_slope_grid)
-    slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
-
     # open netcdfs
     path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
     if config["resolution"] == "5min":
@@ -220,8 +197,7 @@ def run_producer(server={"server": None, "port": None}):
             "sand": {"var": "SAND", "file": "SAND5min.nc", "conv_factor": 0.01},  # % -> fraction
             "clay": {"var": "CLAY", "file": "CLAY5min.nc", "conv_factor": 0.01},  # % -> fraction
             "corg": {"var": "OC", "file": "OC5min.nc", "conv_factor": 0.01},  # scale factor
-            "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0}
-            # scale factor * 1 g/cm3 = 1000 kg/m3
+            "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0},  # scale factor * 1 g/cm3 = 1000 kg/m3
         }
     else:
         soil_data = None  # ["Sand5min.nc", "Clay5min.nc", "OC5min.nc", "BD5min.nc"]
@@ -277,7 +253,33 @@ def run_producer(server={"server": None, "port": None}):
         scenario = setup["scenario"]
         ensmem = setup["ensmem"]
 
-        # read template sim.json 
+        region = setup["region"] if "region" in setup else config["region"]
+        lat_lon_bounds = region_to_lat_lon_bounds.get(region, {
+            "tl": {"lat": float(config["start_lat"]), "lon": float(config["start_lon"])},
+            "br": {"lat": float(config["end_lat"]), "lon": float(config["end_lon"])}
+        })
+
+        planting = setup["planting"].lower()
+        nitrogen = setup["nitrogen"].lower()
+        management_file = f"agro_ecological_regions_{planting}_planting_{nitrogen}_nitrogen.csv"
+        # load management data
+        management = Mrunlib.read_csv(paths["path-to-data-dir"] + "/eco_regions/" + management_file, key="id")
+
+        # height data for germany
+        path_to_dem_grid = paths["path-to-data-dir"] + setup["dem_asc_grid"]
+        dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid, 5)
+        dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=5)
+        # print("read: ", path_to_dem_grid)
+        dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
+
+        # slope data
+        path_to_slope_grid = paths["path-to-data-dir"] + "slope_0.009_4326_wgs84_nigeria.asc"
+        slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid, 6)
+        slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
+        print("read: ", path_to_slope_grid)
+        slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
+
+        # read template sim.json
         with open(setup.get("sim.json", config["sim.json"])) as _:
             sim_json = json.load(_)
         # change start and end date acording to setup
@@ -347,12 +349,12 @@ def run_producer(server={"server": None, "port": None}):
                 aer_row = int((aer_ll0r["lat_0"] - lat) / aer_ll0r["res"])
 
                 aer = 0
+                valid_mgmt = False
                 if 0 <= aer_row < int(eco_metadata["nrows"]) \
                         and 0 <= aer_col < int(eco_metadata["ncols"]):
                     aer = eco_grid[aer_row, aer_col]
                     if aer > 0 and aer in management:
                         mgmt = management[aer]
-                        valid_mgmt = False
                         if check_for_nill_dates(mgmt):
                             valid_mgmt = True
                             for ws in env_template["cropRotation"][0]["worksteps"]:
@@ -381,6 +383,9 @@ def run_producer(server={"server": None, "port": None}):
                         "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                         "c_row": int(c_row), "c_col": int(c_col),
                         "env_id": sent_env_count,
+                        "planting": planting,
+                        "nitrogen": nitrogen,
+                        "region": region,
                         "nodata": True
                     }
                     socket.send_json(env_template)
@@ -388,14 +393,10 @@ def run_producer(server={"server": None, "port": None}):
                     sent_env_count += 1
                     continue
 
-                # dem_r, dem_h = latlon_to_dem_transformer.transform(lon, lat)
-                # height_nn = float(dem_interpolate(dem_r, dem_h))
                 dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
                 dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
                 height_nn = dem_grid[dem_row, dem_col]
 
-                #slope_r, slope_h = latlon_to_dem_transformer.transform(lon, lat)
-                #slope = slope_interpolate(slope_r, slope_h)
                 slope_col = int((lon - slope_ll0r["lon_0"]) / slope_ll0r["res"])
                 slope_row = int((slope_ll0r["lat_0"] - lat) / slope_ll0r["res"])
                 slope = slope_grid[slope_row, slope_col]
@@ -409,7 +410,7 @@ def run_producer(server={"server": None, "port": None}):
                     env_template["params"]["siteParameters"]["heightNN"] = float(height_nn)
 
                 if setup["slope"]:
-                    env_template["params"]["siteParameters"]["slope"] = slope / 100.0
+                    env_template["params"]["siteParameters"]["slope"] = slope / 90.0
 
                 if setup["latitude"]:
                     env_template["params"]["siteParameters"]["Latitude"] = lat
@@ -430,12 +431,19 @@ def run_producer(server={"server": None, "port": None}):
                     "EmergenceFloodingControlOn"]
 
                 env_template["csvViaHeaderOptions"] = sim_json["climate.csv-options"]
-                path_template = "{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz"
-
+                hist_sub_path = "isimip/3b_v1.1_CMIP6/csvs/{gcm}/historical/{ensmem}/row-{crow}/col-{ccol}.csv.gz".format(
+                    gcm=gcm, ensmem=ensmem, crow=c_row, ccol=c_col)
                 sub_path = "isimip/3b_v1.1_CMIP6/csvs/{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz".format(
                     gcm=gcm, scenario=scenario, ensmem=ensmem, crow=c_row, ccol=c_col
                 )
-                env_template["pathToClimateCSV"] = paths["monica-path-to-climate-dir"] + sub_path
+                if scenario is not "historical":
+                    climate_data_paths = [
+                        paths["monica-path-to-climate-dir"] + hist_sub_path,
+                        paths["monica-path-to-climate-dir"] + sub_path
+                    ]
+                else:
+                    climate_data_paths = [sub_path]
+                env_template["pathToClimateCSV"] = climate_data_paths
                 print("pathToClimateCSV:", env_template["pathToClimateCSV"])
 
                 env_template["customId"] = {
@@ -448,6 +456,9 @@ def run_producer(server={"server": None, "port": None}):
                     "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                     "c_row": int(c_row), "c_col": int(c_col),
                     "env_id": sent_env_count,
+                    "planting": planting,
+                    "nitrogen": nitrogen,
+                    "region": region,
                     "nodata": False
                 }
 

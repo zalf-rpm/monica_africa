@@ -69,7 +69,7 @@ def create_output(msg):
     return cm_count_to_vals
 
 
-def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, path_to_csv_output_dir, setup_id):
+def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, setup_id):
     "write grids row by row"
 
     if not hasattr(write_row_to_grids, "nodata_row_count"):
@@ -244,6 +244,9 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         if not write_normal_output_files:
             custom_id = msg["customId"]
             setup_id = custom_id["setup_id"]
+            region = custom_id["region"]
+            planting = custom_id["planting"]
+            nitrogen = custom_id["nitrogen"]
 
             data = setup_id_to_data[setup_id]
 
@@ -287,8 +290,7 @@ NODATA_value -9999
                     #or (len(data["cols@row_received"]) > data["next_row"] and
                     #    data["cols@row_received"][data["next_row"]] == 0):
 
-                path_to_out_dir = config["out"] + str(setup_id) + "/"
-                path_to_csv_out_dir = config["csv-out"] + str(setup_id) + "/"
+                path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_plant-{planting}_{nitrogen}-N/"
                 print(path_to_out_dir)
                 if not data["out_dir_exists"]:
                     if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
@@ -300,18 +302,9 @@ NODATA_value -9999
                         except OSError:
                             print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
                             exit(1)
-                    if os.path.isdir(path_to_csv_out_dir) and os.path.exists(path_to_csv_out_dir):
-                        data["out_dir_exists"] = True
-                    else:
-                        try:
-                            os.makedirs(path_to_csv_out_dir)
-                            data["out_dir_exists"] = True
-                        except OSError:
-                            print("c: Couldn't create dir:", path_to_csv_out_dir, "! Exiting.")
-                            exit(1)
 
                 write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
-                                   path_to_out_dir, path_to_csv_out_dir, setup_id)
+                                   path_to_out_dir, setup_id)
 
                 debug_msg = "wrote row: " + str(data["next_row"]) \
                             + " next_row: " + str(data["next_row"] + 1) \

@@ -1,4 +1,4 @@
-OBJECTID,AEZ,Tillage_date,Sowing_date,Harvest_date,Planting Density,N 1st Application(kg/ha),N 1st _Date,N 2nd Application(kg/ha),N 2nd_Date,N 3rd Application(kg/ha),N 3rd_Date,Maize seed Variety,,,,,
+id,AEZ,Tillage date,Sowing date,Harvest date,Planting density,N 1st application (kg/ha),N 1st date,N 2nd application (kg/ha),N 2nd date,N 3rd application (kg/ha),N 3rd date,Maize seed variety
 1,Guinea Savannah,02-Jun,04-Jun,08-Oct,0.355,27.5,04-Jun,27.5,25-Jun,27.5,16-Jul,SAMMAZ 15 (IWDC2Syn-F2-W,,,,,
 2,Sudan Savannah,25-Jun,27-Jun,23-Oct,0.35,39.4,27-Jun,39.4,18-Jul,39.4,09-Aug,SAMMAZ 27 (EV 99DT-W-STR,,,,,
 3,Rain forest,30-Apr,02-May,02-Sep,0.35,25,30-Apr,25,02-Jun,25,21-Jun,SAMMAZ 40 (DTSTR-Y SYN2),,,,,

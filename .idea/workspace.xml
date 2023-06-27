@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="dev dump">
-      <change afterPath="$PROJECT_DIR$/data/elevation_0.009_4326_wgs84_nigeria.asc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/slope_0.009_4326_wgs84_nigeria.asc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WW_crop.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/crop.json" beforeDir="false" afterPath="$PROJECT_DIR$/crop.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/monica_run_lib.py" beforeDir="false" afterPath="$PROJECT_DIR$/monica_run_lib.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/Agro_Ecological_regions_late_planting.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/Agro_Ecological_regions_late_planting_low_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_low_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_high_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_high_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_medium_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_medium_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_high_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_high_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_medium_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_medium_nitrogen.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-consumer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sim.json" beforeDir="false" afterPath="$PROJECT_DIR$/sim.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim_setups.csv" beforeDir="false" afterPath="$PROJECT_DIR$/sim_setups.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sim_setups_.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/update_-999_to_-9999.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,20 +55,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/berg/GitHub/monica_africa/data",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.sourceCode.JSON",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/berg/GitHub/monica_africa/data&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.JSON&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/data" />
@@ -174,7 +180,8 @@
       <workItem from="1648734942688" duration="6905000" />
       <workItem from="1685969864637" duration="312000" />
       <workItem from="1685970189390" duration="22532000" />
-      <workItem from="1686232600652" duration="49284000" />
+      <workItem from="1686232600652" duration="54243000" />
+      <workItem from="1687769555997" duration="10197000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -225,7 +232,21 @@
       <option name="project" value="LOCAL" />
       <updated>1686673279409</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="dev dump">
+      <created>1686756929190</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1686756929190</updated>
+    </task>
+    <task id="LOCAL-00009" summary="dev dump">
+      <created>1686930062269</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1686930062269</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -256,12 +277,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run-producer.py</url>
-          <line>298</line>
+          <line>324</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/run-producer.py</url>
-          <line>365</line>
+          <line>395</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
       </breakpoints>

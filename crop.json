@@ -1,6 +1,6 @@
 {
   "crops": {
-    "SM": {
+    "GM": {
       "is-winter-crop": true,
       "cropParams": {
         "species": ["include-from-file", "crops/species/maize.json"],
@@ -21,7 +21,7 @@
           "date": "0000-03-31",
           "type": "Sowing",
           "PlantDensity": 10,
-          "crop": ["ref", "crops", "SM"]
+          "crop": ["ref", "crops", "GM"]
         },
         {
           "type": "MineralFertilization",
