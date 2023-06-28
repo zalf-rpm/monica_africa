@@ -83,9 +83,9 @@ def run_producer(server={"server": None, "port": None}):
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
-        "mode": "mbm-local-local",  # local:"cj-local-remote" remote "mbm-local-remote"
+        "mode": "mbm-local-remote",  # local:"cj-local-remote" remote "mbm-local-remote"
         "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "localhost",  # "login01.cluster.zalf.de",
+        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
@@ -97,7 +97,7 @@ def run_producer(server={"server": None, "port": None}):
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups.csv",
-        "run-setups": "[0]"
+        "run-setups": "[1]"
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -286,6 +286,7 @@ def run_producer(server={"server": None, "port": None}):
         if setup["start_date"]:
             sim_json["climate.csv-options"]["start-date"] = str(setup["start_date"])
         if setup["end_date"]:
+            end_year = int(setup["end_date"].split("-")[0])
             sim_json["climate.csv-options"]["end-date"] = str(setup["end_date"])
 
             # read template site.json
@@ -436,13 +437,13 @@ def run_producer(server={"server": None, "port": None}):
                 sub_path = "isimip/3b_v1.1_CMIP6/csvs/{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz".format(
                     gcm=gcm, scenario=scenario, ensmem=ensmem, crow=c_row, ccol=c_col
                 )
-                if scenario is not "historical":
+                if setup["incl_historical"]:
                     climate_data_paths = [
                         paths["monica-path-to-climate-dir"] + hist_sub_path,
                         paths["monica-path-to-climate-dir"] + sub_path
                     ]
                 else:
-                    climate_data_paths = [sub_path]
+                    climate_data_paths = [paths["monica-path-to-climate-dir"] + sub_path]
                 env_template["pathToClimateCSV"] = climate_data_paths
                 print("pathToClimateCSV:", env_template["pathToClimateCSV"])
 
