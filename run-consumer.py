@@ -247,6 +247,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
             region = custom_id["region"]
             planting = custom_id["planting"]
             nitrogen = custom_id["nitrogen"]
+            crop = custom_id["crop"]
 
             data = setup_id_to_data[setup_id]
 
@@ -290,7 +291,7 @@ NODATA_value -9999
                     #or (len(data["cols@row_received"]) > data["next_row"] and
                     #    data["cols@row_received"][data["next_row"]] == 0):
 
-                path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_plant-{planting}_{nitrogen}-N/"
+                path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
                 print(path_to_out_dir)
                 if not data["out_dir_exists"]:
                     if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):

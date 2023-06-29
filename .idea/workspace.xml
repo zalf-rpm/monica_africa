@@ -6,19 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="dev dump">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WW_crop.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/crop.json" beforeDir="false" afterPath="$PROJECT_DIR$/crop.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/Agro_Ecological_regions_late_planting.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/Agro_Ecological_regions_late_planting_low_nitrogen.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_low_nitrogen.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_high_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_high_nitrogen.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_medium_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_early_planting_medium_nitrogen.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_high_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_high_nitrogen.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_medium_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_ecological_regions_late_planting_medium_nitrogen.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/eco_regions/Agro_Ecological_regions_late_planting_low_nitrogen.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/eco_regions/agro_Ecological_regions_late_planting_low_nitrogen.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-consumer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sim_setups.csv" beforeDir="false" afterPath="$PROJECT_DIR$/sim_setups.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sim_setups_.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/update_-999_to_-9999.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +67,7 @@
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run-producer">
+  <component name="RunManager">
     <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="klimertrag" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -181,7 +170,7 @@
       <workItem from="1685969864637" duration="312000" />
       <workItem from="1685970189390" duration="22532000" />
       <workItem from="1686232600652" duration="54243000" />
-      <workItem from="1687769555997" duration="10197000" />
+      <workItem from="1687769555997" duration="25941000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -246,7 +235,55 @@
       <option name="project" value="LOCAL" />
       <updated>1686930062269</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1687882961083</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1687882961083</updated>
+    </task>
+    <task id="LOCAL-00011" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1687966087812</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1687966087812</updated>
+    </task>
+    <task id="LOCAL-00012" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1688041637700</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1688041637700</updated>
+    </task>
+    <task id="LOCAL-00013" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1688041959724</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1688041959724</updated>
+    </task>
+    <task id="LOCAL-00014" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1688047972404</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1688047972404</updated>
+    </task>
+    <task id="LOCAL-00015" summary="dev dump">
+      <option name="closed" value="true" />
+      <created>1688049493558</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1688049493558</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -272,31 +309,18 @@
     <MESSAGE value="dev dump" />
     <option name="LAST_COMMIT_MESSAGE" value="dev dump" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run-producer.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="48" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run-producer.py</url>
-          <line>395</line>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1686748285229" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1688047980161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$prepare_input_files.coverage" NAME="prepare_input_files Coverage Results" MODIFIED="1645540979552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$flush_queue.coverage" NAME="flush-queue Coverage Results" MODIFIED="1687957419709" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$dummy.coverage" NAME="dummy Coverage Results" MODIFIED="1647616452099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_final.coverage" NAME="run-consumer_final Coverage Results" MODIFIED="1641900202962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$create_image_from_ascii.coverage" NAME="create_image_from_ascii Coverage Results" MODIFIED="1688040396001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$06_plot_final_calibration_figures.coverage" NAME="06_plot_final_calibration_figures Coverage Results" MODIFIED="1647863270409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$reformat_output.coverage" NAME="reformat_output Coverage Results" MODIFIED="1645625904623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations__1_.coverage" NAME="01_compare_simulation_and_observations (1) Coverage Results" MODIFIED="1642161896630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$post_process.coverage" NAME="post_process Coverage Results" MODIFIED="1688040202099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations.coverage" NAME="01_compare_simulation_and_observations Coverage Results" MODIFIED="1647424341475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_results.coverage" NAME="05_plot_results Coverage Results" MODIFIED="1647537897438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
@@ -304,6 +328,6 @@
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_clemens_local.coverage" NAME="run-producer_clemens_local Coverage Results" MODIFIED="1643792315236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_plot_final_calibration_figures.coverage" NAME="01_plot_final_calibration_figures Coverage Results" MODIFIED="1648741551358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AgoraNatura/agora_natura/result_analysis" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$plot_book_chapter_map.coverage" NAME="plot_book_chapter_map Coverage Results" MODIFIED="1643034535583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1686673059097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1687967900587" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
