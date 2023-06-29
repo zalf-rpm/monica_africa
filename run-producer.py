@@ -440,7 +440,7 @@ def run_producer(server={"server": None, "port": None}):
                 sub_path = "isimip/3b_v1.1_CMIP6/csvs/{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz".format(
                     gcm=gcm, scenario=scenario, ensmem=ensmem, crow=c_row, ccol=c_col
                 )
-                if setup["incl_historical"]:
+                if setup["incl_historical"] and scenario != "historical":
                     climate_data_paths = [
                         paths["monica-path-to-climate-dir"] + hist_sub_path,
                         paths["monica-path-to-climate-dir"] + sub_path
