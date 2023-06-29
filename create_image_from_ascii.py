@@ -27,10 +27,10 @@ import cartopy.feature as cfeature
 
 PATHS = {
     "local": {
-        "sourcepath": "./out/merged",
-        "outputpath": "./out/",
+        "sourcepath": "./out/3_reg-nigeria_plant-early_high-N/",
+        "outputpath": "./out/3_reg-nigeria_plant-early_high-N/",
         "png-out": "png/",  # path to png images
-        "pdf-out": "pdf-out/",  # path to pdf package
+        "pdf-out": "pdf/",  # path to pdf package
     },
     "test": {
         "sourcepath": "./asciigrid/",

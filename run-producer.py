@@ -83,9 +83,9 @@ def run_producer(server={"server": None, "port": None}):
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
-        "mode": "mbm-local-remote",  # local:"cj-local-remote" remote "mbm-local-remote"
+        "mode": "mbm-local-local",  # local:"cj-local-remote" remote "mbm-local-remote"
         "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
+        "server": server["server"] if server["server"] else "localhost",  # "login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
@@ -97,7 +97,7 @@ def run_producer(server={"server": None, "port": None}):
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups.csv",
-        "run-setups": "[1]"
+        "run-setups": "[3]"
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -252,6 +252,7 @@ def run_producer(server={"server": None, "port": None}):
         gcm = setup["gcm"]
         scenario = setup["scenario"]
         ensmem = setup["ensmem"]
+        crop = setup["crop"]
 
         region = setup["region"] if "region" in setup else config["region"]
         lat_lon_bounds = region_to_lat_lon_bounds.get(region, {
@@ -299,6 +300,7 @@ def run_producer(server={"server": None, "port": None}):
         # read template crop.json
         with open(setup.get("crop.json", config["crop.json"])) as _:
             crop_json = json.load(_)
+            crop_json["cropRotation"][0]["worksteps"][1]["crop"][2] = crop
 
         crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = setup[
             "use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
@@ -387,6 +389,7 @@ def run_producer(server={"server": None, "port": None}):
                         "planting": planting,
                         "nitrogen": nitrogen,
                         "region": region,
+                        "crop": crop,
                         "nodata": True
                     }
                     socket.send_json(env_template)
@@ -460,6 +463,7 @@ def run_producer(server={"server": None, "port": None}):
                     "planting": planting,
                     "nitrogen": nitrogen,
                     "region": region,
+                    "crop": crop,
                     "nodata": False
                 }
 
