@@ -6,4 +6,3 @@ run-id,region,crop,planting,nitrogen,gcm,scenario,ensmem,incl_historical,start_d
 5,nigeria,BokkosMaize_1,late,medium,UKESM1-0-LL,ssp585,r1i1p1f2,true,1970-01-01,2020-12-31,true,true,true,false,true,false,true,false,false,false,,,,,true,elevation_0.009_4326_wgs84_nigeria.asc,slope_0.009_4326_wgs84_nigeria.asc,sim.json,crop.json,site.json,
 6,nigeria,HaskePotato,late,high,GFDL-ESM4,historical,r1i1p1f1,true,1970-01-01,2014-12-31,true,true,true,false,true,false,true,false,false,false,,,,,true,elevation_0.009_4326_wgs84_nigeria.asc,slope_0.009_4326_wgs84_nigeria.asc,sim.json,crop.json,site.json,
 7,nigeria,BokkosMaize_3,late,low,GFDL-ESM4,ssp126,r1i1p1f1,true,1970-01-01,2020-12-31,true,true,true,false,true,false,true,false,false,false,,,,,true,elevation_0.009_4326_wgs84_nigeria.asc,slope_0.009_4326_wgs84_nigeria.asc,sim.json,crop.json,site.json,
-
