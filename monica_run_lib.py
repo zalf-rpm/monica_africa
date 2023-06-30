@@ -59,6 +59,8 @@ def read_sim_setups(path_to_setups_csv):
         header_cols = next(reader)
         for row in reader:
             data = {}
+            if len(row) == 0:
+                continue
             for i, header_col in enumerate(header_cols):
                 value = row[i]
                 if value.lower() in ["true", "false"]:
