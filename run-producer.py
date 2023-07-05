@@ -420,8 +420,11 @@ def run_producer(server={"server": None, "port": None}):
                     env_template["params"]["siteParameters"]["Latitude"] = lat
 
                 if setup["FieldConditionModifier"]:
-                    env_template["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]["species"][
-                        "FieldConditionModifier"] = float(setup["FieldConditionModifier"])
+                    fcms = setup["FieldConditionModifier"].split("|")
+                    fcm = float(fcms[aer-1])
+                    if fcm > 0:
+                        env_template["cropRotation"][0]["worksteps"][1]["crop"]["cropParams"]["species"][
+                            "FieldConditionModifier"] = fcm
 
                 env_template["params"]["simulationParameters"]["UseNMinMineralFertilisingMethod"] = setup[
                     "fertilization"]
