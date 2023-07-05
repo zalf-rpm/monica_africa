@@ -1,19 +1,11 @@
 {
   "crops": {
-    "grain-maize_bs": {
-      "is-winter-crop": true,
-      "cropParams": {
-        "species": ["include-from-file", "crops/species/maize.json"],
-        "cultivar": ["include-from-file", "crops/cultivars/grain-maize_bs.json"]
-      },
-      "residueParams": ["include-from-file", "crops/residues/maize.json"]
-    },
     "BokkosMaize_1": {
       "is-winter-crop": true,
       "cropParams": {
         "species": {
           "=": ["include-from-file", "crops/species/maize.json"],
-          "FieldConditionModifier": 0.9
+          "FieldConditionModifier": 0.95
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
