@@ -19,8 +19,8 @@ import errno
 
 PATHS = {
     "local": {
-        "sourcepath": "./out/3_reg-nigeria_plant-early_high-N/",
-        "outputpath": "./out/3_reg-nigeria_plant-early_high-N/merged/",
+        "sourcepath": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/rpm/projects/monica/project/africa/nigeria/1_reg-nigeria_BokkosMaize_1_plant-early_low-N/",
+        "outputpath": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/rpm/projects/monica/project/africa/nigeria/1_reg-nigeria_BokkosMaize_1_plant-early_low-N/merged/",
         "std": "std/",  # path to std images
         "avg": "avg/",  # path to avg images
     },
@@ -35,7 +35,7 @@ USER = "local"
 NONEVALUE = -9999
 # start and end years for each decade
 start_year = 1970  # 1601  # 1970
-end_year = 2020  # 2101  # 2009
+end_year = 2000  # 2101  # 2009
 yearRanges = [(y, y+9) for y in range(start_year, end_year, 10)]
 crops = ["maizegrainmaize"]  # TBD use grain maize
 types = ["Yield", "LAI", "AbBiom"]

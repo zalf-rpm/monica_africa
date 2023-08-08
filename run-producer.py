@@ -90,14 +90,13 @@ def run_producer(server={"server": None, "port": None}):
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
         "end_lon": "179.50000000",
-        "region": "nigeria",
+        "region": "africa",
         "resolution": "5min",  # 30sec,
-        "path_to_dem_grid": "",
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups.csv",
-        "run-setups": "[3]"
+        "setups-file": "sim_setups_africa.csv",
+        "run-setups": "[1]"
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -149,7 +148,8 @@ def run_producer(server={"server": None, "port": None}):
         return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
 
     # eco regions
-    path_to_eco_grid = paths["path-to-data-dir"] + "/eco_regions/agro_eco_regions.asc"
+    path_to_eco_grid = (paths["path-to-data-dir"] +
+                        "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc")
     eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
     eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
     aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
@@ -161,6 +161,9 @@ def run_producer(server={"server": None, "port": None}):
         return True
     
     def mgmt_date_to_rel_date(mgmt_date):
+        if mgmt_date[:5] == "0000-":
+            return mgmt_date
+
         day_str, month_short_name = mgmt_date.split("-")
         month_str = "00"
         if month_short_name == "Jan":
@@ -212,23 +215,23 @@ def run_producer(server={"server": None, "port": None}):
         # skip first 4.5cm layer and just use 7 layers
         layers = []
 
-        layerDepth = 8
+        layer_depth = 8
         # find the fill value for the soil data
         for elem2 in soil_data.keys():
             for i in range(8):
                 if np.ma.is_masked(soil_vars[elem2][i, row, col]):
-                    if i < layerDepth:
-                        layerDepth = i
+                    if i < layer_depth:
+                        layer_depth = i
                     break
                     #return None
-        layerDepth -= 1
+        layer_depth -= 1
 
-        if layerDepth < 4:
+        if layer_depth < 4:
             return None
         
         for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
                                                  (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 0.7)][1:]:
-            if i <= layerDepth:
+            if i <= layer_depth:
                 layers.append({
                     "Thickness": [monica_depth_m, "m"],
                     "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * soil_data["corg"]["conv_factor"], "%"],
@@ -260,21 +263,39 @@ def run_producer(server={"server": None, "port": None}):
             "br": {"lat": float(config["end_lat"]), "lon": float(config["end_lon"])}
         })
 
-        planting = setup["planting"].lower()
-        nitrogen = setup["nitrogen"].lower()
-        management_file = f"agro_ecological_regions_{planting}_planting_{nitrogen}_nitrogen.csv"
-        # load management data
-        management = Mrunlib.read_csv(paths["path-to-data-dir"] + "/eco_regions/" + management_file, key="id")
+        if setup["region"] == "nigeria":
+            planting = setup["planting"].lower()
+            nitrogen = setup["nitrogen"].lower()
+            management_file = f"{planting}_planting_{nitrogen}_nitrogen.csv"
+            # load management data
+            management = Mrunlib.read_csv(paths["path-to-data-dir"] +
+                                          "/agro_ecological_regions_nigeria/" + management_file, key="id")
+        else:
+            planting = nitrogen = management = None
+
+        path_to_planting_grid = \
+            paths["path-to-data-dir"] + f"/{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
+        planting_metadata, _ = Mrunlib.read_header(path_to_planting_grid, 5)
+        planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=6)
+        # print("read: ", path_to_planting_grid)
+        planting_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
+
+        path_to_harvest_grid = \
+            paths["path-to-data-dir"] + f"/{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
+        harvest_metadata, _ = Mrunlib.read_header(path_to_harvest_grid, 5)
+        harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=6)
+        # print("read: ", path_to_harvest_grid)
+        harvest_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
 
         # height data for germany
-        path_to_dem_grid = paths["path-to-data-dir"] + setup["dem_asc_grid"]
+        path_to_dem_grid = setup["path_to_dem_asc_grid"]
         dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid, 5)
         dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=5)
         # print("read: ", path_to_dem_grid)
         dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
 
         # slope data
-        path_to_slope_grid = paths["path-to-data-dir"] + "slope_0.009_4326_wgs84_nigeria.asc"
+        path_to_slope_grid = setup["path_to_slope_asc_grid"]
         slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid, 6)
         slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
         print("read: ", path_to_slope_grid)
@@ -300,7 +321,10 @@ def run_producer(server={"server": None, "port": None}):
         # read template crop.json
         with open(setup.get("crop.json", config["crop.json"])) as _:
             crop_json = json.load(_)
-            crop_json["cropRotation"][0]["worksteps"][1]["crop"][2] = crop
+            # set current crop
+            for ws in crop_json["cropRotation"][0]["worksteps"]:
+                if "Sowing" in ws["type"]:
+                    ws["crop"][2] = crop
 
         crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = setup[
             "use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
@@ -348,34 +372,54 @@ def run_producer(server={"server": None, "port": None}):
                 s_row = int((s_lat_0 - lat) / s_resolution)
 
                 # set management
-                aer_col = int((lon - aer_ll0r["lon_0"]) / aer_ll0r["res"])
-                aer_row = int((aer_ll0r["lat_0"] - lat) / aer_ll0r["res"])
+                mgmt = None
+                aer = None
+                if setup["region"] == "nigeria":
+                    aer_col = int((lon - aer_ll0r["lon_0"]) / aer_ll0r["res"])
+                    aer_row = int((aer_ll0r["lat_0"] - lat) / aer_ll0r["res"])
+                    if 0 <= aer_row < int(eco_metadata["nrows"]) \
+                            and 0 <= aer_col < int(eco_metadata["ncols"]):
+                        aer = eco_grid[aer_row, aer_col]
+                        if aer > 0 and aer in management:
+                            mgmt = management[aer]
+                else:
+                    mgmt = {}
 
-                aer = 0
+                    planting_col = int((lon - planting_ll0r["lon_0"]) / planting_ll0r["res"])
+                    planting_row = int((planting_ll0r["lat_0"] - lat) / planting_ll0r["res"])
+                    if 0 <= planting_row < int(planting_metadata["nrows"]) \
+                            and 0 <= planting_col < int(planting_metadata["ncols"]):
+                        planting_doy = planting_grid[planting_row, planting_col]
+                        d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
+                        mgmt["Sowing date"] = f"0000-{d.month:02}-{d.year:02}"
+
+                    harvest_col = int((lon - harvest_ll0r["lon_0"]) / harvest_ll0r["res"])
+                    harvest_row = int((harvest_ll0r["lat_0"] - lat) / harvest_ll0r["res"])
+                    if 0 <= harvest_row < int(harvest_metadata["nrows"]) \
+                            and 0 <= harvest_col < int(harvest_metadata["ncols"]):
+                        harvest_doy = harvest_grid[harvest_row, harvest_col]
+                        d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
+                        mgmt["Harvest date"] = f"0000-{d.month:02}-{d.year:02}"
+
                 valid_mgmt = False
-                if 0 <= aer_row < int(eco_metadata["nrows"]) \
-                        and 0 <= aer_col < int(eco_metadata["ncols"]):
-                    aer = eco_grid[aer_row, aer_col]
-                    if aer > 0 and aer in management:
-                        mgmt = management[aer]
-                        if check_for_nill_dates(mgmt):
-                            valid_mgmt = True
-                            for ws in env_template["cropRotation"][0]["worksteps"]:
-                                if ws["type"] == "Sowing":
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
-                                    ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
-                                elif ws["type"] == "AutomaticHarvest":
-                                    ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
-                                elif ws["type"] == "Tillage":
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
-                                elif ws["type"] == "MineralFertilization":
-                                    app_no = int(ws["application"])
-                                    app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
-                                    ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
+                if mgmt and check_for_nill_dates(mgmt):
+                    valid_mgmt = True
+                    for ws in env_template["cropRotation"][0]["worksteps"]:
+                        if ws["type"] == "Sowing" and "Sowing date" in mgmt:
+                            ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
+                            ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                        elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
+                            ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
+                        elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
+                            ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
+                        elif ws["type"] == "MineralFertilization" and mgmt[:2] == "N " and mgmt[-5:] == " date":
+                            app_no = int(ws["application"])
+                            app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
+                            ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
+                            ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
 
                 soil_profile = create_soil_profile(s_row, s_col)
-                if soil_profile is None or aer == 0 or aer not in management or not valid_mgmt:
+                if soil_profile is None or mgmt is None or not valid_mgmt:
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
@@ -414,17 +458,28 @@ def run_producer(server={"server": None, "port": None}):
                     env_template["params"]["siteParameters"]["heightNN"] = float(height_nn)
 
                 if setup["slope"]:
-                    env_template["params"]["siteParameters"]["slope"] = slope / 90.0
+                    if setup["slope_unit"] == "degree":
+                        s = slope / 90.0
+                    elif setup["slope_unit"] == "radian":
+                        s = slope / (3.14 / 2.0)
+                    else:
+                        s = slope
+                    env_template["params"]["siteParameters"]["slope"] = s
 
                 if setup["latitude"]:
                     env_template["params"]["siteParameters"]["Latitude"] = lat
 
                 if setup["FieldConditionModifier"]:
-                    fcms = setup["FieldConditionModifier"].split("|")
-                    fcm = float(fcms[aer-1])
-                    if fcm > 0:
-                        env_template["cropRotation"][0]["worksteps"][1]["crop"]["cropParams"]["species"][
-                            "FieldConditionModifier"] = fcm
+                    for ws in env_template["cropRotation"][0]["worksteps"]:
+                        if "Sowing" in ws["type"]:
+                            if "|" in setup["FieldConditionModifier"] and aer and aer > 0:
+                                fcms = setup["FieldConditionModifier"].split("|")
+                                fcm = float(fcms[aer-1])
+                                if fcm > 0:
+                                    ws["crop"]["cropParams"]["species"]["FieldConditionModifier"] = fcm
+                            else:
+                                ws["crop"]["cropParams"]["species"]["FieldConditionModifier"] = \
+                                    setup["FieldConditionModifier"]
 
                 env_template["params"]["simulationParameters"]["UseNMinMineralFertilisingMethod"] = setup[
                     "fertilization"]

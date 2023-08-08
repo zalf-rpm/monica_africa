@@ -27,8 +27,8 @@ import cartopy.feature as cfeature
 
 PATHS = {
     "local": {
-        "sourcepath": "./out/3_reg-nigeria_plant-early_high-N/",
-        "outputpath": "./out/3_reg-nigeria_plant-early_high-N/",
+        "sourcepath": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/rpm/projects/monica/project/africa/nigeria/1_reg-nigeria_BokkosMaize_1_plant-early_low-N/merged/",
+        "outputpath": "/run/user/1000/gvfs/sftp:host=login01.cluster.zalf.de,user=rpm/beegfs/rpm/projects/monica/project/africa/nigeria/1_reg-nigeria_BokkosMaize_1_plant-early_low-N/merged/",
         "png-out": "png/",  # path to png images
         "pdf-out": "pdf/",  # path to pdf package
     },
