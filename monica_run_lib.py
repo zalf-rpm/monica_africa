@@ -76,14 +76,16 @@ def read_header(path_to_ascii_grid_file, no_of_header_lines=6):
     """read metadata from esri ascii grid file"""
 
     def read_header_from(f):
+        possible_headers = ["ncols", "nrows", "xllcorner", "yllcorner", "cellsize", "nodata_value"]
         metadata = {}
         header_str = ""
         for i in range(0, no_of_header_lines):
             line = f.readline()
-            header_str += line
             s_line = [x for x in line.split() if len(x) > 0]
-            if len(s_line) > 1:
-                metadata[s_line[0].strip().lower()] = float(s_line[1].strip())
+            key = s_line[0].strip().lower()
+            if len(s_line) > 1 and key in possible_headers:
+                metadata[key] = float(s_line[1].strip())
+                header_str += line
         return metadata, header_str
 
     if path_to_ascii_grid_file[-3:] == ".gz":

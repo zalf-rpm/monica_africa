@@ -151,7 +151,7 @@ def run_producer(server={"server": None, "port": None}):
     path_to_eco_grid = (paths["path-to-data-dir"] +
                         "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc")
     eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
-    eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
+    eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=len(eco_metadata))
     aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
 
     def check_for_nill_dates(mgmt):
@@ -275,29 +275,29 @@ def run_producer(server={"server": None, "port": None}):
 
         path_to_planting_grid = \
             paths["path-to-data-dir"] + f"/{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
-        planting_metadata, _ = Mrunlib.read_header(path_to_planting_grid, 5)
-        planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=6)
+        planting_metadata, _ = Mrunlib.read_header(path_to_planting_grid)
+        planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=len(planting_metadata))
         # print("read: ", path_to_planting_grid)
         planting_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
 
         path_to_harvest_grid = \
             paths["path-to-data-dir"] + f"/{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
-        harvest_metadata, _ = Mrunlib.read_header(path_to_harvest_grid, 5)
-        harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=6)
+        harvest_metadata, _ = Mrunlib.read_header(path_to_harvest_grid)
+        harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
         # print("read: ", path_to_harvest_grid)
         harvest_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
 
         # height data for germany
         path_to_dem_grid = setup["path_to_dem_asc_grid"]
-        dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid, 5)
-        dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=5)
+        dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid)
+        dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=len(dem_metadata))
         # print("read: ", path_to_dem_grid)
         dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
 
         # slope data
         path_to_slope_grid = setup["path_to_slope_asc_grid"]
-        slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid, 6)
-        slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=6)
+        slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid)
+        slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=len(slope_metadata))
         print("read: ", path_to_slope_grid)
         slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
 
@@ -389,25 +389,30 @@ def run_producer(server={"server": None, "port": None}):
                     planting_row = int((planting_ll0r["lat_0"] - lat) / planting_ll0r["res"])
                     if 0 <= planting_row < int(planting_metadata["nrows"]) \
                             and 0 <= planting_col < int(planting_metadata["ncols"]):
-                        planting_doy = planting_grid[planting_row, planting_col]
-                        d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
-                        mgmt["Sowing date"] = f"0000-{d.month:02}-{d.year:02}"
+                        planting_doy = int(planting_grid[planting_row, planting_col])
+                        if planting_doy != planting_metadata["nodata_value"]:
+                            d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
+                            mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
+                            planting = f"doy=p:{planting_doy}"
 
                     harvest_col = int((lon - harvest_ll0r["lon_0"]) / harvest_ll0r["res"])
                     harvest_row = int((harvest_ll0r["lat_0"] - lat) / harvest_ll0r["res"])
                     if 0 <= harvest_row < int(harvest_metadata["nrows"]) \
                             and 0 <= harvest_col < int(harvest_metadata["ncols"]):
-                        harvest_doy = harvest_grid[harvest_row, harvest_col]
-                        d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
-                        mgmt["Harvest date"] = f"0000-{d.month:02}-{d.year:02}"
+                        harvest_doy = int(harvest_grid[harvest_row, harvest_col])
+                        if harvest_doy != harvest_metadata["nodata_value"]:
+                            d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
+                            mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
+                            planting = f"{planting}-h:{harvest_doy}"
 
                 valid_mgmt = False
-                if mgmt and check_for_nill_dates(mgmt):
+                if mgmt and check_for_nill_dates(mgmt) and len(mgmt) > 1:
                     valid_mgmt = True
                     for ws in env_template["cropRotation"][0]["worksteps"]:
                         if ws["type"] == "Sowing" and "Sowing date" in mgmt:
                             ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
-                            ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                            if "Planting density" in mgmt:
+                                ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
                         elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
                             ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
@@ -417,9 +422,10 @@ def run_producer(server={"server": None, "port": None}):
                             app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
                             ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
                             ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
+                else:
+                    mgmt = None
 
-                soil_profile = create_soil_profile(s_row, s_col)
-                if soil_profile is None or mgmt is None or not valid_mgmt:
+                def send_nodata_msg(sec):
                     env_template["customId"] = {
                         "setup_id": setup_id,
                         "lat": lat, "lon": lon,
@@ -429,7 +435,7 @@ def run_producer(server={"server": None, "port": None}):
                         "s_row_0": s_row_0, "s_col_0": s_col_0,
                         "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                         "c_row": int(c_row), "c_col": int(c_col),
-                        "env_id": sent_env_count,
+                        "env_id": sec,
                         "planting": planting,
                         "nitrogen": nitrogen,
                         "region": region,
@@ -437,17 +443,32 @@ def run_producer(server={"server": None, "port": None}):
                         "nodata": True
                     }
                     socket.send_json(env_template)
-                    print("sent nodata env ", sent_env_count, " customId: ", env_template["customId"])
+                    print("sent nodata env ", sec, " customId: ", env_template["customId"])
+
+                if mgmt is None or not valid_mgmt:
+                    send_nodata_msg(sent_env_count)
+                    sent_env_count += 1
+                    continue
+
+                soil_profile = create_soil_profile(s_row, s_col)
+                if not soil_profile:
+                    send_nodata_msg(sent_env_count)
                     sent_env_count += 1
                     continue
 
                 dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
                 dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
                 height_nn = dem_grid[dem_row, dem_col]
+                if height_nn == dem_metadata["nodata_value"]:
+                    send_nodata_msg(sent_env_count)
+                    sent_env_count += 1
+                    continue
 
                 slope_col = int((lon - slope_ll0r["lon_0"]) / slope_ll0r["res"])
                 slope_row = int((slope_ll0r["lat_0"] - lat) / slope_ll0r["res"])
                 slope = slope_grid[slope_row, slope_col]
+                if slope == slope_metadata["nodata_value"]:
+                    slope = 0
 
                 env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
                     "LeafExtensionModifier"]
@@ -460,8 +481,6 @@ def run_producer(server={"server": None, "port": None}):
                 if setup["slope"]:
                     if setup["slope_unit"] == "degree":
                         s = slope / 90.0
-                    elif setup["slope_unit"] == "radian":
-                        s = slope / (3.14 / 2.0)
                     else:
                         s = slope
                     env_template["params"]["siteParameters"]["slope"] = s
