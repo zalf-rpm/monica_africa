@@ -83,9 +83,9 @@ def run_producer(server={"server": None, "port": None}):
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
-        "mode": "mbm-local-local",  # local:"cj-local-remote" remote "mbm-local-remote"
+        "mode": "mbm-local-remote",
         "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "localhost",  # "login01.cluster.zalf.de",
+        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
@@ -393,7 +393,6 @@ def run_producer(server={"server": None, "port": None}):
                         if planting_doy != planting_metadata["nodata_value"]:
                             d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
                             mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
-                            planting = f"doy=p:{planting_doy}"
 
                     harvest_col = int((lon - harvest_ll0r["lon_0"]) / harvest_ll0r["res"])
                     harvest_row = int((harvest_ll0r["lat_0"] - lat) / harvest_ll0r["res"])
@@ -403,7 +402,6 @@ def run_producer(server={"server": None, "port": None}):
                         if harvest_doy != harvest_metadata["nodata_value"]:
                             d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
                             mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
-                            planting = f"{planting}-h:{harvest_doy}"
 
                 valid_mgmt = False
                 if mgmt and check_for_nill_dates(mgmt) and len(mgmt) > 1:
