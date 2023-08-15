@@ -1,0 +1,1130 @@
+Crop,Contry,Year,Yield t.ha,ID
+Maize ,Algeria,2010,0.25827,10
+Maize ,Algeria,2011,0.23374,10
+Maize ,Algeria,2012,0.25583,10
+Maize ,Algeria,2013,0.33649,10
+Maize ,Algeria,2014,0.26165,10
+Maize ,Algeria,2015,0.39242,10
+Maize ,Algeria,2016,0.45122,10
+Maize ,Algeria,2017,0.13007,10
+Maize ,Algeria,2018,0.44416,10
+Maize ,Algeria,2019,0.41539,10
+Maize ,Algeria,2020,0.60739,10
+Maize ,Angola,2010,0.072,43
+Maize ,Angola,2011,0.07376,43
+Maize ,Angola,2012,0.0777,43
+Maize ,Angola,2013,0.09467,43
+Maize ,Angola,2014,0.10386,43
+Maize ,Angola,2015,0.11234,43
+Maize ,Angola,2016,0.09785,43
+Maize ,Angola,2017,0.08935,43
+Maize ,Angola,2018,0.10477,43
+Maize ,Angola,2019,0.10666,43
+Maize ,Angola,2020,0.10993,43
+Maize ,Burkina Faso,2010,0.14342,18
+Maize ,Burkina Faso,2011,0.15356,18
+Maize ,Burkina Faso,2012,0.18386,18
+Maize ,Burkina Faso,2013,0.17353,18
+Maize ,Burkina Faso,2014,0.19109,18
+Maize ,Burkina Faso,2015,0.1792,18
+Maize ,Burkina Faso,2016,0.17577,18
+Maize ,Burkina Faso,2017,0.16034,18
+Maize ,Burkina Faso,2018,0.16681,18
+Maize ,Burkina Faso,2019,0.16858,18
+Maize ,Burkina Faso,2020,0.17625,18
+Maize ,Burundi,2010,0.10595,42
+Maize ,Burundi,2011,0.11087,42
+Maize ,Burundi,2012,0.11763,42
+Maize ,Burundi,2013,0.13218,42
+Maize ,Burundi,2014,0.13145,42
+Maize ,Burundi,2015,0.13262,42
+Maize ,Burundi,2016,0.14835,42
+Maize ,Burundi,2017,0.12977,42
+Maize ,Burundi,2018,0.15289,42
+Maize ,Burundi,2019,0.10002,42
+Maize ,Burundi,2020,0.11607,42
+Maize ,Cameroon,2010,0.19741,21
+Maize ,Cameroon,2011,0.2024,21
+Maize ,Cameroon,2012,0.17152,21
+Maize ,Cameroon,2013,0.19787,21
+Maize ,Cameroon,2014,0.17645,21
+Maize ,Cameroon,2015,0.17406,21
+Maize ,Cameroon,2016,0.17929,21
+Maize ,Cameroon,2017,0.17662,21
+Maize ,Cameroon,2018,0.17667,21
+Maize ,Cameroon,2019,0.17754,21
+Maize ,Cameroon,2020,0.17694,21
+Maize ,Central Africa,2010,0.16148,29
+Maize ,Central Africa,2011,0.16804,29
+Maize ,Central Africa,2012,0.17505,29
+Maize ,Central Africa,2013,0.1248,29
+Maize ,Central Africa,2014,0.08,29
+Maize ,Central Africa,2015,0.08,29
+Maize ,Central Africa,2016,0.08,29
+Maize ,Central Africa,2017,0.08115,29
+Maize ,Central Africa,2018,0.08094,29
+Maize ,Central Africa,2019,0.08,29
+Maize ,Central Africa,2020,0.08,29
+Maize ,Chad,2010,0.08174,15
+Maize ,Chad,2011,0.12271,15
+Maize ,Chad,2012,0.13679,15
+Maize ,Chad,2013,0.12273,15
+Maize ,Chad,2014,0.1164,15
+Maize ,Chad,2015,0.11461,15
+Maize ,Chad,2016,0.12726,15
+Maize ,Chad,2017,0.11814,15
+Maize ,Chad,2018,0.12809,15
+Maize ,Chad,2019,0.12625,15
+Maize ,Chad,2020,0.12029,15
+Maize ,Congo,2010,0.08174,34
+Maize ,Congo,2011,0.08285,34
+Maize ,Congo,2012,0.08219,34
+Maize ,Congo,2013,0.08239,34
+Maize ,Congo,2014,0.0854,34
+Maize ,Congo,2015,0.08691,34
+Maize ,Congo,2016,0.08969,34
+Maize ,Congo,2017,0.09307,34
+Maize ,Congo,2018,0.09605,34
+Maize ,Congo,2019,0.1,34
+Maize ,Congo,2020,0.1,34
+Maize ,Egypt,2010,0.727,12
+Maize ,Egypt,2011,0.77409,12
+Maize ,Egypt,2012,0.77723,12
+Maize ,Egypt,2013,0.77223,12
+Maize ,Egypt,2014,0.77556,12
+Maize ,Egypt,2015,0.73546,12
+Maize ,Egypt,2016,0.76071,12
+Maize ,Egypt,2017,0.77895,12
+Maize ,Egypt,2018,0.75162,12
+Maize ,Egypt,2019,0.49513,12
+Maize ,Egypt,2020,0.77767,12
+Maize ,Ethiopia,2010,0.21926,19
+Maize ,Ethiopia,2011,0.24963,19
+Maize ,Ethiopia,2012,0.25933,19
+Maize ,Ethiopia,2013,0.27403,19
+Maize ,Ethiopia,2014,0.29502,19
+Maize ,Ethiopia,2015,0.27765,19
+Maize ,Ethiopia,2016,0.29468,19
+Maize ,Ethiopia,2017,0.33119,19
+Maize ,Ethiopia,2018,0.41904,19
+Maize ,Ethiopia,2019,0.42368,19
+Maize ,Ethiopia,2020,0.42404,19
+Maize ,Gabon,2010,0.15733,38
+Maize ,Gabon,2011,0.15736,38
+Maize ,Gabon,2012,0.15739,38
+Maize ,Gabon,2013,0.15741,38
+Maize ,Gabon,2014,0.15667,38
+Maize ,Gabon,2015,0.15653,38
+Maize ,Gabon,2016,0.15629,38
+Maize ,Gabon,2017,0.15622,38
+Maize ,Gabon,2018,0.15632,38
+Maize ,Gabon,2019,0.15628,38
+Maize ,Gabon,2020,0.15627,38
+Maize ,Gambia,2010,0.125,6
+Maize ,Gambia,2011,0.09349,6
+Maize ,Gambia,2012,0.10643,6
+Maize ,Gambia,2013,0.09967,6
+Maize ,Gambia,2014,0.08252,6
+Maize ,Gambia,2015,0.0878,6
+Maize ,Gambia,2016,0.07209,6
+Maize ,Gambia,2017,0.08857,6
+Maize ,Gambia,2018,0.05429,6
+Maize ,Gambia,2019,0.03714,6
+Maize ,Gambia,2020,0.04857,6
+Maize ,Ghana,2010,0.18874,27
+Maize ,Ghana,2011,0.16458,27
+Maize ,Ghana,2012,0.18712,27
+Maize ,Ghana,2013,0.1724,27
+Maize ,Ghana,2014,0.17291,27
+Maize ,Ghana,2015,0.19218,27
+Maize ,Ghana,2016,0.195,27
+Maize ,Ghana,2017,0.20112,27
+Maize ,Ghana,2018,0.1948,27
+Maize ,Ghana,2019,0.24167,27
+Maize ,Ghana,2020,0.27564,27
+Maize ,Guinea,2010,0.16313,8
+Maize ,Guinea,2011,0.16584,8
+Maize ,Guinea,2012,0.122,8
+Maize ,Guinea,2013,0.125,8
+Maize ,Guinea,2014,0.12323,8
+Maize ,Guinea,2015,0.12503,8
+Maize ,Guinea,2016,0.12265,8
+Maize ,Guinea,2017,0.135,8
+Maize ,Guinea,2018,0.13386,8
+Maize ,Guinea,2019,0.145,8
+Maize ,Guinea,2020,0.142,8
+Maize ,Guinea-Bissau,2010,0.1047,7
+Maize ,Guinea-Bissau,2011,0.10509,7
+Maize ,Guinea-Bissau,2012,0.10466,7
+Maize ,Guinea-Bissau,2013,0.10466,7
+Maize ,Guinea-Bissau,2014,0.1,7
+Maize ,Guinea-Bissau,2015,0.08571,7
+Maize ,Guinea-Bissau,2016,0.08571,7
+Maize ,Guinea-Bissau,2017,0.1,7
+Maize ,Guinea-Bissau,2018,0.1,7
+Maize ,Guinea-Bissau,2019,0.0778,7
+Maize ,Guinea-Bissau,2020,0.0818,7
+Maize ,Kenya,2010,0.17251,33
+Maize ,Kenya,2011,0.1584,33
+Maize ,Kenya,2012,0.17366,33
+Maize ,Kenya,2013,0.16922,33
+Maize ,Kenya,2014,0.16602,33
+Maize ,Kenya,2015,0.1823,33
+Maize ,Kenya,2016,0.14284,33
+Maize ,Kenya,2017,0.15272,33
+Maize ,Kenya,2018,0.17656,33
+Maize ,Kenya,2019,0.156,33
+Maize ,Kenya,2020,0.17741,33
+Maize ,Libya,2010,0.19333,11
+Maize ,Libya,2011,0.21643,11
+Maize ,Libya,2012,0.21851,11
+Maize ,Libya,2013,0.2,11
+Maize ,Libya,2014,0.20983,11
+Maize ,Libya,2015,0.22887,11
+Maize ,Libya,2016,0.21322,11
+Maize ,Libya,2017,0.21809,11
+Maize ,Libya,2018,0.22009,11
+Maize ,Libya,2019,0.21717,11
+Maize ,Libya,2020,0.21845,11
+Maize ,Madagascar,2010,0.15577,48
+Maize ,Madagascar,2011,0.15455,48
+Maize ,Madagascar,2012,0.16591,48
+Maize ,Madagascar,2013,0.16581,48
+Maize ,Madagascar,2014,0.16832,48
+Maize ,Madagascar,2015,0.17142,48
+Maize ,Madagascar,2016,0.17309,48
+Maize ,Madagascar,2017,0.17406,48
+Maize ,Madagascar,2018,0.17485,48
+Maize ,Madagascar,2019,0.17363,48
+Maize ,Madagascar,2020,0.17704,48
+Maize ,Malawi,2010,0.20158,45
+Maize ,Malawi,2011,0.22079,45
+Maize ,Malawi,2012,0.21932,45
+Maize ,Malawi,2013,0.21708,45
+Maize ,Malawi,2014,0.23339,45
+Maize ,Malawi,2015,0.16563,45
+Maize ,Malawi,2016,0.14154,45
+Maize ,Malawi,2017,0.20078,45
+Maize ,Malawi,2018,0.16008,45
+Maize ,Malawi,2019,0.19578,45
+Maize ,Malawi,2020,0.20955,45
+Maize ,Mali,2010,0.26886,13
+Maize ,Mali,2011,0.14037,13
+Maize ,Mali,2012,0.24427,13
+Maize ,Mali,2013,0.25927,13
+Maize ,Mali,2014,0.21715,13
+Maize ,Mali,2015,0.25299,13
+Maize ,Mali,2016,0.27255,13
+Maize ,Mali,2017,0.29182,13
+Maize ,Mali,2018,0.28802,13
+Maize ,Mali,2019,0.26649,13
+Maize ,Mali,2020,0.30055,13
+Maize ,Mauritania,2010,0.08592,3
+Maize ,Mauritania,2011,0.06611,3
+Maize ,Mauritania,2012,0.06904,3
+Maize ,Mauritania,2013,0.04731,3
+Maize ,Mauritania,2014,0.06818,3
+Maize ,Mauritania,2015,0.04551,3
+Maize ,Mauritania,2016,0.04552,3
+Maize ,Mauritania,2017,0.1,3
+Maize ,Mauritania,2018,0.07059,3
+Maize ,Mauritania,2019,0.07492,3
+Maize ,Mauritania,2020,0.0625,3
+Maize ,Morocco,2010,0.12132,1
+Maize ,Morocco,2011,0.11533,1
+Maize ,Morocco,2012,0.07648,1
+Maize ,Morocco,2013,0.06632,1
+Maize ,Morocco,2014,0.07085,1
+Maize ,Morocco,2015,0.07544,1
+Maize ,Morocco,2016,0.09275,1
+Maize ,Morocco,2017,0.09362,1
+Maize ,Morocco,2018,0.0799,1
+Maize ,Morocco,2019,0.06397,1
+Maize ,Morocco,2020,0.04204,1
+Maize ,Mozambique,2010,0.12024,46
+Maize ,Mozambique,2011,0.1202,46
+Maize ,Mozambique,2012,0.1498,46
+Maize ,Mozambique,2013,0.06814,46
+Maize ,Mozambique,2014,0.07967,46
+Maize ,Mozambique,2015,0.08036,46
+Maize ,Mozambique,2016,0.07323,46
+Maize ,Mozambique,2017,0.074,46
+Maize ,Mozambique,2018,0.08719,46
+Maize ,Mozambique,2019,0.08831,46
+Maize ,Mozambique,2020,0.07139,46
+Maize ,Namibia,2010,0.19792,50
+Maize ,Namibia,2011,0.19188,50
+Maize ,Namibia,2012,0.1885,50
+Maize ,Namibia,2013,0.18491,50
+Maize ,Namibia,2014,0.16,50
+Maize ,Namibia,2015,0.1851,50
+Maize ,Namibia,2016,0.19513,50
+Maize ,Namibia,2017,0.23542,50
+Maize ,Namibia,2018,0.23539,50
+Maize ,Namibia,2019,0.21303,50
+Maize ,Namibia,2020,0.18286,50
+Maize ,Niger,2010,0.07869,14
+Maize ,Niger,2011,0.08405,14
+Maize ,Niger,2012,0.10437,14
+Maize ,Niger,2013,0.12326,14
+Maize ,Niger,2014,0.17602,14
+Maize ,Niger,2015,0.12229,14
+Maize ,Niger,2016,0.12177,14
+Maize ,Niger,2017,0.14257,14
+Maize ,Niger,2018,0.14632,14
+Maize ,Niger,2019,0.15599,14
+Maize ,Niger,2020,0.17584,14
+Maize ,Nigeria,2010,0.18502,20
+Maize ,Nigeria,2011,0.16271,20
+Maize ,Nigeria,2012,0.15118,20
+Maize ,Nigeria,2013,0.14616,20
+Maize ,Nigeria,2014,0.17002,20
+Maize ,Nigeria,2015,0.17188,20
+Maize ,Nigeria,2016,0.17837,20
+Maize ,Nigeria,2017,0.16641,20
+Maize ,Nigeria,2018,0.16716,20
+Maize ,Nigeria,2019,0.19255,20
+Maize ,Nigeria,2020,0.22545,20
+Maize ,Rwanda,2010,0.23416,41
+Maize ,Rwanda,2011,0.23529,41
+Maize ,Rwanda,2012,0.22587,41
+Maize ,Rwanda,2013,0.22845,41
+Maize ,Rwanda,2014,0.25009,41
+Maize ,Rwanda,2015,0.15313,41
+Maize ,Rwanda,2016,0.15748,41
+Maize ,Rwanda,2017,0.1205,41
+Maize ,Rwanda,2018,0.14315,41
+Maize ,Rwanda,2019,0.1461,41
+Maize ,Rwanda,2020,0.15237,41
+Maize ,Senegal,2010,0.15384,5
+Maize ,Senegal,2011,0.11331,5
+Maize ,Senegal,2012,0.15465,5
+Maize ,Senegal,2013,0.14428,5
+Maize ,Senegal,2014,0.12212,5
+Maize ,Senegal,2015,0.15253,5
+Maize ,Senegal,2016,0.18248,5
+Maize ,Senegal,2017,0.17714,5
+Maize ,Senegal,2018,0.19358,5
+Maize ,Senegal,2019,0.20539,5
+Maize ,Senegal,2020,0.26549,5
+Maize ,Sierra Leone,2010,0.145,31
+Maize ,Sierra Leone,2011,0.152,31
+Maize ,Sierra Leone,2012,0.22,31
+Maize ,Sierra Leone,2013,0.20999,31
+Maize ,Sierra Leone,2014,0.06034,31
+Maize ,Sierra Leone,2015,0.06141,31
+Maize ,Sierra Leone,2016,0.03332,31
+Maize ,Sierra Leone,2017,0.2133,31
+Maize ,Sierra Leone,2018,0.21438,31
+Maize ,Sierra Leone,2019,0.32991,31
+Maize ,Sierra Leone,2020,0.16251,31
+Maize ,Somalia,2010,0.15098,25
+Maize ,Somalia,2011,0.17901,25
+Maize ,Somalia,2012,0.17662,25
+Maize ,Somalia,2013,0.121,25
+Maize ,Somalia,2014,0.06557,25
+Maize ,Somalia,2015,0.06111,25
+Maize ,Somalia,2016,0.05551,25
+Maize ,Somalia,2017,0.077,25
+Maize ,Somalia,2018,0.10968,25
+Maize ,Somalia,2019,0.057,25
+Maize ,Somalia,2020,0.075,25
+Maize ,South Africa,2010,0.46736,52
+Maize ,South Africa,2011,0.43671,52
+Maize ,South Africa,2012,0.44905,52
+Maize ,South Africa,2013,0.42466,52
+Maize ,South Africa,2014,0.53009,52
+Maize ,South Africa,2015,0.34871,52
+Maize ,South Africa,2016,0.3712,52
+Maize ,South Africa,2017,0.58596,52
+Maize ,South Africa,2018,0.49755,52
+Maize ,South Africa,2019,0.45539,52
+Maize ,South Africa,2020,0.54478,52
+Maize ,Sudan,2012,0.16634,16
+Maize ,Sudan ,2010,0.13228,16
+Maize ,Sudan ,2011,0.13514,16
+Maize ,Tanzania,2010,0.15515,40
+Maize ,Tanzania,2011,0.13203,40
+Maize ,Tanzania,2012,0.12395,40
+Maize ,Tanzania,2013,0.13,40
+Maize ,Tanzania,2014,0.1625,40
+Maize ,Tanzania,2015,0.15584,40
+Maize ,Tanzania,2016,0.15856,40
+Maize ,Tanzania,2017,0.17499,40
+Maize ,Tanzania,2018,0.17689,40
+Maize ,Tanzania,2019,0.16485,40
+Maize ,Tanzania,2020,0.15979,40
+Maize ,Togo,2010,0.11937,28
+Maize ,Togo,2011,0.12453,28
+Maize ,Togo,2012,0.11914,28
+Maize ,Togo,2013,0.09244,28
+Maize ,Togo,2014,0.11959,28
+Maize ,Togo,2015,0.13895,28
+Maize ,Togo,2016,0.12235,28
+Maize ,Togo,2017,0.12308,28
+Maize ,Togo,2018,0.12396,28
+Maize ,Togo,2019,0.12271,28
+Maize ,Togo,2020,0.12355,28
+Maize ,Uganda,2010,0.22999,35
+Maize ,Uganda,2011,0.23999,35
+Maize ,Uganda,2012,0.24996,35
+Maize ,Uganda,2013,0.24949,35
+Maize ,Uganda,2014,0.25997,35
+Maize ,Uganda,2015,0.25,35
+Maize ,Uganda,2016,0.25546,35
+Maize ,Uganda,2017,0.26002,35
+Maize ,Uganda,2018,0.26866,35
+Maize ,Uganda,2019,0.27442,35
+Maize ,Uganda,2020,0.27934,35
+Maize ,Zambia,2010,0.25871,44
+Maize ,Zambia,2011,0.27414,44
+Maize ,Zambia,2012,0.26545,44
+Maize ,Zambia,2013,0.25382,44
+Maize ,Zambia,2014,0.27802,44
+Maize ,Zambia,2015,0.3031,44
+Maize ,Zambia,2016,0.24816,44
+Maize ,Zambia,2017,0.25151,44
+Maize ,Zambia,2018,0.22052,44
+Maize ,Zambia,2019,0.23814,44
+Maize ,Zambia,2020,0.25402,44
+Maize ,Zimbabwe,2010,0.08751,49
+Maize ,Zimbabwe,2011,0.06568,49
+Maize ,Zimbabwe,2012,0.07912,49
+Maize ,Zimbabwe,2013,0.07449,49
+Maize ,Zimbabwe,2014,0.09301,49
+Maize ,Zimbabwe,2015,0.05803,49
+Maize ,Zimbabwe,2016,0.04405,49
+Maize ,Zimbabwe,2017,0.13933,49
+Maize ,Zimbabwe,2018,0.13506,49
+Maize ,Zimbabwe,2019,0.07807,49
+Maize ,Zimbabwe,2020,0.11801,49
+Millet,Angola,2010,0.02095,43
+Millet,Angola,2011,0.02988,43
+Millet,Angola,2012,0.00958,43
+Millet,Angola,2013,0.01979,43
+Millet,Angola,2014,0.02197,43
+Millet,Angola,2015,0.02837,43
+Millet,Angola,2016,0.02445,43
+Millet,Angola,2017,0.02593,43
+Millet,Angola,2018,0.0231,43
+Millet,Angola,2019,0.02305,43
+Millet,Angola,2020,0.02388,43
+Millet,Burkina Faso,2010,0.08429,18
+Millet,Burkina Faso,2011,0.07248,18
+Millet,Burkina Faso,2012,0.08472,18
+Millet,Burkina Faso,2013,0.08127,18
+Millet,Burkina Faso,2014,0.08159,18
+Millet,Burkina Faso,2015,0.08152,18
+Millet,Burkina Faso,2016,0.07622,18
+Millet,Burkina Faso,2017,0.06775,18
+Millet,Burkina Faso,2018,0.08531,18
+Millet,Burkina Faso,2019,0.08246,18
+Millet,Burkina Faso,2020,0.08982,18
+Millet,Burundi,2010,0.11138,42
+Millet,Burundi,2011,0.11095,42
+Millet,Burundi,2012,0.11151,42
+Millet,Burundi,2013,0.11145,42
+Millet,Burundi,2014,0.11078,42
+Millet,Burundi,2015,0.1112,42
+Millet,Burundi,2016,0.11081,42
+Millet,Burundi,2017,0.11067,42
+Millet,Burundi,2018,0.11054,42
+Millet,Burundi,2019,0.1104,42
+Millet,Burundi,2020,0.11,42
+Millet,Cameroon,2010,0.11688,21
+Millet,Cameroon,2011,0.12834,21
+Millet,Cameroon,2012,0.13065,21
+Millet,Cameroon,2013,0.13257,21
+Millet,Cameroon,2014,0.13231,21
+Millet,Cameroon,2015,0.13418,21
+Millet,Cameroon,2016,0.13322,21
+Millet,Cameroon,2017,0.13282,21
+Millet,Cameroon,2018,0.13545,21
+Millet,Cameroon,2019,0.13136,21
+Millet,Cameroon,2020,0.13074,21
+Millet,Central Africa,2010,0.1177,29
+Millet,Central Africa,2011,0.11147,29
+Millet,Central Africa,2012,0.10497,29
+Millet,Central Africa,2013,0.10523,29
+Millet,Central Africa,2014,0.1078,29
+Millet,Central Africa,2015,0.10914,29
+Millet,Central Africa,2016,0.10947,29
+Millet,Central Africa,2017,0.10563,29
+Millet,Central Africa,2018,0.10424,29
+Millet,Central Africa,2019,0.1,29
+Millet,Central Africa,2020,0.1,29
+Millet,Chad,2010,0.0567,15
+Millet,Chad,2011,0.03583,15
+Millet,Chad,2012,0.06365,15
+Millet,Chad,2013,0.05193,15
+Millet,Chad,2014,0.06298,15
+Millet,Chad,2015,0.05391,15
+Millet,Chad,2016,0.05926,15
+Millet,Chad,2017,0.05665,15
+Millet,Chad,2018,0.06192,15
+Millet,Chad,2019,0.06079,15
+Millet,Chad,2020,0.05917,15
+Millet,Congo,2010,0.08077,34
+Millet,Congo,2011,0.08148,34
+Millet,Congo,2012,0.08571,34
+Millet,Congo,2013,0.09,34
+Millet,Congo,2014,0.08803,34
+Millet,Congo,2015,0.08703,34
+Millet,Congo,2016,0.08729,34
+Millet,Congo,2017,0.0877,34
+Millet,Congo,2018,0.08846,34
+Millet,Congo,2019,0.08449,34
+Millet,Congo,2020,0.08687,34
+Millet,Ethiopia,2010,0.15555,19
+Millet,Ethiopia,2011,0.1507,19
+Millet,Ethiopia,2012,0.17202,19
+Millet,Ethiopia,2013,0.18672,19
+Millet,Ethiopia,2014,0.20165,19
+Millet,Ethiopia,2015,0.22265,19
+Millet,Ethiopia,2016,0.22296,19
+Millet,Ethiopia,2017,0.22603,19
+Millet,Ethiopia,2018,0.23173,19
+Millet,Ethiopia,2019,0.24715,19
+Millet,Ethiopia,2020,0.2536,19
+Millet,Gambia,2010,0.10591,6
+Millet,Gambia,2011,0.07896,6
+Millet,Gambia,2012,0.09683,6
+Millet,Gambia,2013,0.08866,6
+Millet,Gambia,2014,0.07618,6
+Millet,Gambia,2015,0.073,6
+Millet,Gambia,2016,0.06842,6
+Millet,Gambia,2017,0.06707,6
+Millet,Gambia,2018,0.04615,6
+Millet,Gambia,2019,0.043,6
+Millet,Gambia,2020,0.043,6
+Millet,Ghana,2010,0.12398,27
+Millet,Ghana,2011,0.10294,27
+Millet,Ghana,2012,0.10418,27
+Millet,Ghana,2013,0.09651,27
+Millet,Ghana,2014,0.09568,27
+Millet,Ghana,2015,0.097,27
+Millet,Ghana,2016,0.098,27
+Millet,Ghana,2017,0.10636,27
+Millet,Ghana,2018,0.11601,27
+Millet,Ghana,2019,0.12271,27
+Millet,Ghana,2020,0.13706,27
+Millet,Guinea,2010,0.10041,8
+Millet,Guinea,2011,0.10193,8
+Millet,Guinea,2012,0.10305,8
+Millet,Guinea,2013,0.10333,8
+Millet,Guinea,2014,0.10632,8
+Millet,Guinea,2015,0.11301,8
+Millet,Guinea,2016,0.11837,8
+Millet,Guinea,2017,0.12385,8
+Millet,Guinea,2018,0.12828,8
+Millet,Guinea,2019,0.125,8
+Millet,Guinea,2020,0.12674,8
+Millet,Guinea-Bissau,2010,0.12256,7
+Millet,Guinea-Bissau,2011,0.12099,7
+Millet,Guinea-Bissau,2012,0.12414,7
+Millet,Guinea-Bissau,2013,0.12682,7
+Millet,Guinea-Bissau,2014,0.12565,7
+Millet,Guinea-Bissau,2015,0.12376,7
+Millet,Guinea-Bissau,2016,0.12431,7
+Millet,Guinea-Bissau,2017,0.1206,7
+Millet,Guinea-Bissau,2018,0.12,7
+Millet,Guinea-Bissau,2019,0.0819,7
+Millet,Guinea-Bissau,2020,0.0815,7
+Millet,Kenya,2010,0.05436,33
+Millet,Kenya,2011,0.06596,33
+Millet,Kenya,2012,0.11684,33
+Millet,Kenya,2013,0.08249,33
+Millet,Kenya,2014,0.09076,33
+Millet,Kenya,2015,0.10968,33
+Millet,Kenya,2016,0.06111,33
+Millet,Kenya,2017,0.04275,33
+Millet,Kenya,2018,0.0625,33
+Millet,Kenya,2019,0.09272,33
+Millet,Kenya,2020,0.12921,33
+Millet,Libya,2010,0.11852,11
+Millet,Libya,2011,0.14784,11
+Millet,Libya,2012,0.14247,11
+Millet,Libya,2013,0.1299,11
+Millet,Libya,2014,0.12956,11
+Millet,Libya,2015,0.13455,11
+Millet,Libya,2016,0.13638,11
+Millet,Libya,2017,0.13727,11
+Millet,Libya,2018,0.13794,11
+Millet,Libya,2019,0.13904,11
+Millet,Libya,2020,0.1401,11
+Millet,Malawi,2010,0.05115,45
+Millet,Malawi,2011,0.071,45
+Millet,Malawi,2012,0.07649,45
+Millet,Malawi,2013,0.08053,45
+Millet,Malawi,2014,0.08509,45
+Millet,Malawi,2015,0.06648,45
+Millet,Malawi,2016,0.03775,45
+Millet,Malawi,2017,0.0634,45
+Millet,Malawi,2018,0.05774,45
+Millet,Malawi,2019,0.07694,45
+Millet,Malawi,2020,0.08529,45
+Millet,Mali,2010,0.10925,13
+Millet,Mali,2011,0.06403,13
+Millet,Mali,2012,0.08968,13
+Millet,Mali,2013,0.09425,13
+Millet,Mali,2014,0.09837,13
+Millet,Mali,2015,0.09595,13
+Millet,Mali,2016,0.08855,13
+Millet,Mali,2017,0.06924,13
+Millet,Mali,2018,0.08527,13
+Millet,Mali,2019,0.0944,13
+Millet,Mali,2020,0.08876,13
+Millet,Mauritania,2010,0.02972,3
+Millet,Mauritania,2011,0.01056,3
+Millet,Mauritania,2012,0.031,3
+Millet,Mauritania,2013,0.02651,3
+Millet,Mauritania,2014,0.02295,3
+Millet,Mauritania,2015,0.02631,3
+Millet,Mauritania,2016,0.025,3
+Millet,Mauritania,2017,0.01667,3
+Millet,Mauritania,2018,0.02727,3
+Millet,Mauritania,2019,0.02727,3
+Millet,Mauritania,2020,0.02727,3
+Millet,Morocco,2010,0.20073,1
+Millet,Morocco,2011,0.2,1
+Millet,Morocco,2012,0.19643,1
+Millet,Morocco,2013,0.19655,1
+Millet,Morocco,2014,0.20293,1
+Millet,Morocco,2015,0.20989,1
+Millet,Morocco,2016,0.20267,1
+Millet,Morocco,2017,0.2041,1
+Millet,Morocco,2018,0.20804,1
+Millet,Morocco,2019,0.20693,1
+Millet,Morocco,2020,0.20765,1
+Millet,Mozambique,2010,0.04469,46
+Millet,Mozambique,2011,0.04541,46
+Millet,Mozambique,2012,0.08038,46
+Millet,Mozambique,2013,0.02826,46
+Millet,Mozambique,2014,0.05751,46
+Millet,Mozambique,2015,0.03677,46
+Millet,Mozambique,2016,0.04375,46
+Millet,Mozambique,2017,0.04468,46
+Millet,Mozambique,2018,0.06534,46
+Millet,Mozambique,2019,0.0761,46
+Millet,Mozambique,2020,0.04132,46
+Millet,Namibia,2010,0.01889,50
+Millet,Namibia,2011,0.01866,50
+Millet,Namibia,2012,0.0181,50
+Millet,Namibia,2013,0.01759,50
+Millet,Namibia,2014,0.00878,50
+Millet,Namibia,2015,0.01686,50
+Millet,Namibia,2016,0.00809,50
+Millet,Namibia,2017,0.02148,50
+Millet,Namibia,2018,0.0326,50
+Millet,Namibia,2019,0.02704,50
+Millet,Namibia,2020,0.02704,50
+Millet,Niger,2010,0.05291,14
+Millet,Niger,2011,0.03915,14
+Millet,Niger,2012,0.05443,14
+Millet,Niger,2013,0.04125,14
+Millet,Niger,2014,0.04514,14
+Millet,Niger,2015,0.05298,14
+Millet,Niger,2016,0.05375,14
+Millet,Niger,2017,0.05415,14
+Millet,Niger,2018,0.05483,14
+Millet,Niger,2019,0.04788,14
+Millet,Niger,2020,0.05203,14
+Millet,Nigeria,2010,0.11848,20
+Millet,Nigeria,2011,0.04497,20
+Millet,Nigeria,2012,0.09642,20
+Millet,Nigeria,2013,0.06124,20
+Millet,Nigeria,2014,0.11726,20
+Millet,Nigeria,2015,0.10373,20
+Millet,Nigeria,2016,0.08558,20
+Millet,Nigeria,2017,0.0849,20
+Millet,Nigeria,2018,0.10836,20
+Millet,Nigeria,2019,0.11014,20
+Millet,Nigeria,2020,0.09525,20
+Millet,Rwanda,2010,0.06699,41
+Millet,Rwanda,2011,0.06134,41
+Millet,Rwanda,2012,0.05531,41
+Millet,Rwanda,2013,0.04921,41
+Millet,Rwanda,2014,0.04446,41
+Millet,Rwanda,2015,0.04707,41
+Millet,Rwanda,2016,0.04774,41
+Millet,Rwanda,2017,0.04809,41
+Millet,Rwanda,2018,0.04763,41
+Millet,Rwanda,2019,0.04782,41
+Millet,Rwanda,2020,0.04785,41
+Millet,Senegal,2010,0.07872,5
+Millet,Senegal,2011,0.06165,5
+Millet,Senegal,2012,0.08106,5
+Millet,Senegal,2013,0.06833,5
+Millet,Senegal,2014,0.05712,5
+Millet,Senegal,2015,0.08133,5
+Millet,Senegal,2016,0.0747,5
+Millet,Senegal,2017,0.09305,5
+Millet,Senegal,2018,0.0965,5
+Millet,Senegal,2019,0.09167,5
+Millet,Senegal,2020,0.1119,5
+Millet,Sierra Leone,2010,0.10109,31
+Millet,Sierra Leone,2011,0.10255,31
+Millet,Sierra Leone,2012,0.10286,31
+Millet,Sierra Leone,2013,0.10362,31
+Millet,Sierra Leone,2014,0.10427,31
+Millet,Sierra Leone,2015,0.10533,31
+Millet,Sierra Leone,2016,0.10627,31
+Millet,Sierra Leone,2017,0.10707,31
+Millet,Sierra Leone,2018,0.10843,31
+Millet,Sierra Leone,2019,0.10826,31
+Millet,Sierra Leone,2020,0.10891,31
+Millet,South Africa,2010,0.05148,52
+Millet,South Africa,2011,0.05,52
+Millet,South Africa,2012,0.04815,52
+Millet,South Africa,2013,0.04786,52
+Millet,South Africa,2014,0.04879,52
+Millet,South Africa,2015,0.04943,52
+Millet,South Africa,2016,0.04866,52
+Millet,South Africa,2017,0.04896,52
+Millet,South Africa,2018,0.04901,52
+Millet,South Africa,2019,0.04888,52
+Millet,South Africa,2020,0.04895,52
+Millet,Sudan,2010,0.02336,16
+Millet,Sudan,2011,0.02586,16
+Millet,Tanzania,2010,0.10145,40
+Millet,Tanzania,2011,0.11271,40
+Millet,Tanzania,2012,0.08208,40
+Millet,Tanzania,2013,0.09646,40
+Millet,Tanzania,2014,0.0993,40
+Millet,Tanzania,2015,0.09361,40
+Millet,Tanzania,2016,0.09912,40
+Millet,Tanzania,2017,0.09752,40
+Millet,Tanzania,2018,0.12136,40
+Millet,Tanzania,2019,0.14296,40
+Millet,Tanzania,2020,0.12037,40
+Millet,Togo,2010,0.06949,28
+Millet,Togo,2011,0.06865,28
+Millet,Togo,2012,0.04861,28
+Millet,Togo,2013,0.12755,28
+Millet,Togo,2014,0.06247,28
+Millet,Togo,2015,0.07988,28
+Millet,Togo,2016,0.06289,28
+Millet,Togo,2017,0.05931,28
+Millet,Togo,2018,0.05913,28
+Millet,Togo,2019,0.05877,28
+Millet,Togo,2020,0.06,28
+Millet,Uganda,2010,0.16048,35
+Millet,Uganda,2011,0.14928,35
+Millet,Uganda,2012,0.13968,35
+Millet,Uganda,2013,0.13,35
+Millet,Uganda,2014,0.13513,35
+Millet,Uganda,2015,0.135,35
+Millet,Uganda,2016,0.14007,35
+Millet,Uganda,2017,0.14264,35
+Millet,Uganda,2018,0.14183,35
+Millet,Uganda,2019,0.14148,35
+Millet,Uganda,2020,0.14112,35
+Millet,Zambia,2010,0.09447,44
+Millet,Zambia,2011,0.10591,44
+Millet,Zambia,2012,0.0971,44
+Millet,Zambia,2013,0.07076,44
+Millet,Zambia,2014,0.08846,44
+Millet,Zambia,2015,0.09119,44
+Millet,Zambia,2016,0.06337,44
+Millet,Zambia,2017,0.07117,44
+Millet,Zambia,2018,0.07785,44
+Millet,Zambia,2019,0.08599,44
+Millet,Zambia,2020,0.06844,44
+Millet,Zimbabwe,2010,0.02145,49
+Millet,Zimbabwe,2011,0.01668,49
+Millet,Zimbabwe,2012,0.0175,49
+Millet,Zimbabwe,2013,0.01857,49
+Millet,Zimbabwe,2014,0.03167,49
+Millet,Zimbabwe,2015,0.01244,49
+Millet,Zimbabwe,2016,0.01671,49
+Millet,Zimbabwe,2017,0.04492,49
+Millet,Zimbabwe,2018,0.03372,49
+Millet,Zimbabwe,2019,0.02094,49
+Millet,Zimbabwe,2020,0.03004,49
+Sorghum,Algeria,2010,0.30286,10
+Sorghum,Algeria,2011,1,10
+Sorghum,Algeria,2012,2.06,10
+Sorghum,Algeria,2013,0.6,10
+Sorghum,Algeria,2014,0.62,10
+Sorghum,Algeria,2015,1.21689,10
+Sorghum,Algeria,2016,2.55214,10
+Sorghum,Algeria,2017,1.59391,10
+Sorghum,Algeria,2018,1.3666,10
+Sorghum,Algeria,2019,0.70227,10
+Sorghum,Algeria,2020,0.37647,10
+Sorghum,Angola,2010,0.02814,43
+Sorghum,Angola,2011,0.0332,43
+Sorghum,Angola,2012,0.00998,43
+Sorghum,Angola,2013,0.02415,43
+Sorghum,Angola,2014,0.02421,43
+Sorghum,Angola,2015,0.02503,43
+Sorghum,Angola,2016,0.02193,43
+Sorghum,Angola,2017,0.02266,43
+Sorghum,Angola,2018,0.02712,43
+Sorghum,Angola,2019,0.02211,43
+Sorghum,Angola,2020,0.02286,43
+Sorghum,Burkina Faso,2010,0.10036,18
+Sorghum,Burkina Faso,2011,0.08952,18
+Sorghum,Burkina Faso,2012,0.10755,18
+Sorghum,Burkina Faso,2013,0.10409,18
+Sorghum,Burkina Faso,2014,0.11028,18
+Sorghum,Burkina Faso,2015,0.09936,18
+Sorghum,Burkina Faso,2016,0.09594,18
+Sorghum,Burkina Faso,2017,0.08193,18
+Sorghum,Burkina Faso,2018,0.10116,18
+Sorghum,Burkina Faso,2019,0.09903,18
+Sorghum,Burkina Faso,2020,0.10605,18
+Sorghum,Burundi,2010,0.10761,42
+Sorghum,Burundi,2011,0.0835,42
+Sorghum,Burundi,2012,0.0589,42
+Sorghum,Burundi,2013,0.06513,42
+Sorghum,Burundi,2014,0.06931,42
+Sorghum,Burundi,2015,0.1153,42
+Sorghum,Burundi,2016,0.06976,42
+Sorghum,Burundi,2017,0.06499,42
+Sorghum,Burundi,2018,0.06697,42
+Sorghum,Burundi,2019,0.05599,42
+Sorghum,Burundi,2020,0.05319,42
+Sorghum,Cameroon,2010,0.1438,21
+Sorghum,Cameroon,2011,0.14946,21
+Sorghum,Cameroon,2012,0.14885,21
+Sorghum,Cameroon,2013,0.1508,21
+Sorghum,Cameroon,2014,0.15329,21
+Sorghum,Cameroon,2015,0.15614,21
+Sorghum,Cameroon,2016,0.15902,21
+Sorghum,Cameroon,2017,0.16158,21
+Sorghum,Cameroon,2018,0.16686,21
+Sorghum,Cameroon,2019,0.16766,21
+Sorghum,Cameroon,2020,0.16994,21
+Sorghum,Central Africa,2010,0.09269,29
+Sorghum,Central Africa,2011,0.11707,29
+Sorghum,Central Africa,2012,0.11707,29
+Sorghum,Central Africa,2013,0.1055,29
+Sorghum,Central Africa,2014,0.10019,29
+Sorghum,Central Africa,2015,0.09724,29
+Sorghum,Central Africa,2016,0.09643,29
+Sorghum,Central Africa,2017,0.09482,29
+Sorghum,Central Africa,2018,0.09299,29
+Sorghum,Central Africa,2019,0.08999,29
+Sorghum,Central Africa,2020,0.09,29
+Sorghum,Chad,2010,0.07241,15
+Sorghum,Chad,2011,0.06283,15
+Sorghum,Chad,2012,0.10119,15
+Sorghum,Chad,2013,0.07304,15
+Sorghum,Chad,2014,0.08414,15
+Sorghum,Chad,2015,0.07776,15
+Sorghum,Chad,2016,0.08319,15
+Sorghum,Chad,2017,0.08247,15
+Sorghum,Chad,2018,0.08672,15
+Sorghum,Chad,2019,0.08686,15
+Sorghum,Chad,2020,0.08397,15
+Sorghum,Congo,2010,0.06611,34
+Sorghum,Congo,2011,0.06652,34
+Sorghum,Congo,2012,0.06674,34
+Sorghum,Congo,2013,0.06661,34
+Sorghum,Congo,2014,0.0668,34
+Sorghum,Congo,2015,0.06698,34
+Sorghum,Congo,2016,0.06681,34
+Sorghum,Congo,2017,0.06688,34
+Sorghum,Congo,2018,0.06705,34
+Sorghum,Congo,2019,0.0669,34
+Sorghum,Congo,2020,0.06693,34
+Sorghum,Egypt,2010,0.5006,12
+Sorghum,Egypt,2011,0.53457,12
+Sorghum,Egypt,2012,0.53034,12
+Sorghum,Egypt,2013,0.53777,12
+Sorghum,Egypt,2014,0.54158,12
+Sorghum,Egypt,2015,0.47956,12
+Sorghum,Egypt,2016,0.48881,12
+Sorghum,Egypt,2017,0.53057,12
+Sorghum,Egypt,2018,0.51953,12
+Sorghum,Egypt,2019,0.50098,12
+Sorghum,Egypt,2020,0.49446,12
+Sorghum,Ethiopia,2010,0.20866,19
+Sorghum,Ethiopia,2011,0.2054,19
+Sorghum,Ethiopia,2012,0.21059,19
+Sorghum,Ethiopia,2013,0.22825,19
+Sorghum,Ethiopia,2014,0.23651,19
+Sorghum,Ethiopia,2015,0.25695,19
+Sorghum,Ethiopia,2016,0.25251,19
+Sorghum,Ethiopia,2017,0.27258,19
+Sorghum,Ethiopia,2018,0.27461,19
+Sorghum,Ethiopia,2019,0.28802,19
+Sorghum,Ethiopia,2020,0.28262,19
+Sorghum,Gambia,2010,0.125,6
+Sorghum,Gambia,2011,0.06908,6
+Sorghum,Gambia,2012,0.07445,6
+Sorghum,Gambia,2013,0.10581,6
+Sorghum,Gambia,2014,0.0745,6
+Sorghum,Gambia,2015,0.08667,6
+Sorghum,Gambia,2016,0.09667,6
+Sorghum,Gambia,2017,0.06333,6
+Sorghum,Gambia,2018,0.06,6
+Sorghum,Gambia,2019,0.06,6
+Sorghum,Gambia,2020,0.06,6
+Sorghum,Ghana,2010,0.12846,27
+Sorghum,Ghana,2011,0.1179,27
+Sorghum,Ghana,2012,0.12129,27
+Sorghum,Ghana,2013,0.11369,27
+Sorghum,Ghana,2014,0.1141,27
+Sorghum,Ghana,2015,0.115,27
+Sorghum,Ghana,2016,0.1,27
+Sorghum,Ghana,2017,0.11015,27
+Sorghum,Ghana,2018,0.11191,27
+Sorghum,Ghana,2019,0.115,27
+Sorghum,Ghana,2020,0.11349,27
+Sorghum,Guinea,2010,0.09986,8
+Sorghum,Guinea,2011,0.09951,8
+Sorghum,Guinea,2012,0.09917,8
+Sorghum,Guinea,2013,0.09882,8
+Sorghum,Guinea,2014,0.10646,8
+Sorghum,Guinea,2015,0.11456,8
+Sorghum,Guinea,2016,0.12414,8
+Sorghum,Guinea,2017,0.13301,8
+Sorghum,Guinea,2018,0.1423,8
+Sorghum,Guinea,2019,0.145,8
+Sorghum,Guinea,2020,0.14668,8
+Sorghum,Guinea-Bissau,2010,0.09018,7
+Sorghum,Guinea-Bissau,2011,0.09444,7
+Sorghum,Guinea-Bissau,2012,0.09566,7
+Sorghum,Guinea-Bissau,2013,0.09645,7
+Sorghum,Guinea-Bissau,2014,0.09825,7
+Sorghum,Guinea-Bissau,2015,0.09906,7
+Sorghum,Guinea-Bissau,2016,0.09989,7
+Sorghum,Guinea-Bissau,2017,0.09636,7
+Sorghum,Guinea-Bissau,2018,0.105,7
+Sorghum,Guinea-Bissau,2019,0.0894,7
+Sorghum,Guinea-Bissau,2020,0.0897,7
+Sorghum,Kenya,2010,0.07267,33
+Sorghum,Kenya,2011,0.06291,33
+Sorghum,Kenya,2012,0.07445,33
+Sorghum,Kenya,2013,0.0755,33
+Sorghum,Kenya,2014,0.08316,33
+Sorghum,Kenya,2015,0.09667,33
+Sorghum,Kenya,2016,0.06336,33
+Sorghum,Kenya,2017,0.07073,33
+Sorghum,Kenya,2018,0.07862,33
+Sorghum,Kenya,2019,0.1199,33
+Sorghum,Kenya,2020,0.14341,33
+Sorghum,Madagascar,2010,0.05752,48
+Sorghum,Madagascar,2011,0.05797,48
+Sorghum,Madagascar,2012,0.0587,48
+Sorghum,Madagascar,2013,0.05652,48
+Sorghum,Madagascar,2014,0.05598,48
+Sorghum,Madagascar,2015,0.05698,48
+Sorghum,Madagascar,2016,0.05669,48
+Sorghum,Madagascar,2017,0.05628,48
+Sorghum,Madagascar,2018,0.05649,48
+Sorghum,Madagascar,2019,0.05691,48
+Sorghum,Madagascar,2020,0.05694,48
+Sorghum,Malawi,2010,0.06094,45
+Sorghum,Malawi,2011,0.08184,45
+Sorghum,Malawi,2012,0.08335,45
+Sorghum,Malawi,2013,0.09647,45
+Sorghum,Malawi,2014,0.10119,45
+Sorghum,Malawi,2015,0.08452,45
+Sorghum,Malawi,2016,0.05887,45
+Sorghum,Malawi,2017,0.08696,45
+Sorghum,Malawi,2018,0.07798,45
+Sorghum,Malawi,2019,0.11672,45
+Sorghum,Malawi,2020,0.12061,45
+Sorghum,Mali,2010,0.09951,13
+Sorghum,Mali,2011,0.07067,13
+Sorghum,Mali,2012,0.10612,13
+Sorghum,Mali,2013,0.11052,13
+Sorghum,Mali,2014,0.10558,13
+Sorghum,Mali,2015,0.10482,13
+Sorghum,Mali,2016,0.08934,13
+Sorghum,Mali,2017,0.08975,13
+Sorghum,Mali,2018,0.10241,13
+Sorghum,Mali,2019,0.10069,13
+Sorghum,Mali,2020,0.0995,13
+Sorghum,Mauritania,2010,0.05094,3
+Sorghum,Mauritania,2011,0.02793,3
+Sorghum,Mauritania,2012,0.05074,3
+Sorghum,Mauritania,2013,0.04843,3
+Sorghum,Mauritania,2014,0.04241,3
+Sorghum,Mauritania,2015,0.04255,3
+Sorghum,Mauritania,2016,0.0452,3
+Sorghum,Mauritania,2017,0.04375,3
+Sorghum,Mauritania,2018,0.04508,3
+Sorghum,Mauritania,2019,0.04503,3
+Sorghum,Mauritania,2020,0.04559,3
+Sorghum,Morocco,2010,0.06632,1
+Sorghum,Morocco,2011,0.08011,1
+Sorghum,Morocco,2012,0.09475,1
+Sorghum,Morocco,2013,0.10637,1
+Sorghum,Morocco,2014,0.1,1
+Sorghum,Morocco,2015,0.10478,1
+Sorghum,Morocco,2016,0.09182,1
+Sorghum,Morocco,2017,0.0897,1
+Sorghum,Morocco,2018,0.09011,1
+Sorghum,Morocco,2019,0.07998,1
+Sorghum,Morocco,2020,0.09374,1
+Sorghum,Mozambique,2010,0.06089,46
+Sorghum,Mozambique,2011,0.06412,46
+Sorghum,Mozambique,2012,0.04532,46
+Sorghum,Mozambique,2013,0.03572,46
+Sorghum,Mozambique,2014,0.05254,46
+Sorghum,Mozambique,2015,0.04178,46
+Sorghum,Mozambique,2016,0.04475,46
+Sorghum,Mozambique,2017,0.04583,46
+Sorghum,Mozambique,2018,0.06727,46
+Sorghum,Mozambique,2019,0.06902,46
+Sorghum,Mozambique,2020,0.05408,46
+Sorghum,Namibia,2010,0.02941,50
+Sorghum,Namibia,2011,0.0297,50
+Sorghum,Namibia,2012,0.02913,50
+Sorghum,Namibia,2013,0.02917,50
+Sorghum,Namibia,2014,0.02397,50
+Sorghum,Namibia,2015,0.02253,50
+Sorghum,Namibia,2016,0.00755,50
+Sorghum,Namibia,2017,0.0121,50
+Sorghum,Namibia,2018,0.01853,50
+Sorghum,Namibia,2019,0.01843,50
+Sorghum,Namibia,2020,0.0186,50
+Sorghum,Niger,2010,0.03919,14
+Sorghum,Niger,2011,0.02676,14
+Sorghum,Niger,2012,0.04422,14
+Sorghum,Niger,2013,0.03703,14
+Sorghum,Niger,2014,0.03992,14
+Sorghum,Niger,2015,0.05614,14
+Sorghum,Niger,2016,0.05016,14
+Sorghum,Niger,2017,0.05091,14
+Sorghum,Niger,2018,0.0539,14
+Sorghum,Niger,2019,0.05061,14
+Sorghum,Niger,2020,0.05807,14
+Sorghum,Nigeria,2010,0.14397,20
+Sorghum,Nigeria,2011,0.12206,20
+Sorghum,Nigeria,2012,0.11445,20
+Sorghum,Nigeria,2013,0.09727,20
+Sorghum,Nigeria,2014,0.12071,20
+Sorghum,Nigeria,2015,0.11875,20
+Sorghum,Nigeria,2016,0.13809,20
+Sorghum,Nigeria,2017,0.11923,20
+Sorghum,Nigeria,2018,0.12163,20
+Sorghum,Nigeria,2019,0.12349,20
+Sorghum,Nigeria,2020,0.11768,20
+Sorghum,Rwanda,2010,0.12088,41
+Sorghum,Rwanda,2011,0.12714,41
+Sorghum,Rwanda,2012,0.14277,41
+Sorghum,Rwanda,2013,0.14433,41
+Sorghum,Rwanda,2014,0.10244,41
+Sorghum,Rwanda,2015,0.0968,41
+Sorghum,Rwanda,2016,0.09881,41
+Sorghum,Rwanda,2017,0.10555,41
+Sorghum,Rwanda,2018,0.10732,41
+Sorghum,Rwanda,2019,0.09863,41
+Sorghum,Rwanda,2020,0.10063,41
+Sorghum,Senegal,2010,0.09331,5
+Sorghum,Senegal,2011,0.06389,5
+Sorghum,Senegal,2012,0.09602,5
+Sorghum,Senegal,2013,0.08458,5
+Sorghum,Senegal,2014,0.08182,5
+Sorghum,Senegal,2015,0.0939,5
+Sorghum,Senegal,2016,0.08761,5
+Sorghum,Senegal,2017,0.09736,5
+Sorghum,Senegal,2018,0.11929,5
+Sorghum,Senegal,2019,0.11312,5
+Sorghum,Senegal,2020,0.13568,5
+Sorghum,Sierra Leone,2010,0.09136,31
+Sorghum,Sierra Leone,2011,0.09093,31
+Sorghum,Sierra Leone,2012,0.09051,31
+Sorghum,Sierra Leone,2013,0.09008,31
+Sorghum,Sierra Leone,2014,0.09393,31
+Sorghum,Sierra Leone,2015,0.09513,31
+Sorghum,Sierra Leone,2016,0.09687,31
+Sorghum,Sierra Leone,2017,0.09783,31
+Sorghum,Sierra Leone,2018,0.09716,31
+Sorghum,Sierra Leone,2019,0.09606,31
+Sorghum,Sierra Leone,2020,0.09614,31
+Sorghum,Somalia,2010,0.04057,25
+Sorghum,Somalia,2011,0.02205,25
+Sorghum,Somalia,2012,0.09824,25
+Sorghum,Somalia,2013,0.08543,25
+Sorghum,Somalia,2014,0.05398,25
+Sorghum,Somalia,2015,0.05765,25
+Sorghum,Somalia,2016,0.04727,25
+Sorghum,Somalia,2017,0.03942,25
+Sorghum,Somalia,2018,0.05556,25
+Sorghum,Somalia,2019,0.05,25
+Sorghum,Somalia,2020,0.04,25
+Sorghum,South Africa,2010,0.22671,52
+Sorghum,South Africa,2011,0.22399,52
+Sorghum,South Africa,2012,0.27806,52
+Sorghum,South Africa,2013,0.23507,52
+Sorghum,South Africa,2014,0.33651,52
+Sorghum,South Africa,2015,0.17092,52
+Sorghum,South Africa,2016,0.14536,52
+Sorghum,South Africa,2017,0.35891,52
+Sorghum,South Africa,2018,0.39931,52
+Sorghum,South Africa,2019,0.25149,52
+Sorghum,South Africa,2020,0.37176,52
+Sorghum,Sudan,2010,0.04686,16
+Sorghum,Sudan,2011,0.06346,16
+Sorghum,Tanzania,2010,0.12914,40
+Sorghum,Tanzania,2011,0.09943,40
+Sorghum,Tanzania,2012,0.09992,40
+Sorghum,Tanzania,2013,0.11697,40
+Sorghum,Tanzania,2014,0.10372,40
+Sorghum,Tanzania,2015,0.08954,40
+Sorghum,Tanzania,2016,0.10134,40
+Sorghum,Tanzania,2017,0.10018,40
+Sorghum,Tanzania,2018,0.11028,40
+Sorghum,Tanzania,2019,0.11314,40
+Sorghum,Tanzania,2020,0.10493,40
+Sorghum,Togo,2010,0.10943,28
+Sorghum,Togo,2011,0.11012,28
+Sorghum,Togo,2012,0.08635,28
+Sorghum,Togo,2013,0.09444,28
+Sorghum,Togo,2014,0.09501,28
+Sorghum,Togo,2015,0.08905,28
+Sorghum,Togo,2016,0.086,28
+Sorghum,Togo,2017,0.08752,28
+Sorghum,Togo,2018,0.08695,28
+Sorghum,Togo,2019,0.08891,28
+Sorghum,Togo,2020,0.0903,28
+Sorghum,Tunisia,2010,0.04769,9
+Sorghum,Tunisia,2011,0.04819,9
+Sorghum,Tunisia,2012,0.05106,9
+Sorghum,Tunisia,2013,0.05106,9
+Sorghum,Tunisia,2014,0.05062,9
+Sorghum,Tunisia,2015,0.05123,9
+Sorghum,Tunisia,2016,0.05145,9
+Sorghum,Tunisia,2017,0.05174,9
+Sorghum,Tunisia,2018,0.05147,9
+Sorghum,Tunisia,2019,0.05155,9
+Sorghum,Tunisia,2020,0.05159,9
+Sorghum,Uganda,2010,0.11008,35
+Sorghum,Uganda,2011,0.12005,35
+Sorghum,Uganda,2012,0.09008,35
+Sorghum,Uganda,2013,0.08016,35
+Sorghum,Uganda,2014,0.08007,35
+Sorghum,Uganda,2015,0.11,35
+Sorghum,Uganda,2016,0.11128,35
+Sorghum,Uganda,2017,0.10434,35
+Sorghum,Uganda,2018,0.09499,35
+Sorghum,Uganda,2019,0.0922,35
+Sorghum,Uganda,2020,0.08979,35
+Sorghum,Zambia,2010,0.09593,44
+Sorghum,Zambia,2011,0.08223,44
+Sorghum,Zambia,2012,0.09787,44
+Sorghum,Zambia,2013,0.06478,44
+Sorghum,Zambia,2014,0.08234,44
+Sorghum,Zambia,2015,0.08043,44
+Sorghum,Zambia,2016,0.05288,44
+Sorghum,Zambia,2017,0.06311,44
+Sorghum,Zambia,2018,0.06513,44
+Sorghum,Zambia,2019,0.08044,44
+Sorghum,Zambia,2020,0.05681,44
+Sorghum,Zimbabwe,2010,0.02702,49
+Sorghum,Zimbabwe,2011,0.02267,49
+Sorghum,Zimbabwe,2012,0.02046,49
+Sorghum,Zimbabwe,2013,0.03066,49
+Sorghum,Zimbabwe,2014,0.04589,49
+Sorghum,Zimbabwe,2015,0.02412,49
+Sorghum,Zimbabwe,2016,0.01907,49
+Sorghum,Zimbabwe,2017,0.03108,49
+Sorghum,Zimbabwe,2018,0.06498,49
+Sorghum,Zimbabwe,2019,0.03348,49
+Sorghum,Zimbabwe,2020,0.06383,49

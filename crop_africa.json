@@ -5,10 +5,12 @@
       "cropParams": {
         "species": {
           "=": ["include-from-file", "crops/species/maize.json"],
-          "FieldConditionModifier": 0.95
+          "AssimilateReallocation": 0,
+          "RootPenetrationRate": 0
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/grain-maize.json"]
+          "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
+          "MaxAssimilationRate": 0
         }
       },
       "residueParams": ["include-from-file", "crops/residues/maize.json"]
@@ -16,16 +18,30 @@
     "millet": {
       "is-winter-crop": true,
       "cropParams": {
-        "species": ["include-from-file", "crops/species/maize.json"],
-        "cultivar": ["include-from-file", "crops/cultivars/grain-maize.json"]
+        "species": {
+          "=": ["include-from-file", "crops/species/sorghum.json"],
+          "AssimilateReallocation": 0,
+          "RootPenetrationRate": 0
+        },
+        "cultivar": {
+          "=": ["include-from-file", "crops/cultivars/sorghum.json"],
+          "MaxAssimilationRate": 0
+        }
       },
-      "residueParams": ["include-from-file", "crops/residues/maize.json"]
+      "residueParams": ["include-from-file", "crops/residues/sorghum.json"]
     },
     "sorghum": {
       "is-winter-crop": true,
       "cropParams": {
-        "species": ["include-from-file", "crops/species/sorghum.json"],
-        "cultivar": ["include-from-file", "crops/cultivars/sorghum.json"]
+        "species": {
+          "=": ["include-from-file", "crops/species/sorghum.json"],
+          "AssimilateReallocation": 0,
+          "RootPenetrationRate": 0
+        },
+        "cultivar": {
+          "=": ["include-from-file", "crops/cultivars/sorghum.json"],
+          "MaxAssimilationRate": 0
+        }
       },
       "residueParams": ["include-from-file", "crops/residues/sorghum.json"]
     }
