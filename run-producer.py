@@ -96,7 +96,7 @@ def run_producer(server={"server": None, "port": None}):
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups_africa.csv",
-        "run-setups": "[1]"
+        "run-setups": "[2]"
     }
 
     # read commandline args only if script is invoked directly from commandline

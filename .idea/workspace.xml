@@ -4,12 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="Update sim_setups_africa.csv">
-      <change afterPath="$PROJECT_DIR$/run-calibration-consumer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/run-calibration-producer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sim_calibration.json" afterDir="false" />
+    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="starting adding code for calibration">
+      <change afterPath="$PROJECT_DIR$/calibratethese.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/calibration_MONICA_adapter.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/calibration_spotpy_setup_MONICA.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/crop_africa_calibration.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/run-calibration.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sim_setups_africa_calibration.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crop_africa.json" beforeDir="false" afterPath="$PROJECT_DIR$/crop_africa.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-calibration-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-calibration-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-producer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +87,7 @@
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run-consumer">
+  <component name="RunManager">
     <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="klimertrag" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -187,7 +193,7 @@
       <workItem from="1687769555997" duration="38867000" />
       <workItem from="1689341706607" duration="51000" />
       <workItem from="1691423484775" duration="630000" />
-      <workItem from="1691424753024" duration="45939000" />
+      <workItem from="1691424753024" duration="56644000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -412,7 +418,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692114040675</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="starting adding code for calibration">
+      <option name="closed" value="true" />
+      <created>1692121564644</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1692121564644</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -439,11 +453,28 @@
     <MESSAGE value="dev dump" />
     <MESSAGE value="africa setup somewhat works" />
     <MESSAGE value="Update sim_setups_africa.csv" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update sim_setups_africa.csv" />
+    <MESSAGE value="starting adding code for calibration" />
+    <option name="LAST_COMMIT_MESSAGE" value="starting adding code for calibration" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run-consumer.py</url>
+          <line>306</line>
+          <option name="timeStamp" value="89" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run-consumer.py</url>
+          <line>95</line>
+          <option name="timeStamp" value="90" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1691666434592" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1692270678067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_results.coverage" NAME="05_plot_results Coverage Results" MODIFIED="1647537897438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$post_process.coverage" NAME="post_process Coverage Results" MODIFIED="1688130909041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_clemens_local.coverage" NAME="run-producer_clemens_local Coverage Results" MODIFIED="1643792315236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -459,7 +490,7 @@
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_plot_final_calibration_figures.coverage" NAME="01_plot_final_calibration_figures Coverage Results" MODIFIED="1648741551358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AgoraNatura/agora_natura/result_analysis" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_final_maps_and_figures.coverage" NAME="05_plot_final_maps_and_figures Coverage Results" MODIFIED="1647614666353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1691666432404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1692270653965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations__1_.coverage" NAME="01_compare_simulation_and_observations (1) Coverage Results" MODIFIED="1642161896630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
   </component>
 </project>
