@@ -100,7 +100,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         except zmq.error.Again as _e:
             print('no response from the server (with "timeout"=%d ms) ' % socket.RCVTIMEO)
             if outp:
-                country_id_to_year_to_avg_yield = defaultdict(lambda: dict)
+                country_id_to_year_to_avg_yield = defaultdict(dict)
                 for country_id, rest in country_id_to_year_to_yields.items():
                     for year, yields in rest.items():
                         if len(yields) > 0:
@@ -110,7 +110,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                 outp.write(value=out_ip).wait()
 
                 # reset and wait for next round
-                country_id_to_year_to_yields = defaultdict(lambda: defaultdict(list))
+                country_id_to_year_to_yields.clear()
 
         except Exception as e:
             print("Exception:", e)

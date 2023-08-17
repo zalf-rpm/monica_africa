@@ -104,7 +104,7 @@ def run_producer(server={"server": None, "port": None}):
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_africa.csv",
+        "setups-file": "sim_setups_africa_calibration.csv",
         "run-setups": "[1]"
     }
 
@@ -253,14 +253,14 @@ def run_producer(server={"server": None, "port": None}):
     sent_env_count = 1
     start_time = time.perf_counter()
 
-    if len(setups) < 3 and setups[0] not in setups:
+    if len(run_setups) < 3 and run_setups[0] not in setups:
         print("Setup id:", setups[0], "was invalid and/or sturdy ref to input channel missing!")
         exit(1)
     else:
-        setup_id = setups[0]
+        setup_id = run_setups[0]
 
     conman = common.ConnectionManager()
-    inp = conman.try_connect(setups[1], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
+    inp = conman.try_connect(run_setups[1], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
     if inp:
         while True:
             msg = inp.read().wait()
@@ -559,7 +559,7 @@ def run_producer(server={"server": None, "port": None}):
                         "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                         "env_id": sent_env_count,
                         "nodata": False,
-                        "out_sr": setups[2],
+                        "out_sr": run_setups[2],
                         "country_id": country_id
                     }
 
