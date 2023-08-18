@@ -578,9 +578,10 @@ class ConnectionManager:
 
             if sr_token:
                 restorer = bootstrap_cap.cast_as(persistence_capnp.Restorer)
-                res_req = restorer.restore_request()
-                res_req.localRef = sr_token
-                dyn_obj_reader = res_req.send().wait().cap
+                dyn_obj_reader = restorer.restore(localRef={"text": sr_token}).wait().cap
+                #res_req = restorer.restore_request()
+                #res_req.localRef = {"text": sr_token}
+                #dyn_obj_reader = res_req.send().wait().cap
                 if dyn_obj_reader is not None:
                     return dyn_obj_reader.as_interface(cast_as) if cast_as else dyn_obj_reader
             else:

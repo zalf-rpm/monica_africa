@@ -30,8 +30,8 @@ def run_calibration(server={"server": None, "port": None}):
         "site.json": "site.json",
         "setups-file": "sim_setups_africa.csv",
         "run-setups": "[1]",
-        "out_sr": "capnp://OLFKGVRKGOanC9Egq_i5wwr0GG8zEuizBLU1f_UIR9w@10.10.25.25:46815/a87beca7-a0ef-4fc3-8174-e9a6cc669e9e",
-        "in_sr": "capnp://2c4klhrLPxOrp8_Azm0ojkC-28iAQ4I9XZoKUUAGlPw@10.10.25.25:36413/c1ad5f00-ddf1-4105-b268-ca804e564ad9"
+        "prod_writer_sr": "capnp://CntouulC2KYC3W_qk06H5Y0aUgAGP3Rzxkw1ZlLpktU@10.10.25.25:38019/7cbdd552-49fd-4d5f-bbc0-4d927eb64b7f",
+        "cons_reader_sr": "capnp://OU0P6_fB84Vrdq2bdb5nJqMk9sux4z5640XrAlAf9pg@10.10.25.25:40023/024a82b5-77b0-4cb7-b711-b1a99ac1db4d"
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -50,7 +50,7 @@ def run_calibration(server={"server": None, "port": None}):
         reader = csv.reader(file, dialect)
         next(reader, None)  # skip the header
         for row in reader:
-            crop_to_observations[row[0].lower()].append(
+            crop_to_observations[row[0].strip().lower()].append(
                 {"id": int(row[4]),
                  "year": int(row[2]),
                  "value": float(row[3])})
@@ -85,14 +85,14 @@ def run_calibration(server={"server": None, "port": None}):
         return
     setup_id = run_setups[0]
     setup = setups[setup_id]
-    cons_inp = conman.try_connect(config["out_sr"], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
-    prod_outp = conman.try_connect(config["in_sr"], cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
+    cons_reader = conman.try_connect(config["cons_reader_sr"], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
+    prod_writer = conman.try_connect(config["prod_writer_sr"], cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
 
     #Here, MONICA is initialized and a producer is started:
     #Arguments are: Parameters, Sites, Observations
     #Returns a ready made setup
     obs_list = list(map(lambda d: d["value"], crop_to_observations[setup["crop"]]))
-    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_outp, cons_inp)
+    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_writer, cons_reader)
 
     rep = 200 #initial number was 10
     results = []
@@ -107,10 +107,8 @@ def run_calibration(server={"server": None, "port": None}):
     #pcento = percent change allowed in kstop loops before convergence
     sampler.sample(rep, ngs=len(params)*2, peps=0.001, pcento=0.001)
 
-
     #Extract the parameter samples from distribution
     results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
-
 
     # Plot how the objective function was minimized during sampling
     font = {'family': 'calibri',

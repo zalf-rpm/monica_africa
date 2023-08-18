@@ -30,12 +30,12 @@ abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
 class spot_setup(object):
-    def __init__(self, user_params, obs_list, prod_outp, cons_inp):
+    def __init__(self, user_params, obs_list, prod_writer, cons_reader):
         self.user_params = user_params
         self.params = []
         self.obs_list = obs_list
-        self.prod_outp = prod_outp
-        self.cons_inp = cons_inp
+        self.prod_writer = prod_writer
+        self.cons_reader = cons_reader
         for par in user_params:
             par_name = par["name"]
             if "array" in par:
@@ -50,18 +50,21 @@ class spot_setup(object):
     def simulation(self, vector):
         # vector = MaxAssimilationRate, AssimilateReallocation, RootPenetrationRate
         out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
-        self.prod_outp.write(value=out_ip).wait()
+        self.prod_writer.write(value=out_ip).wait()
 
-        msg = self.cons_inp.read().wait()
+        msg = self.cons_reader.read().wait()
         # check for end of data from in port
         if msg.which() == "done":
             return
 
         in_ip = msg.value.as_struct(fbp_capnp.IP)
         s: str = in_ip.content.as_text()
-        country_id_to_year_to_avg_yield = json.loads(s)
-        country_id_to_year_to_avg_yield.sort(key=lambda r: [r["id"], r["year"]])
-        return simulations
+        list_of_country_id_and_year_and_avg_yield = json.loads(s)
+        list_of_country_id_and_year_and_avg_yield.sort(key=lambda r: [r["id"], r["year"]])
+        sim_list = list(map(lambda d: d["value"], list_of_country_id_and_year_and_avg_yield))
+        # besides the order the length of observation results and simulation results should be the same
+        assert(len(sim_list) == len(self.obs_list))
+        return sim_list
 
     def evaluation(self):
         return self.obs_list
