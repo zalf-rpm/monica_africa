@@ -57,7 +57,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "mode": "remoteConsumer-remoteMonica",
         "port": server["port"] if server["port"] else "7777",  # local 7778,  remote 7777
         "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
-        "writer_sr": "capnp://OU0P6_fB84Vrdq2bdb5nJqMk9sux4z5640XrAlAf9pg@10.10.25.25:40023/1115e763-2fd2-4da2-b8d5-bb64caf33e4f",
+        "writer_sr": None,
         "timeout": 600000  # 10min
     }
 
@@ -96,6 +96,8 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
             else:
                 envs_received += 1
 
+            #print("received result customId:", custom_id)
+
             leave = no_of_envs_expected == envs_received
 
             #writer_sr = custom_id["writer_sr"]
@@ -111,6 +113,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                         country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
 
             if no_of_envs_expected == envs_received and writer:
+                #print("last expected env received")
                 list_of_country_id_and_year_and_avg_yield = []
                 for country_id, rest in country_id_to_year_to_yields.items():
                     for year, yields in rest.items():

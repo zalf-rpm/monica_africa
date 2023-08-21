@@ -51,6 +51,7 @@ class spot_setup(object):
         # vector = MaxAssimilationRate, AssimilateReallocation, RootPenetrationRate
         out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
         self.prod_writer.write(value=out_ip).wait()
+        #print("sent params to monica setup:", vector)
 
         msg = self.cons_reader.read().wait()
         # check for end of data from in port
@@ -61,6 +62,7 @@ class spot_setup(object):
         s: str = in_ip.content.as_text()
         list_of_country_id_and_year_and_avg_yield = json.loads(s)
         list_of_country_id_and_year_and_avg_yield.sort(key=lambda r: [r["id"], r["year"]])
+        #print("received monica results:", list_of_country_id_and_year_and_avg_yield)
         sim_list = list(map(lambda d: d["value"], list_of_country_id_and_year_and_avg_yield))
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_list))

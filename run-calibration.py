@@ -11,7 +11,9 @@ import numpy as np
 import os
 from pathlib import Path
 import spotpy
+import subprocess as sp
 import sys
+import uuid
 
 import common.common as common
 
@@ -19,6 +21,27 @@ PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
 PATH_TO_CAPNP_SCHEMAS = (PATH_TO_REPO / "capnproto_schemas").resolve()
 abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
+
+
+def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
+    chan = sp.Popen([
+        path_to_channel_binary,
+        "--name=chan_{}".format(chan_name if chan_name else str(uuid.uuid4())),
+        "--output_srs",
+    ], stdout=sp.PIPE, text=True)
+    reader_sr = None
+    writer_sr = None
+    while True:
+        s = chan.stdout.readline().split("=", maxsplit=1)
+        id, sr = s if len(s) == 2 else (None, None)
+        if id and id == "readerSR":
+            reader_sr = sr.strip()
+        elif id and id == "writerSR":
+            writer_sr = sr.strip()
+        if reader_sr and writer_sr:
+            break
+    return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
+
 
 def run_calibration(server={"server": None, "port": None}):
     config = {
@@ -28,10 +51,11 @@ def run_calibration(server={"server": None, "port": None}):
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_africa.csv",
+        "setups-file": "sim_setups_africa_calibration.csv",
         "run-setups": "[1]",
-        "prod_writer_sr": "capnp://CntouulC2KYC3W_qk06H5Y0aUgAGP3Rzxkw1ZlLpktU@10.10.25.25:38019/7cbdd552-49fd-4d5f-bbc0-4d927eb64b7f",
-        "cons_reader_sr": "capnp://OU0P6_fB84Vrdq2bdb5nJqMk9sux4z5640XrAlAf9pg@10.10.25.25:40023/024a82b5-77b0-4cb7-b711-b1a99ac1db4d"
+        #"prod_writer_sr": "capnp://cwyTtDDGrPvenYtN_ZYZMpfJYzJxeMCQlqmtJWBEkEk@10.10.25.25:9998/w",
+        #"cons_reader_sr": "capnp://AeDOf62wF9k_DBAAnk48QNqzFozffeveuQHQyp1wRr0@10.10.25.25:9999/r",
+        "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -43,6 +67,30 @@ def run_calibration(server={"server": None, "port": None}):
 
     print("config:", config)
 
+    procs = []
+
+    prod_chan_data = get_reader_writer_srs_from_channel(config["path_to_channel"], "prod_chan")
+    procs.append(prod_chan_data["chan"])
+    cons_chan_data = get_reader_writer_srs_from_channel(config["path_to_channel"], "cons_chan")
+    procs.append(cons_chan_data["chan"])
+
+    procs.append(sp.Popen([
+        "python",
+        "run-calibration-producer.py",
+        #"mode=remoteProducer-remoteMonica",
+        f"setups-file={config['setups-file']}",
+        f"run-setups={config['run-setups']}",
+        f"reader_sr={prod_chan_data['reader_sr']}",
+    ]))
+
+    procs.append(sp.Popen([
+        "python",
+        "run-calibration-consumer.py",
+        # "mode=remoteConsumer-remoteMonica",
+        f"run-setups={config['run-setups']}",
+        f"writer_sr={cons_chan_data['writer_sr']}",
+    ]))
+
     crop_to_observations = defaultdict(list)
     with open("data/FAO_yield_data.csv") as file:
         dialect = csv.Sniffer().sniff(file.read(), delimiters=';,\t')
@@ -53,7 +101,8 @@ def run_calibration(server={"server": None, "port": None}):
             crop_to_observations[row[0].strip().lower()].append(
                 {"id": int(row[4]),
                  "year": int(row[2]),
-                 "value": float(row[3])})
+                 "value": float(row[3])*1000.0  # t/ha -> kg/ha
+                 })
 
     # order obslist by exp_id to avoid mismatch between observation/evaluation lists
     for crop, obs in crop_to_observations.items():
@@ -77,7 +126,7 @@ def run_calibration(server={"server": None, "port": None}):
                 p["derive_function"] = lambda _, _2: eval(row[8])
             params.append(p)
 
-    conman = common.ConnectionManager()
+    con_man = common.ConnectionManager()
 
     setups = monica_run_lib.read_sim_setups(config["setups-file"])
     run_setups = json.loads(config["run-setups"])
@@ -85,16 +134,16 @@ def run_calibration(server={"server": None, "port": None}):
         return
     setup_id = run_setups[0]
     setup = setups[setup_id]
-    cons_reader = conman.try_connect(config["cons_reader_sr"], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
-    prod_writer = conman.try_connect(config["prod_writer_sr"], cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
+    cons_reader = con_man.try_connect(cons_chan_data["reader_sr"], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
+    prod_writer = con_man.try_connect(prod_chan_data["writer_sr"], cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
 
     #Here, MONICA is initialized and a producer is started:
     #Arguments are: Parameters, Sites, Observations
     #Returns a ready made setup
-    obs_list = list(map(lambda d: d["value"], crop_to_observations[setup["crop"]]))
+    obs_list = list(map(lambda d: d["value"], filter(lambda d: d["id"] == 10, crop_to_observations[setup["crop"]])))
     spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_writer, cons_reader)
 
-    rep = 200 #initial number was 10
+    rep = 1000 #initial number was 10
     results = []
     #Set up the sampler with the model above
     sampler = spotpy.algorithms.sceua(spot_setup, dbname='SCEUA_monica_results', dbformat='csv')
@@ -122,6 +171,9 @@ def run_calibration(server={"server": None, "port": None}):
     plt.xlabel("Iteration")
     fig.savefig("SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
 
+    # kill the two channels and the producer and consumer
+    for proc in procs:
+        proc.terminate()
 
     print("sampler_MONICA.py finished")
 

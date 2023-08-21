@@ -106,7 +106,7 @@ def run_producer(server={"server": None, "port": None}):
         "site.json": "site.json",
         "setups-file": "sim_setups_africa_calibration.csv",
         "run-setups": "[1]",
-        "reader_sr": "capnp://CntouulC2KYC3W_qk06H5Y0aUgAGP3Rzxkw1ZlLpktU@10.10.25.25:38019/94cbec50-a3ee-48c8-ac41-0ede72342afa"
+        "reader_sr": None,
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -157,12 +157,7 @@ def run_producer(server={"server": None, "port": None}):
         resolution = float(metadata["cellsize"])
         return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
 
-    # eco regions
-    path_to_eco_grid = (paths["path-to-data-dir"] +
-                        "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc")
-    eco_metadata, _ = monica_run_lib.read_header(path_to_eco_grid)
-    eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=len(eco_metadata))
-    aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
+
 
     def check_for_nill_dates(mgmt):
         for key, value in mgmt.items():
@@ -251,7 +246,41 @@ def run_producer(server={"server": None, "port": None}):
                 })
         return layers
 
-    sent_env_count = 1
+    def load_grid_cached(path_to_grid, type, print_path=False):
+        if not hasattr(load_grid_cached, "cache"):
+            load_grid_cached.cache = {}
+
+        if path_to_grid in load_grid_cached.cache:
+            return load_grid_cached.cache[path_to_grid]
+
+        md, _ = monica_run_lib.read_header(path_to_grid)
+        grid = np.loadtxt(path_to_grid, dtype=type, skiprows=len(md))
+        print("read: ", path_to_grid)
+        ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(md)
+
+        def col(lon):
+            return int((lon - ll0r["lon_0"]) / ll0r["res"])
+        def row(lat):
+            return int((ll0r["lat_0"] - lat) / ll0r["res"])
+        def value(lat, lon, type, return_no_data = False):
+            c = col(lon)
+            r = row(lat)
+            if 0 <= r < md["nrows"] and 0 <= c < md["ncols"]:
+                val = type(grid[r, c])
+                if val != md["nodata_value"] or return_no_data:
+                    return val
+            return None
+
+        cache_entry = {
+            "metadata": md, "grid": grid, "ll0r": ll0r,
+            "col": lambda lon: col(lon),
+            "row": lambda lat: row(lat),
+            "value": lambda lat, lon, type, ret_no_data: value(lat, lon, type, ret_no_data)
+        }
+        load_grid_cached.cache[path_to_grid] = cache_entry
+        return cache_entry
+
+    sent_env_count = 0
     start_time = time.perf_counter()
 
     if len(run_setups) > 1 and run_setups[0] not in setups:
@@ -268,6 +297,8 @@ def run_producer(server={"server": None, "port": None}):
             if msg.which() == "done":
                 break
 
+            env_template = None
+            start_setup_time = None
             try:
                 in_ip = msg.value.as_struct(fbp_capnp.IP)
                 s: str = in_ip.content.as_text()
@@ -297,47 +328,20 @@ def run_producer(server={"server": None, "port": None}):
                 else:
                     planting = nitrogen = management = None
 
-                path_to_country_id_grid = \
-                    paths["path-to-data-dir"] + f"{setup['crop']}-mask_0.083deg_4326_wgs84_africa.asc.gz"
-                country_id_metadata, _ = monica_run_lib.read_header(path_to_country_id_grid)
-                country_id_grid = np.loadtxt(path_to_country_id_grid, dtype=int, skiprows=len(country_id_metadata))
-                print("read: ", path_to_country_id_grid)
-                country_id_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(country_id_metadata)
-
-                path_to_crop_mask_grid = \
-                    paths["path-to-data-dir"] + f"{setup['crop']}-mask_0.083deg_4326_wgs84_africa.asc.gz"
-                crop_mask_metadata, _ = monica_run_lib.read_header(path_to_crop_mask_grid)
-                crop_mask_grid = np.loadtxt(path_to_crop_mask_grid, dtype=int, skiprows=len(crop_mask_metadata))
-                print("read: ", path_to_crop_mask_grid)
-                crop_mask_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(crop_mask_metadata)
-
-                path_to_planting_grid = \
-                    paths["path-to-data-dir"] + f"{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
-                planting_metadata, _ = monica_run_lib.read_header(path_to_planting_grid)
-                planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=len(planting_metadata))
-                print("read: ", path_to_planting_grid)
-                planting_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
-
-                path_to_harvest_grid = \
-                    paths["path-to-data-dir"] + f"{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
-                harvest_metadata, _ = monica_run_lib.read_header(path_to_harvest_grid)
-                harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
-                print("read: ", path_to_harvest_grid)
-                harvest_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
-
-                # height data for germany
-                path_to_dem_grid = setup["path_to_dem_asc_grid"]
-                dem_metadata, _ = monica_run_lib.read_header(path_to_dem_grid)
-                dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=len(dem_metadata))
-                print("read: ", path_to_dem_grid)
-                dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
-
-                # slope data
-                path_to_slope_grid = setup["path_to_slope_asc_grid"]
-                slope_metadata, _ = monica_run_lib.read_header(path_to_slope_grid)
-                slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=len(slope_metadata))
-                print("read: ", path_to_slope_grid)
-                slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
+                # eco regions
+                eco_data = load_grid_cached(
+                    paths["path-to-data-dir"] +
+                    "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc", int)
+                country_id_data = load_grid_cached(
+                    paths["path-to-data-dir"] + "country-id_0.083deg_4326_wgs84_africa.asc", int)
+                crop_mask_data = load_grid_cached(
+                    paths["path-to-data-dir"] + f"{setup['crop']}-mask_0.083deg_4326_wgs84_africa.asc.gz", int)
+                planting_data = load_grid_cached(
+                    paths["path-to-data-dir"] + f"{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc", int)
+                harvest_data = load_grid_cached(
+                    paths["path-to-data-dir"] + f"{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc", int)
+                height_data = load_grid_cached(setup["path_to_dem_asc_grid"], float)
+                slope_data = load_grid_cached(setup["path_to_slope_asc_grid"], float)
 
                 # read template sim.json
                 with open(setup.get("sim.json", config["sim.json"])) as _:
@@ -399,7 +403,7 @@ def run_producer(server={"server": None, "port": None}):
                 for lat_scaled in lats_scaled:
                     lat = lat_scaled / s_res_scale_factor
 
-                    print(lat, )
+                    #print("lat:"+str(round(lat,2)))
 
                     lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
                                         int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,
@@ -408,7 +412,7 @@ def run_producer(server={"server": None, "port": None}):
                     s_col_0 = int(((lons_scaled[0] / s_res_scale_factor) - s_lon_0) / s_resolution)
                     for lon_scaled in lons_scaled:
                         lon = lon_scaled / s_res_scale_factor
-                        print(lon, )
+                        #print("lon:"+str(round(lon,2)), end=" ")
 
                         c_col = int((lon - c_lon_0) / c_resolution)
                         c_row = int((c_lat_0 - lat) / c_resolution)
@@ -420,33 +424,19 @@ def run_producer(server={"server": None, "port": None}):
                         mgmt = None
                         aer = None
                         if setup["region"] == "nigeria":
-                            aer_col = int((lon - aer_ll0r["lon_0"]) / aer_ll0r["res"])
-                            aer_row = int((aer_ll0r["lat_0"] - lat) / aer_ll0r["res"])
-                            if 0 <= aer_row < int(eco_metadata["nrows"]) \
-                                    and 0 <= aer_col < int(eco_metadata["ncols"]):
-                                aer = eco_grid[aer_row, aer_col]
-                                if aer > 0 and aer in management:
-                                    mgmt = management[aer]
+                            aer = eco_data["value"](lat, lon, int, False)
+                            if aer and aer > 0 and aer in management:
+                                mgmt = management[aer]
                         else:
                             mgmt = {}
-
-                            planting_col = int((lon - planting_ll0r["lon_0"]) / planting_ll0r["res"])
-                            planting_row = int((planting_ll0r["lat_0"] - lat) / planting_ll0r["res"])
-                            if 0 <= planting_row < int(planting_metadata["nrows"]) \
-                                    and 0 <= planting_col < int(planting_metadata["ncols"]):
-                                planting_doy = int(planting_grid[planting_row, planting_col])
-                                if planting_doy != planting_metadata["nodata_value"]:
-                                    d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
-                                    mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
-
-                            harvest_col = int((lon - harvest_ll0r["lon_0"]) / harvest_ll0r["res"])
-                            harvest_row = int((harvest_ll0r["lat_0"] - lat) / harvest_ll0r["res"])
-                            if 0 <= harvest_row < int(harvest_metadata["nrows"]) \
-                                    and 0 <= harvest_col < int(harvest_metadata["ncols"]):
-                                harvest_doy = int(harvest_grid[harvest_row, harvest_col])
-                                if harvest_doy != harvest_metadata["nodata_value"]:
-                                    d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
-                                    mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
+                            planting_doy = planting_data["value"](lat, lon, int, False)
+                            if planting_doy:
+                                d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
+                                mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
+                            harvest_doy = harvest_data["value"](lat, lon, int, False)
+                            if harvest_doy:
+                                d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
+                                mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
 
                         valid_mgmt = False
                         if mgmt and check_for_nill_dates(mgmt) and len(mgmt) > 1:
@@ -468,34 +458,24 @@ def run_producer(server={"server": None, "port": None}):
                         else:
                             mgmt = None
 
-                        crop_mask_col = int((lon - crop_mask_ll0r["lon_0"]) / crop_mask_ll0r["res"])
-                        crop_mask_row = int((crop_mask_ll0r["lat_0"] - lat) / crop_mask_ll0r["res"])
-                        crop_mask_value = crop_mask_grid[crop_mask_row, crop_mask_col]
-                        is_no_crop = crop_mask_value in [crop_mask_metadata["nodata_value"], 0]
+                        crop_mask_value = crop_mask_data["value"](lat, lon, int, False)
+                        is_no_crop = not crop_mask_value or crop_mask_value == 0
 
-                        country_id_col = int((lon - country_id_ll0r["lon_0"]) / country_id_ll0r["res"])
-                        country_id_row = int((country_id_ll0r["lat_0"] - lat) / country_id_ll0r["res"])
-                        country_id = country_id_grid[country_id_row, country_id_col]
-                        no_valid_country_id = country_id == crop_mask_metadata["nodata_value"]
+                        country_id = country_id_data["value"](lat, lon, int, False)
+                        no_valid_country_id = not country_id or country_id != 10
 
-                        if mgmt is None or not valid_mgmt or is_no_crop or no_valid_country_id:
+                        height_nn = height_data["value"](lat, lon, float, False)
+
+                        slope = slope_data["value"](lat, lon, float, False)
+                        if not slope:
+                            slope = 0
+
+                        if not height_nn or mgmt is None or not valid_mgmt or is_no_crop or no_valid_country_id:
                             continue
 
                         soil_profile = create_soil_profile(s_row, s_col)
                         if not soil_profile:
                             continue
-
-                        dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
-                        dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
-                        height_nn = dem_grid[dem_row, dem_col]
-                        if height_nn == dem_metadata["nodata_value"]:
-                            continue
-
-                        slope_col = int((lon - slope_ll0r["lon_0"]) / slope_ll0r["res"])
-                        slope_row = int((slope_ll0r["lat_0"] - lat) / slope_ll0r["res"])
-                        slope = slope_grid[slope_row, slope_col]
-                        if slope == slope_metadata["nodata_value"]:
-                            slope = 0
 
                         env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
                             "LeafExtensionModifier"]
@@ -552,39 +532,40 @@ def run_producer(server={"server": None, "port": None}):
                         else:
                             climate_data_paths = [paths["monica-path-to-climate-dir"] + sub_path]
                         env_template["pathToClimateCSV"] = climate_data_paths
-                        print("pathToClimateCSV:", env_template["pathToClimateCSV"])
+                        #print("pathToClimateCSV:", env_template["pathToClimateCSV"])
 
                         env_template["customId"] = {
                             "setup_id": setup_id,
                             "lat": lat, "lon": lon,
                             "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
-                            "env_id": sent_env_count,
+                            "env_id": sent_env_count+1,
                             "nodata": False,
                             #"writer_sr": config["writer_sr"],
                             "country_id": country_id,
                         }
 
                         socket.send_json(env_template)
-                        print("sent env ", sent_env_count, " customId: ", env_template["customId"])
+                        #print("sent env ", sent_env_count, " customId: ", env_template["customId"])
 
                         sent_env_count += 1
 
                         if sent_env_count == 100:
-                            sent_env_count = 1
                             raise Exception("leave early for test")
             except Exception as e:
-                print("Exception raised:", e)
-                continue
+                #print("Exception raised:", e)
+                pass
 
             # send a last message will be just forwarded by monica to signify last
-            env_template["pathToClimateCSV"] = ""
-            env_template["customId"] = {
-                "no_of_sent_envs": sent_env_count - 1
-            }
-            socket.send_json(env_template)
+            if env_template:
+                env_template["pathToClimateCSV"] = ""
+                env_template["customId"] = {
+                    "no_of_sent_envs": sent_env_count
+                }
+                socket.send_json(env_template)
 
             stop_setup_time = time.perf_counter()
-            print("Setup ", (sent_env_count - 1), " envs took ", (stop_setup_time - start_setup_time), " seconds")
+            print("Setup ", sent_env_count, " envs took ", (stop_setup_time - start_setup_time), " seconds")
+            sent_env_count = 0
 
     stop_time = time.perf_counter()
 
