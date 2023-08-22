@@ -43,19 +43,19 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
-def run_calibration(server={"server": None, "port": None}):
+def run_calibration(server={"server": None, "prod-port": None, "cons-port": None}):
     config = {
         "mode": "mbm-local-remote",
-        "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
+        "prod-server-port": server["port"] if server["prod-port"] else "6666",  # local: 6667, remote 6666
+        "cons-server-port": server["port"] if server["cons-port"] else "7777",  # local: 6667, remote 6666
         "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups_africa_calibration.csv",
         "run-setups": "[1]",
-        #"prod_writer_sr": "capnp://cwyTtDDGrPvenYtN_ZYZMpfJYzJxeMCQlqmtJWBEkEk@10.10.25.25:9998/w",
-        #"cons_reader_sr": "capnp://AeDOf62wF9k_DBAAnk48QNqzFozffeveuQHQyp1wRr0@10.10.25.25:9999/r",
-        "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
+        "path_to_channel": "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
+        #"path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
     }
 
     # read commandline args only if script is invoked directly from commandline
@@ -78,6 +78,7 @@ def run_calibration(server={"server": None, "port": None}):
         "python",
         "run-calibration-producer.py",
         #"mode=remoteProducer-remoteMonica",
+        f"server-port={config['prod-server-port']}",
         f"setups-file={config['setups-file']}",
         f"run-setups={config['run-setups']}",
         f"reader_sr={prod_chan_data['reader_sr']}",
@@ -87,6 +88,7 @@ def run_calibration(server={"server": None, "port": None}):
         "python",
         "run-calibration-consumer.py",
         # "mode=remoteConsumer-remoteMonica",
+        f"server-port={config['cons-server-port']}",
         f"run-setups={config['run-setups']}",
         f"writer_sr={cons_chan_data['writer_sr']}",
     ]))
