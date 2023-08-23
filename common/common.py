@@ -12,9 +12,6 @@
 # Landscape Systems Analysis at the ZALF.
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
-import sys
-print(sys.path)
-
 import base64
 import capnp
 from collections import defaultdict

@@ -1,6 +1,3 @@
-import sys
-print(sys.path)
-
 import capnp
 from collections import defaultdict
 import json
@@ -59,6 +56,7 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
         "path_to_out": "out/",
         "run-setups": "[1]",
         "path_to_channel": "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
+        "path_to_python": "/home/rpm/.conda/envs/py39/bin/python"
         #"path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
     }
 
