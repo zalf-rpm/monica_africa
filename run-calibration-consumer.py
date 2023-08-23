@@ -16,24 +16,12 @@
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
 import capnp
-from collections import defaultdict, OrderedDict
-import csv
-from datetime import datetime
-import gc
+from collections import defaultdict
 import json
-import numpy as np
 import os
 from pathlib import Path
-from pyproj import CRS, Transformer
-import sqlite3
 import sys
-import timeit
-import types
 import zmq
-
-import monica_io3
-import soil_io3
-import monica_run_lib as Mrunlib
 
 import common.common as common
 
@@ -50,26 +38,18 @@ PATHS = {
     }
 }
 
-def run_consumer(leave_after_finished_run=True, server={"server": None, "port": None}):
+def run_consumer(server=None, port=None):
     """collect data from workers"""
 
     config = {
         "mode": "remoteConsumer-remoteMonica",
-        "port": server["port"] if server["port"] else "7777",  # local 7778,  remote 7777
-        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
+        "port": port if port else "7777",  # local 7778,  remote 7777
+        "server": server if server else "login01.cluster.zalf.de",
         "writer_sr": None,
         "timeout": 600000  # 10min
     }
 
-    if len(sys.argv) > 1 and __name__ == "__main__":
-        for arg in sys.argv[1:]:
-            k, v = arg.split("=")
-            if k in config:
-                config[k] = v
-
-    paths = PATHS[config["mode"]]
-
-    print("consumer config:", config)
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     context = zmq.Context()
     socket = context.socket(zmq.PULL)

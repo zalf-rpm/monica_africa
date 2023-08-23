@@ -315,8 +315,8 @@ def run_producer(server={"server": None, "port": None}):
         with open(setup.get("site.json", config["site.json"])) as _:
             site_json = json.load(_)
 
-        if len(scenario) > 0 and scenario[:3].lower() == "rcp":
-            site_json["EnvironmentParameters"]["rcp"] = scenario
+        if len(scenario) > 0 and scenario[:3].lower() == "ssp":
+            site_json["EnvironmentParameters"]["rcp"] = f"rcp{scenario[-2:]}"
 
         # read template crop.json
         with open(setup.get("crop.json", config["crop.json"])) as _:

@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="initial tests for calibration work locally">
+    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="some cleanup">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-calibration-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-calibration-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-producer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +81,7 @@
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.run-consumer">
     <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="klimertrag" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -185,7 +188,7 @@
       <workItem from="1689341706607" duration="51000" />
       <workItem from="1691423484775" duration="630000" />
       <workItem from="1691424753024" duration="67145000" />
-      <workItem from="1692349596622" duration="38235000" />
+      <workItem from="1692349596622" duration="45797000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -458,7 +461,63 @@
       <option name="project" value="LOCAL" />
       <updated>1692715570074</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="initial tests for calibration work locally">
+      <option name="closed" value="true" />
+      <created>1692725252165</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1692725252165</updated>
+    </task>
+    <task id="LOCAL-00037" summary="test">
+      <option name="closed" value="true" />
+      <created>1692777872083</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1692777872083</updated>
+    </task>
+    <task id="LOCAL-00038" summary="test">
+      <option name="closed" value="true" />
+      <created>1692780382348</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1692780382348</updated>
+    </task>
+    <task id="LOCAL-00039" summary="test">
+      <option name="closed" value="true" />
+      <created>1692780628644</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1692780628644</updated>
+    </task>
+    <task id="LOCAL-00040" summary="test">
+      <option name="closed" value="true" />
+      <created>1692780831663</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1692780831663</updated>
+    </task>
+    <task id="LOCAL-00041" summary="test">
+      <option name="closed" value="true" />
+      <created>1692781115574</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1692781115574</updated>
+    </task>
+    <task id="LOCAL-00042" summary="some cleanup">
+      <option name="closed" value="true" />
+      <created>1692783022479</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1692783022479</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -487,18 +546,9 @@
     <MESSAGE value="starting adding code for calibration" />
     <MESSAGE value="dev dump" />
     <MESSAGE value="initial tests for calibration work locally" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial tests for calibration work locally" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run-calibration-producer.py</url>
-          <line>370</line>
-          <option name="timeStamp" value="150" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="test" />
+    <MESSAGE value="some cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="some cleanup" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

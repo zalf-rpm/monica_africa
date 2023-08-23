@@ -16,26 +16,17 @@
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
 import capnp
-from collections import defaultdict
-import copy
-import csv
 from datetime import date, timedelta
-import gzip
 import json
-import math
 from netCDF4 import Dataset
 import numpy as np
 import os
 from pathlib import Path
-from pyproj import CRS, Transformer
-import sqlite3
-import sqlite3 as cas_sq3
 import sys
 import time
 import zmq
 
 import monica_io3
-import soil_io3
 import monica_run_lib
 
 import common.common as common
@@ -76,25 +67,17 @@ PATHS = {
         "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
         "path-debug-write-folder": "./debug-out/",
     },
-    "remoteProducer-remoteMonica": {
-        "path-to-climate-dir": "/data/",  # mounted path to archive or hard drive with climate data
-        "monica-path-to-climate-dir": "/monica_data/climate-data/",
-        # mounted path to archive accessable by monica executable
-        "path-to-data-dir": "./data/",  # mounted path to archive or hard drive with data
-        "path-to-soil-dir": "/project/soil/global_soil_dataset_for_earth_system_modeling/",
-        "path-debug-write-folder": "/out/debug-out/",
-    }
 }
 
 
-def run_producer(server={"server": None, "port": None}):
+def run_producer(server=None, port=None):
     context = zmq.Context()
     socket = context.socket(zmq.PUSH)  # pylint: disable=no-member
 
     config = {
         "mode": "mbm-local-remote",
-        "server-port": server["port"] if server["port"] else "6666",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
+        "server-port": port if port else "6666",  # local: 6667, remote 6666
+        "server": server if server else "login01.cluster.zalf.de",
         "start_lat": "83.95833588",
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
@@ -107,16 +90,13 @@ def run_producer(server={"server": None, "port": None}):
         "setups-file": "sim_setups_africa_calibration.csv",
         "run-setups": "[1]",
         "reader_sr": None,
+        "test_mode": "false",
+        "only_country_ids": None  # "[10]",
     }
 
-    # read commandline args only if script is invoked directly from commandline
-    if len(sys.argv) > 1 and __name__ == "__main__":
-        for arg in sys.argv[1:]:
-            k, v = arg.split("=")
-            if k in config:
-                config[k] = v
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
-    print("config:", config)
+    only_country_ids = json.loads(config["only_country_ids"]) if config["only_country_ids"] else []
 
     s_resolution = {"5min": 5 / 60., "30sec": 30 / 3600.}[config["resolution"]]
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]
@@ -357,8 +337,8 @@ def run_producer(server={"server": None, "port": None}):
                 with open(setup.get("site.json", config["site.json"])) as _:
                     site_json = json.load(_)
 
-                if len(scenario) > 0 and scenario[:3].lower() == "rcp":
-                    site_json["EnvironmentParameters"]["rcp"] = scenario
+                if len(scenario) > 0 and scenario[:3].lower() == "ssp":
+                    site_json["EnvironmentParameters"]["rcp"] = f"rcp{scenario[-2:]}"
 
                 # read template crop.json
                 with open(setup.get("crop.json", config["crop.json"])) as _:
@@ -457,21 +437,24 @@ def run_producer(server={"server": None, "port": None}):
                                     ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
                         else:
                             mgmt = None
+                        if not mgmt or not valid_mgmt:
+                            continue
 
                         crop_mask_value = crop_mask_data["value"](lat, lon, int, False)
-                        is_no_crop = not crop_mask_value or crop_mask_value == 0
+                        if not crop_mask_value or crop_mask_value == 0:
+                            continue
 
                         country_id = country_id_data["value"](lat, lon, int, False)
-                        no_valid_country_id = not country_id or country_id != 10
+                        if not country_id or country_id not in only_country_ids:
+                            continue
 
                         height_nn = height_data["value"](lat, lon, float, False)
+                        if not height_nn:
+                            continue
 
                         slope = slope_data["value"](lat, lon, float, False)
                         if not slope:
                             slope = 0
-
-                        if not height_nn or mgmt is None or not valid_mgmt or is_no_crop or no_valid_country_id:
-                            continue
 
                         soil_profile = create_soil_profile(s_row, s_col)
                         if not soil_profile:
@@ -540,7 +523,6 @@ def run_producer(server={"server": None, "port": None}):
                             "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                             "env_id": sent_env_count+1,
                             "nodata": False,
-                            #"writer_sr": config["writer_sr"],
                             "country_id": country_id,
                         }
 
@@ -549,7 +531,7 @@ def run_producer(server={"server": None, "port": None}):
 
                         sent_env_count += 1
 
-                        if sent_env_count == 100:
+                        if config["test_mode"] == "true" and sent_env_count == 100:
                             raise Exception("leave early for test")
             except Exception as e:
                 #print("Exception raised:", e)

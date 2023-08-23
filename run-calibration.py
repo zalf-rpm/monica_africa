@@ -56,7 +56,9 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         # "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
         "path_to_channel": "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
         "path_to_python": "/home/rpm/.conda/envs/py39/bin/python",
-        "repetitions": "1000"
+        "repetitions": "200",
+        "test_mode": "false",
+        "only_country_ids": None  # "[10]",
     }
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -77,7 +79,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         f"setups-file={config['setups-file']}",
         f"run-setups={config['run-setups']}",
         f"reader_sr={prod_chan_data['reader_sr']}",
-    ]))
+        f"test_mode={config['test_mode']}",
+    ] + (config["only_country_ids"] if config["only_country_ids"] else [])))
 
     procs.append(sp.Popen([
         config["path_to_python"],
@@ -138,7 +141,13 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     #Here, MONICA is initialized and a producer is started:
     #Arguments are: Parameters, Sites, Observations
     #Returns a ready made setup
-    obs_list = list(map(lambda d: d["value"], filter(lambda d: d["id"] == 10, crop_to_observations[setup["crop"]])))
+    if config["only_country_ids"]:
+        only_country_ids = json.loads(config["only_country_ids"])
+        obs_list = list(
+            map(lambda d: d["value"],
+                filter(lambda d: d["id"] in only_country_ids, crop_to_observations[setup["crop"]])))
+    else:
+        obs_list = list(map(lambda d: d["value"], crop_to_observations[setup["crop"]]))
     spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_writer, cons_reader)
 
     rep = int(config["repetitions"]) #initial number was 10
