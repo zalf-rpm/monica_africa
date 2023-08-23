@@ -1,3 +1,6 @@
+import sys
+print(sys.path)
+
 import capnp
 from collections import defaultdict
 import json
