@@ -30,10 +30,11 @@ abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
 class spot_setup(object):
-    def __init__(self, user_params, obs_list, prod_writer, cons_reader):
+    def __init__(self, user_params, observations, prod_writer, cons_reader):
         self.user_params = user_params
         self.params = []
-        self.obs_list = obs_list
+        self.observations = observations
+        self.obs_flat_list = list(map(lambda d: d["value"], observations))
         self.prod_writer = prod_writer
         self.cons_reader = cons_reader
         for par in user_params:
@@ -60,17 +61,18 @@ class spot_setup(object):
 
         in_ip = msg.value.as_struct(fbp_capnp.IP)
         s: str = in_ip.content.as_text()
-        list_of_country_id_and_year_and_avg_yield = json.loads(s)
-        list_of_country_id_and_year_and_avg_yield.sort(key=lambda r: [r["id"], r["year"]])
-        print("received monica results:", list_of_country_id_and_year_and_avg_yield, flush=True)
-        sim_list = list(map(lambda d: d["value"], list_of_country_id_and_year_and_avg_yield))
-        print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_list), flush=True)
+        country_id_and_year_to_avg_yield = json.loads(s)
+        print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
+        sim_list = []
+        for d in self.observations:
+            sim_list.append(country_id_and_year_to_avg_yield[(d["id"], d["year"])])
+        print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         # besides the order the length of observation results and simulation results should be the same
-        assert(len(sim_list) == len(self.obs_list))
+        assert(len(sim_list) == len(self.obs_flat_list))
         return sim_list
 
     def evaluation(self):
-        return self.obs_list
+        return self.obs_flat_list
 
     def objectivefunction(self, simulation, evaluation):
         objectivefunction = spotpy.objectivefunctions.rmse(evaluation, simulation)

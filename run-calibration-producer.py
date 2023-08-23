@@ -383,7 +383,7 @@ def run_producer(server=None, port=None):
                 for lat_scaled in lats_scaled:
                     lat = lat_scaled / s_res_scale_factor
                     #print("lat:"+str(round(lat,2)))
-                    print(str(round(lat, 2)), end=" ", flush=True)
+                    print(str(round(lat, 2)), end=" ")#, flush=True)
 
                     lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
                                         int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,

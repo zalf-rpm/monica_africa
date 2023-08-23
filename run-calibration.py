@@ -139,17 +139,12 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     cons_reader = con_man.try_connect(cons_chan_data["reader_sr"], cast_as=fbp_capnp.Channel.Reader, retry_secs=1)
     prod_writer = con_man.try_connect(prod_chan_data["writer_sr"], cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
 
-    #Here, MONICA is initialized and a producer is started:
-    #Arguments are: Parameters, Sites, Observations
-    #Returns a ready made setup
+    # configure MONICA setup for spotpy
+    observations = crop_to_observations[setup["crop"]]
     if config["only_country_ids"]:
         only_country_ids = json.loads(config["only_country_ids"])
-        obs_list = list(
-            map(lambda d: d["value"],
-                filter(lambda d: d["id"] in only_country_ids, crop_to_observations[setup["crop"]])))
-    else:
-        obs_list = list(map(lambda d: d["value"], crop_to_observations[setup["crop"]]))
-    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_writer, cons_reader)
+        observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
+    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader)
 
     rep = int(config["repetitions"]) #initial number was 10
     results = []
