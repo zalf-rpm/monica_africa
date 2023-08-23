@@ -74,7 +74,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     procs.append(sp.Popen([
         config["path_to_python"],
         "run-calibration-producer.py",
-        #"mode=hpc-local-remote",
+        "mode=hpc-local-remote",
         f"server={config['server']}",
         f"port={config['prod-port']}",
         f"setups-file={config['setups-file']}",
