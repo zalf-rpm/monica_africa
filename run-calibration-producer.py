@@ -382,8 +382,8 @@ def run_producer(server=None, port=None):
                 s_row_0 = int((s_lat_0 - (lats_scaled[0] / s_res_scale_factor)) / s_resolution)
                 for lat_scaled in lats_scaled:
                     lat = lat_scaled / s_res_scale_factor
-
                     #print("lat:"+str(round(lat,2)))
+                    print(str(round(lat, 2)), end=" ")
 
                     lons_scaled = range(int(lat_lon_bounds["tl"]["lon"] * s_res_scale_factor),
                                         int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,
@@ -393,6 +393,7 @@ def run_producer(server=None, port=None):
                     for lon_scaled in lons_scaled:
                         lon = lon_scaled / s_res_scale_factor
                         #print("lon:"+str(round(lon,2)), end=" ")
+                        #print(".", end="", flush=True)
 
                         c_col = int((lon - c_lon_0) / c_resolution)
                         c_row = int((c_lat_0 - lat) / c_resolution)
@@ -445,7 +446,7 @@ def run_producer(server=None, port=None):
                             continue
 
                         country_id = country_id_data["value"](lat, lon, int, False)
-                        if not country_id or country_id not in only_country_ids:
+                        if not country_id or (config["only_country_ids"] and country_id not in only_country_ids):
                             continue
 
                         height_nn = height_data["value"](lat, lon, float, False)
