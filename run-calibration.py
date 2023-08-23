@@ -3,11 +3,9 @@ from collections import defaultdict
 import json
 import calibration_spotpy_setup_MONICA
 import csv
-from datetime import date
 from matplotlib import colors
 import matplotlib.pyplot as plt
 import monica_run_lib
-import numpy as np
 import os
 from pathlib import Path
 import spotpy
@@ -43,31 +41,25 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
-def run_calibration(server={"server": None, "prod-port": None, "cons-port": None}):
+def run_calibration(server=None, prod_port=None, cons_port=None):
     config = {
         "mode": "mbm-local-remote",
-        "prod-port": server["port"] if server["prod-port"] else "6666",  # local: 6667, remote 6666
-        "cons-port": server["port"] if server["cons-port"] else "7777",  # local: 6667, remote 6666
-        "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
+        "prod-port": prod_port if prod_port else "6666",  # local: 6667, remote 6666
+        "cons-port": cons_port if cons_port else "7777",  # local: 6667, remote 6666
+        "server": server if server else "login01.cluster.zalf.de",
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups_africa_calibration.csv",
         "path_to_out": "out/",
         "run-setups": "[1]",
+        # "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
         "path_to_channel": "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
-        "path_to_python": "/home/rpm/.conda/envs/py39/bin/python"
-        #"path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
+        "path_to_python": "/home/rpm/.conda/envs/py39/bin/python",
+        "repetitions": "1000"
     }
 
-    # read commandline args only if script is invoked directly from commandline
-    if len(sys.argv) > 1 and __name__ == "__main__":
-        for arg in sys.argv[1:]:
-            k, v = arg.split("=")
-            if k in config:
-                config[k] = v
-
-    print("config:", config)
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     procs = []
 
@@ -149,7 +141,7 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
     obs_list = list(map(lambda d: d["value"], filter(lambda d: d["id"] == 10, crop_to_observations[setup["crop"]])))
     spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, obs_list, prod_writer, cons_reader)
 
-    rep = 1000 #initial number was 10
+    rep = int(config["repetitions"]) #initial number was 10
     results = []
     #Set up the sampler with the model above
     sampler = spotpy.algorithms.sceua(spot_setup, dbname='SCEUA_monica_results', dbformat='csv')
@@ -166,12 +158,12 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
     results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
 
     # Plot how the objective function was minimized during sampling
-    font = {'family': 'calibri',
-            'weight': 'normal',
-            'size': 18}
+    #font = {"family": "calibri",
+    #        "weight": "normal",
+    #        "size": 18}
     fig = plt.figure(1, figsize=(9, 6))
     #plt.plot(results["like1"],  marker='o')
-    plt.plot(results["like1"],  'r+')
+    plt.plot(results["like1"], "r+")
     plt.show()
     plt.ylabel("RMSE")
     plt.xlabel("Iteration")
@@ -182,6 +174,7 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
         proc.terminate()
 
     print("sampler_MONICA.py finished")
+
 
 if __name__ == "__main__":
     run_calibration()
