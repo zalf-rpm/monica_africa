@@ -77,7 +77,7 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
     procs.append(cons_chan_data["chan"])
 
     procs.append(sp.Popen([
-        "python",
+        config["path_to_python"],
         "run-calibration-producer.py",
         #"mode=remoteProducer-remoteMonica",
         f"server={config['server']}",
@@ -88,7 +88,7 @@ def run_calibration(server={"server": None, "prod-port": None, "cons-port": None
     ]))
 
     procs.append(sp.Popen([
-        "python",
+        config["path_to_python"],
         "run-calibration-consumer.py",
         # "mode=remoteConsumer-remoteMonica",
         f"server={config['server']}",
