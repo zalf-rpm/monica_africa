@@ -65,7 +65,7 @@ class spot_setup(object):
         print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
         sim_list = []
         for d in self.observations:
-            sim_list.append(country_id_and_year_to_avg_yield[(d["id"], d["year"])])
+            sim_list.append(country_id_and_year_to_avg_yield[f"{d['id']}|{d['year']}"])
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
