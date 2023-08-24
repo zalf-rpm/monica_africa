@@ -17,15 +17,14 @@
 
 import capnp
 import json
-import numpy as np
 import os
 from pathlib import Path
 import spotpy
-import calibration_MONICA_adapter
 import re
 
 PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
-PATH_TO_CAPNP_SCHEMAS = (PATH_TO_REPO / "capnproto_schemas").resolve()
+PATH_TO_MAS_INFRASTRUCTURE_REPO = PATH_TO_REPO / "../mas-infrastructure"
+PATH_TO_CAPNP_SCHEMAS = (PATH_TO_MAS_INFRASTRUCTURE_REPO / "capnproto_schemas").resolve()
 abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
@@ -62,10 +61,12 @@ class spot_setup(object):
         in_ip = msg.value.as_struct(fbp_capnp.IP)
         s: str = in_ip.content.as_text()
         country_id_and_year_to_avg_yield = json.loads(s)
-        print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
+        # print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
         sim_list = []
         for d in self.observations:
-            sim_list.append(country_id_and_year_to_avg_yield[f"{d['id']}|{d['year']}"])
+            key = f"{d['id']}|{d['year']}"
+            if key in country_id_and_year_to_avg_yield:
+                sim_list.append(country_id_and_year_to_avg_yield[key])
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
@@ -75,5 +76,4 @@ class spot_setup(object):
         return self.obs_flat_list
 
     def objectivefunction(self, simulation, evaluation):
-        objectivefunction = spotpy.objectivefunctions.rmse(evaluation, simulation)
-        return objectivefunction
+        return spotpy.objectivefunctions.rmse(evaluation, simulation)

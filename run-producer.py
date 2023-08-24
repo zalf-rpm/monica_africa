@@ -15,26 +15,26 @@
 # Landscape Systems Analysis at the ZALF.
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
-from collections import defaultdict
-import copy
-import csv
 from datetime import date, timedelta
-import gzip
 import json
-import math
-from netCDF4 import Dataset
 import numpy as np
 import os
-from pyproj import CRS, Transformer
-import sqlite3
-import sqlite3 as cas_sq3
+from pathlib import Path
 import sys
 import time
 import zmq
 
-import monica_io3
-import soil_io3
-import monica_run_lib as Mrunlib
+import monica_run_lib
+import shared
+
+PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
+PATH_TO_MAS_INFRASTRUCTURE_REPO = PATH_TO_REPO / "../mas-infrastructure"
+PATH_TO_PYTHON_CODE = PATH_TO_MAS_INFRASTRUCTURE_REPO / "src/python"
+if str(PATH_TO_PYTHON_CODE) not in sys.path:
+    sys.path.insert(1, str(PATH_TO_PYTHON_CODE))
+
+from lib.common import common
+from lib.model import monica_io3
 
 PATHS = {
     # adjust the local path to your environment
@@ -99,14 +99,7 @@ def run_producer(server={"server": None, "port": None}):
         "run-setups": "[2]"
     }
 
-    # read commandline args only if script is invoked directly from commandline
-    if len(sys.argv) > 1 and __name__ == "__main__":
-        for arg in sys.argv[1:]:
-            k, v = arg.split("=")
-            if k in config:
-                config[k] = v
-
-    print("config:", config)
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     s_resolution = {"5min": 5 / 60., "30sec": 30 / 3600.}[config["resolution"]]
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]
@@ -128,7 +121,7 @@ def run_producer(server={"server": None, "port": None}):
     socket.connect("tcp://" + config["server"] + ":" + str(config["server-port"]))
 
     # read setup from csv file
-    setups = Mrunlib.read_sim_setups(config["setups-file"])
+    setups = monica_run_lib.read_sim_setups(config["setups-file"])
     run_setups = json.loads(config["run-setups"])
     print("read sim setups: ", config["setups-file"])
 
@@ -139,107 +132,14 @@ def run_producer(server={"server": None, "port": None}):
     # utm32_crs = CRS.from_epsg(25832)
     # transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
 
-    def get_lat_0_lon_0_resolution_from_grid_metadata(metadata):
-        lat_0 = float(metadata["yllcorner"]) \
-                    + (float(metadata["cellsize"]) * float(metadata["nrows"])) \
-                    - (float(metadata["cellsize"]) / 2.0)
-        lon_0 = float(metadata["xllcorner"]) + (float(metadata["cellsize"]) / 2.0)
-        resolution = float(metadata["cellsize"])
-        return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
-
     # eco regions
     path_to_eco_grid = (paths["path-to-data-dir"] +
                         "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc")
-    eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
+    eco_metadata, _ = monica_run_lib.read_header(path_to_eco_grid)
     eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=len(eco_metadata))
-    aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
+    aer_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
 
-    def check_for_nill_dates(mgmt):
-        for key, value in mgmt.items():
-            if "date" in key and value == "Nill":
-                return False
-        return True
-    
-    def mgmt_date_to_rel_date(mgmt_date):
-        if mgmt_date[:5] == "0000-":
-            return mgmt_date
-
-        day_str, month_short_name = mgmt_date.split("-")
-        month_str = "00"
-        if month_short_name == "Jan":
-            month_str = "01"
-        elif month_short_name == "Feb":
-            month_str = "02"
-        elif month_short_name == "Mar":
-            month_str = "03"
-        elif month_short_name == "Apr":
-            month_str = "04"
-        elif month_short_name == "May":
-            month_str = "05"
-        elif month_short_name == "Jun":
-            month_str = "06"
-        elif month_short_name == "Jul":
-            month_str = "07"
-        elif month_short_name == "Aug":
-            month_str = "08"
-        elif month_short_name == "Sep":
-            month_str = "09"
-        elif month_short_name == "Oct":
-            month_str = "10"
-        elif month_short_name == "Nov":
-            month_str = "11"
-        elif month_short_name == "Dec":
-            month_str = "12"
-
-        return "0000-" + month_str + "-" + day_str
-
-    # open netcdfs
-    path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
-    if config["resolution"] == "5min":
-        soil_data = {
-            "sand": {"var": "SAND", "file": "SAND5min.nc", "conv_factor": 0.01},  # % -> fraction
-            "clay": {"var": "CLAY", "file": "CLAY5min.nc", "conv_factor": 0.01},  # % -> fraction
-            "corg": {"var": "OC", "file": "OC5min.nc", "conv_factor": 0.01},  # scale factor
-            "bd": {"var": "BD", "file": "BD5min.nc", "conv_factor": 0.01 * 1000.0},  # scale factor * 1 g/cm3 = 1000 kg/m3
-        }
-    else:
-        soil_data = None  # ["Sand5min.nc", "Clay5min.nc", "OC5min.nc", "BD5min.nc"]
-    soil_datasets = {}
-    soil_vars = {}
-    for elem, data in soil_data.items():
-        ds = Dataset(path_to_soil_netcdfs + data["file"], "r", format="NETCDF4")
-        soil_datasets[elem] = ds
-        soil_vars[elem] = ds.variables[data["var"]]
-
-    def create_soil_profile(row, col):
-        # skip first 4.5cm layer and just use 7 layers
-        layers = []
-
-        layer_depth = 8
-        # find the fill value for the soil data
-        for elem2 in soil_data.keys():
-            for i in range(8):
-                if np.ma.is_masked(soil_vars[elem2][i, row, col]):
-                    if i < layer_depth:
-                        layer_depth = i
-                    break
-                    #return None
-        layer_depth -= 1
-
-        if layer_depth < 4:
-            return None
-        
-        for i, real_depth_cm, monica_depth_m in [(0, 4.5, 0), (1, 9.1, 0.1), (2, 16.6, 0.1), (3, 28.9, 0.1),
-                                                 (4, 49.3, 0.2), (5, 82.9, 0.3), (6, 138.3, 0.6), (7, 229.6, 0.7)][1:]:
-            if i <= layer_depth:
-                layers.append({
-                    "Thickness": [monica_depth_m, "m"],
-                    "SoilOrganicCarbon": [soil_vars["corg"][i, row, col] * soil_data["corg"]["conv_factor"], "%"],
-                    "SoilBulkDensity": [soil_vars["bd"][i, row, col] * soil_data["bd"]["conv_factor"], "kg m-3"],
-                    "Sand": [soil_vars["sand"][i, row, col] * soil_data["sand"]["conv_factor"], "fraction"],
-                    "Clay": [soil_vars["clay"][i, row, col] * soil_data["clay"]["conv_factor"], "fraction"]
-                })
-        return layers
+    global_soil_dataset = shared.GlobalSoilDataSet(paths["path-to-soil-dir"], config["resolution"])
 
     sent_env_count = 1
     start_time = time.perf_counter()
@@ -268,38 +168,38 @@ def run_producer(server={"server": None, "port": None}):
             nitrogen = setup["nitrogen"].lower()
             management_file = f"{planting}_planting_{nitrogen}_nitrogen.csv"
             # load management data
-            management = Mrunlib.read_csv(paths["path-to-data-dir"] +
+            management = monica_run_lib.read_csv(paths["path-to-data-dir"] +
                                           "/agro_ecological_regions_nigeria/" + management_file, key="id")
         else:
             planting = nitrogen = management = None
 
         path_to_planting_grid = \
             paths["path-to-data-dir"] + f"/{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
-        planting_metadata, _ = Mrunlib.read_header(path_to_planting_grid)
+        planting_metadata, _ = monica_run_lib.read_header(path_to_planting_grid)
         planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=len(planting_metadata))
         # print("read: ", path_to_planting_grid)
-        planting_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
+        planting_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
 
         path_to_harvest_grid = \
             paths["path-to-data-dir"] + f"/{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
-        harvest_metadata, _ = Mrunlib.read_header(path_to_harvest_grid)
+        harvest_metadata, _ = monica_run_lib.read_header(path_to_harvest_grid)
         harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
         # print("read: ", path_to_harvest_grid)
-        harvest_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
+        harvest_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
 
         # height data for germany
         path_to_dem_grid = setup["path_to_dem_asc_grid"]
-        dem_metadata, _ = Mrunlib.read_header(path_to_dem_grid)
+        dem_metadata, _ = monica_run_lib.read_header(path_to_dem_grid)
         dem_grid = np.loadtxt(path_to_dem_grid, dtype=float, skiprows=len(dem_metadata))
         # print("read: ", path_to_dem_grid)
-        dem_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
+        dem_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(dem_metadata)
 
         # slope data
         path_to_slope_grid = setup["path_to_slope_asc_grid"]
-        slope_metadata, _ = Mrunlib.read_header(path_to_slope_grid)
+        slope_metadata, _ = monica_run_lib.read_header(path_to_slope_grid)
         slope_grid = np.loadtxt(path_to_slope_grid, dtype=float, skiprows=len(slope_metadata))
         print("read: ", path_to_slope_grid)
-        slope_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
+        slope_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(slope_metadata)
 
         # read template sim.json
         with open(setup.get("sim.json", config["sim.json"])) as _:
@@ -404,21 +304,21 @@ def run_producer(server={"server": None, "port": None}):
                             mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
 
                 valid_mgmt = False
-                if mgmt and check_for_nill_dates(mgmt) and len(mgmt) > 1:
+                if mgmt and shared.check_for_nill_dates(mgmt) and len(mgmt) > 1:
                     valid_mgmt = True
                     for ws in env_template["cropRotation"][0]["worksteps"]:
                         if ws["type"] == "Sowing" and "Sowing date" in mgmt:
-                            ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
+                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Sowing date"])
                             if "Planting density" in mgmt:
                                 ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
                         elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
-                            ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
+                            ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
-                            ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
+                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Tillage date"])
                         elif ws["type"] == "MineralFertilization" and mgmt[:2] == "N " and mgmt[-5:] == " date":
                             app_no = int(ws["application"])
                             app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
-                            ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
+                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
                             ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
                 else:
                     mgmt = None
@@ -448,7 +348,7 @@ def run_producer(server={"server": None, "port": None}):
                     sent_env_count += 1
                     continue
 
-                soil_profile = create_soil_profile(s_row, s_col)
+                soil_profile = global_soil_dataset.create_soil_profile(s_row, s_col)
                 if not soil_profile:
                     send_nodata_msg(sent_env_count)
                     sent_env_count += 1

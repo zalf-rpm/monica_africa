@@ -26,13 +26,19 @@ import sys
 import time
 import zmq
 
-import monica_io3
 import monica_run_lib
-
-import common.common as common
+import shared
 
 PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
-PATH_TO_CAPNP_SCHEMAS = (PATH_TO_REPO / "capnproto_schemas").resolve()
+PATH_TO_MAS_INFRASTRUCTURE_REPO = PATH_TO_REPO / "../mas-infrastructure"
+PATH_TO_PYTHON_CODE = PATH_TO_MAS_INFRASTRUCTURE_REPO / "src/python"
+if str(PATH_TO_PYTHON_CODE) not in sys.path:
+    sys.path.insert(1, str(PATH_TO_PYTHON_CODE))
+
+from lib.common import common
+from lib.model import monica_io3
+
+PATH_TO_CAPNP_SCHEMAS = (PATH_TO_MAS_INFRASTRUCTURE_REPO / "capnproto_schemas").resolve()
 abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
@@ -129,55 +135,6 @@ def run_producer(server=None, port=None):
     # utm32_crs = CRS.from_epsg(25832)
     # transformers[wgs84] = Transformer.from_crs(wgs84_crs, gk5_crs, always_xy=True)
 
-    def get_lat_0_lon_0_resolution_from_grid_metadata(metadata):
-        lat_0 = float(metadata["yllcorner"]) \
-                    + (float(metadata["cellsize"]) * float(metadata["nrows"])) \
-                    - (float(metadata["cellsize"]) / 2.0)
-        lon_0 = float(metadata["xllcorner"]) + (float(metadata["cellsize"]) / 2.0)
-        resolution = float(metadata["cellsize"])
-        return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
-
-
-
-    def check_for_nill_dates(mgmt):
-        for key, value in mgmt.items():
-            if "date" in key and value == "Nill":
-                return False
-        return True
-    
-    def mgmt_date_to_rel_date(mgmt_date):
-        if mgmt_date[:5] == "0000-":
-            return mgmt_date
-
-        day_str, month_short_name = mgmt_date.split("-")
-        month_str = "00"
-        if month_short_name == "Jan":
-            month_str = "01"
-        elif month_short_name == "Feb":
-            month_str = "02"
-        elif month_short_name == "Mar":
-            month_str = "03"
-        elif month_short_name == "Apr":
-            month_str = "04"
-        elif month_short_name == "May":
-            month_str = "05"
-        elif month_short_name == "Jun":
-            month_str = "06"
-        elif month_short_name == "Jul":
-            month_str = "07"
-        elif month_short_name == "Aug":
-            month_str = "08"
-        elif month_short_name == "Sep":
-            month_str = "09"
-        elif month_short_name == "Oct":
-            month_str = "10"
-        elif month_short_name == "Nov":
-            month_str = "11"
-        elif month_short_name == "Dec":
-            month_str = "12"
-
-        return "0000-" + month_str + "-" + day_str
-
     # open netcdfs
     path_to_soil_netcdfs = paths["path-to-soil-dir"] + "/" + config["resolution"] + "/"
     if config["resolution"] == "5min":
@@ -225,40 +182,6 @@ def run_producer(server=None, port=None):
                     "Clay": [soil_vars["clay"][i, row, col] * soil_data["clay"]["conv_factor"], "fraction"]
                 })
         return layers
-
-    def load_grid_cached(path_to_grid, type, print_path=False):
-        if not hasattr(load_grid_cached, "cache"):
-            load_grid_cached.cache = {}
-
-        if path_to_grid in load_grid_cached.cache:
-            return load_grid_cached.cache[path_to_grid]
-
-        md, _ = monica_run_lib.read_header(path_to_grid)
-        grid = np.loadtxt(path_to_grid, dtype=type, skiprows=len(md))
-        print("read: ", path_to_grid)
-        ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(md)
-
-        def col(lon):
-            return int((lon - ll0r["lon_0"]) / ll0r["res"])
-        def row(lat):
-            return int((ll0r["lat_0"] - lat) / ll0r["res"])
-        def value(lat, lon, type, return_no_data = False):
-            c = col(lon)
-            r = row(lat)
-            if 0 <= r < md["nrows"] and 0 <= c < md["ncols"]:
-                val = type(grid[r, c])
-                if val != md["nodata_value"] or return_no_data:
-                    return val
-            return None
-
-        cache_entry = {
-            "metadata": md, "grid": grid, "ll0r": ll0r,
-            "col": lambda lon: col(lon),
-            "row": lambda lat: row(lat),
-            "value": lambda lat, lon, type, ret_no_data: value(lat, lon, type, ret_no_data)
-        }
-        load_grid_cached.cache[path_to_grid] = cache_entry
-        return cache_entry
 
     sent_env_count = 0
     start_time = time.perf_counter()
@@ -309,19 +232,19 @@ def run_producer(server=None, port=None):
                     planting = nitrogen = management = None
 
                 # eco regions
-                eco_data = load_grid_cached(
+                eco_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] +
                     "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc", int)
-                country_id_data = load_grid_cached(
+                country_id_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] + "country-id_0.083deg_4326_wgs84_africa.asc", int)
-                crop_mask_data = load_grid_cached(
+                crop_mask_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] + f"{setup['crop']}-mask_0.083deg_4326_wgs84_africa.asc.gz", int)
-                planting_data = load_grid_cached(
+                planting_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] + f"{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc", int)
-                harvest_data = load_grid_cached(
+                harvest_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] + f"{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc", int)
-                height_data = load_grid_cached(setup["path_to_dem_asc_grid"], float)
-                slope_data = load_grid_cached(setup["path_to_slope_asc_grid"], float)
+                height_data = shared.load_grid_cached(setup["path_to_dem_asc_grid"], float)
+                slope_data = shared.load_grid_cached(setup["path_to_slope_asc_grid"], float)
 
                 # read template sim.json
                 with open(setup.get("sim.json", config["sim.json"])) as _:
@@ -420,21 +343,21 @@ def run_producer(server=None, port=None):
                                 mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
 
                         valid_mgmt = False
-                        if mgmt and check_for_nill_dates(mgmt) and len(mgmt) > 1:
+                        if mgmt and shared.check_for_nill_dates(mgmt) and len(mgmt) > 1:
                             valid_mgmt = True
                             for ws in env_template["cropRotation"][0]["worksteps"]:
                                 if ws["type"] == "Sowing" and "Sowing date" in mgmt:
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Sowing date"])
+                                    ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Sowing date"])
                                     if "Planting density" in mgmt:
                                         ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
                                 elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
-                                    ws["latest-date"] = mgmt_date_to_rel_date(mgmt["Harvest date"])
+                                    ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                                 elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt["Tillage date"])
+                                    ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Tillage date"])
                                 elif ws["type"] == "MineralFertilization" and mgmt[:2] == "N " and mgmt[-5:] == " date":
                                     app_no = int(ws["application"])
                                     app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
-                                    ws["date"] = mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
+                                    ws["date"] = shared.mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
                                     ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
                         else:
                             mgmt = None

@@ -23,10 +23,15 @@ from pathlib import Path
 import sys
 import zmq
 
-import common.common as common
-
 PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
-PATH_TO_CAPNP_SCHEMAS = (PATH_TO_REPO / "capnproto_schemas").resolve()
+PATH_TO_MAS_INFRASTRUCTURE_REPO = PATH_TO_REPO / "../mas-infrastructure"
+PATH_TO_PYTHON_CODE = PATH_TO_MAS_INFRASTRUCTURE_REPO / "src/python"
+if str(PATH_TO_PYTHON_CODE) not in sys.path:
+    sys.path.insert(1, str(PATH_TO_PYTHON_CODE))
+
+from lib.common import common
+
+PATH_TO_CAPNP_SCHEMAS = (PATH_TO_MAS_INFRASTRUCTURE_REPO / "capnproto_schemas").resolve()
 abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
@@ -37,6 +42,7 @@ PATHS = {
         "path-to-csv-output-dir": "/out/csv-out/"
     }
 }
+
 
 def run_consumer(server=None, port=None):
     """collect data from workers"""
