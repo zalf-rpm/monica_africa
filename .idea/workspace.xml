@@ -4,12 +4,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="some cleanup">
+    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="fix for test run">
+      <change afterPath="$PROJECT_DIR$/shared.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/klimertrag.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/klimertrag.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/calibration_spotpy_setup_MONICA.py" beforeDir="false" afterPath="$PROJECT_DIR$/calibration_spotpy_setup_MONICA.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/capnp/c++.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/capnp/go.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/capnp/java.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/capnp/persistent.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/climate.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/common.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/crop.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/date.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/fbp.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/geo.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/grid.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/management.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/monica/monica_management.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/monica/monica_params.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/monica/monica_state.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/monica/soil_params.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/weberest/web-berest-data-import.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/model/yieldstat/yieldstat.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/persistence.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/registry.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/soil.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/capnproto_schemas/storage.capnp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/capnp_async_helpers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/channel.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/common.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/csv.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/geo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/rect_ascii_grid_management.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/service.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/flow_components/get_lat_lon_grid_value.py" beforeDir="false" afterPath="$PROJECT_DIR$/flow_components/get_lat_lon_grid_value.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/monica_io3.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-consumer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-producer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-consumer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/soil_io3.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +82,9 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: -1
@@ -55,33 +95,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/berg/GitHub/monica_africa&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable",
+    "two.files.diff.last.used.file": "/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/flow_components" />
       <recent name="$PROJECT_DIR$/data/params/crops/residues" />
       <recent name="$PROJECT_DIR$/data/params/crops/cultivars" />
       <recent name="$PROJECT_DIR$/data/params/crops/species" />
-      <recent name="$PROJECT_DIR$/data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run-consumer">
+  <component name="RunManager">
     <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="klimertrag" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -188,7 +229,8 @@
       <workItem from="1689341706607" duration="51000" />
       <workItem from="1691423484775" duration="630000" />
       <workItem from="1691424753024" duration="67145000" />
-      <workItem from="1692349596622" duration="45797000" />
+      <workItem from="1692349596622" duration="52014000" />
+      <workItem from="1692805377684" duration="16259000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -252,14 +294,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1686930062269</updated>
-    </task>
-    <task id="LOCAL-00010" summary="dev dump">
-      <option name="closed" value="true" />
-      <created>1687882961083</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1687882961083</updated>
     </task>
     <task id="LOCAL-00011" summary="dev dump">
       <option name="closed" value="true" />
@@ -517,7 +551,71 @@
       <option name="project" value="LOCAL" />
       <updated>1692783022479</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="cleanup for real test">
+      <option name="closed" value="true" />
+      <created>1692790100904</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1692790100904</updated>
+    </task>
+    <task id="LOCAL-00044" summary="cleanup for real test">
+      <option name="closed" value="true" />
+      <created>1692792267768</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1692792267768</updated>
+    </task>
+    <task id="LOCAL-00045" summary="cleanup for real test">
+      <option name="closed" value="true" />
+      <created>1692792384031</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1692792384031</updated>
+    </task>
+    <task id="LOCAL-00046" summary="cleanup for real test">
+      <option name="closed" value="true" />
+      <created>1692792395289</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1692792395289</updated>
+    </task>
+    <task id="LOCAL-00047" summary="cleanup for real test">
+      <option name="closed" value="true" />
+      <created>1692800414530</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1692800414530</updated>
+    </task>
+    <task id="LOCAL-00048" summary="adjusted sim results to available observations">
+      <option name="closed" value="true" />
+      <created>1692804857673</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1692804857674</updated>
+    </task>
+    <task id="LOCAL-00049" summary="added flow component for getting grid values">
+      <option name="closed" value="true" />
+      <created>1692812901461</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1692812901461</updated>
+    </task>
+    <task id="LOCAL-00050" summary="fix for test run">
+      <option name="closed" value="true" />
+      <created>1692863635612</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1692863635613</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -548,7 +646,23 @@
     <MESSAGE value="initial tests for calibration work locally" />
     <MESSAGE value="test" />
     <MESSAGE value="some cleanup" />
-    <option name="LAST_COMMIT_MESSAGE" value="some cleanup" />
+    <MESSAGE value="Merge branch 'main' of https://github.com/zalf-rpm/monica_africa" />
+    <MESSAGE value="cleanup for real test" />
+    <MESSAGE value="adjusted sim results to available observations" />
+    <MESSAGE value="added flow component for getting grid values" />
+    <MESSAGE value="fix for test run" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix for test run" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run-consumer.py</url>
+          <line>47</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -565,6 +679,7 @@
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$prepare_input_files.coverage" NAME="prepare_input_files Coverage Results" MODIFIED="1645540979552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_plot_final_calibration_figures.coverage" NAME="01_plot_final_calibration_figures Coverage Results" MODIFIED="1648741551358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AgoraNatura/agora_natura/result_analysis" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1692270653965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1692876140178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_clemens_local.coverage" NAME="run-producer_clemens_local Coverage Results" MODIFIED="1643792315236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$dummy.coverage" NAME="dummy Coverage Results" MODIFIED="1647616452099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$calibration_spotpy_setup_MONICA.coverage" NAME="calibration_spotpy_setup_MONICA Coverage Results" MODIFIED="1692620048737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -573,7 +688,7 @@
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$reformat_output.coverage" NAME="reformat_output Coverage Results" MODIFIED="1645625904623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_final_maps_and_figures.coverage" NAME="05_plot_final_maps_and_figures Coverage Results" MODIFIED="1647614666353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1692635798935" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1692792176861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations__1_.coverage" NAME="01_compare_simulation_and_observations (1) Coverage Results" MODIFIED="1642161896630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration_producer.coverage" NAME="run-calibration-producer Coverage Results" MODIFIED="1692627224512" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>

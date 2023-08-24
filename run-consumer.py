@@ -15,23 +15,21 @@
 # Landscape Systems Analysis at the ZALF.
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 import csv
-from datetime import datetime
-import gc
-import json
 import numpy as np
 import os
-from pyproj import CRS, Transformer
-import sqlite3
+from pathlib import Path
 import sys
-import timeit
-import types
 import zmq
 
-import monica_io3
-import soil_io3
-import monica_run_lib as Mrunlib
+PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
+PATH_TO_PYTHON_CODE = PATH_TO_REPO / "../mas-infrastructure/src/python"
+if str(PATH_TO_PYTHON_CODE) not in sys.path:
+    sys.path.insert(1, str(PATH_TO_PYTHON_CODE))
+
+from common import common
+from services.model import monica_io3
 
 PATHS = {
     "mbm-local-remote": {
@@ -197,11 +195,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "timeout": 600000  # 10 minutes
     }
 
-    if len(sys.argv) > 1 and __name__ == "__main__":
-        for arg in sys.argv[1:]:
-            k, v = arg.split("=")
-            if k in config:
-                config[k] = v
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     paths = PATHS[config["mode"]]
 
@@ -209,8 +203,6 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         config["out"] = paths["path-to-output-dir"]
     if not "csv-out" in config:
         config["csv-out"] = paths["path-to-csv-output-dir"]
-
-    print("consumer config:", config)
 
     context = zmq.Context()
     socket = context.socket(zmq.PULL)
