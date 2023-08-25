@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="further refactoring for test runs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/calibration_spotpy_setup_MONICA.py" beforeDir="false" afterPath="$PROJECT_DIR$/calibration_spotpy_setup_MONICA.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration-consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-consumer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration-producer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run-calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration.py" afterDir="false" />
@@ -50,31 +49,30 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: -1
-}</component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
   <component name="ProjectId" id="23NXe2cslpKqIn7FM2NTzPBJu6f" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable",
-    "two.files.diff.last.used.file": "/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PythonContentEntriesConfigurable&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;/home/berg/GitHub/mas-infrastructure/src/python/services/model/monica_io3.py&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
@@ -87,7 +85,7 @@
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.run-consumer">
     <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="klimertrag" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -195,7 +193,8 @@
       <workItem from="1691423484775" duration="630000" />
       <workItem from="1691424753024" duration="67145000" />
       <workItem from="1692349596622" duration="52014000" />
-      <workItem from="1692805377684" duration="17487000" />
+      <workItem from="1692805377684" duration="17580000" />
+      <workItem from="1692965296484" duration="1288000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -259,14 +258,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1686930062269</updated>
-    </task>
-    <task id="LOCAL-00012" summary="dev dump">
-      <option name="closed" value="true" />
-      <created>1688041637700</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1688041637700</updated>
     </task>
     <task id="LOCAL-00013" summary="dev dump">
       <option name="closed" value="true" />
@@ -580,7 +571,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692884553257</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="further refactoring for test runs">
+      <option name="closed" value="true" />
+      <created>1692965225187</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1692965225187</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -616,6 +615,7 @@
     <MESSAGE value="adjusted sim results to available observations" />
     <MESSAGE value="added flow component for getting grid values" />
     <MESSAGE value="fix for test run" />
+    <MESSAGE value="further refactoring and fixes for test runs" />
     <MESSAGE value="further refactoring for test runs" />
     <option name="LAST_COMMIT_MESSAGE" value="further refactoring for test runs" />
   </component>
