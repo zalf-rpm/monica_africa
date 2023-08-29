@@ -56,14 +56,16 @@ def run_consumer(server=None, port=None):
         "timeout": 600000  # 10min
     }
 
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+
     path_to_out_file = config["path_to_out"] + "/consumer.out"
     if not os.path.exists(config["path_to_out"]):
         try:
             os.makedirs(config["path_to_out"])
         except OSError:
             print("run-calibration-consumer.py: Couldn't create dir:", config["path_to_out"], "!")
-
-    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+    with open(path_to_out_file, "a") as _:
+        _.write(f"config: {config}")
 
     context = zmq.Context()
     socket = context.socket(zmq.PULL)

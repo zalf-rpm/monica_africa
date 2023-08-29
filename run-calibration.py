@@ -69,6 +69,15 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
+    path_to_out_file = config["path_to_out"] + "/producer.out"
+    if not os.path.exists(config["path_to_out"]):
+        try:
+            os.makedirs(config["path_to_out"])
+        except OSError:
+            print("run-calibration.py: Couldn't create dir:", config["path_to_out"], "!")
+    with open(path_to_out_file, "a") as _:
+        _.write(f"config: {config}")
+
     procs = []
 
     prod_chan_data = get_reader_writer_srs_from_channel(config["path_to_channel"], "prod_chan")

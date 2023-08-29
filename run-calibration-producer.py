@@ -101,14 +101,16 @@ def run_producer(server=None, port=None):
         "only_country_ids": None  # "[10]",
     }
 
+    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+
     path_to_out_file = config["path_to_out"] + "/producer.out"
     if not os.path.exists(config["path_to_out"]):
         try:
             os.makedirs(config["path_to_out"])
         except OSError:
             print("run-calibration-producer.py: Couldn't create dir:", config["path_to_out"], "!")
-
-    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+    with open(path_to_out_file, "a") as _:
+        _.write(f"config: {config}")
 
     only_country_ids = json.loads(config["only_country_ids"]) if config["only_country_ids"] else []
 
