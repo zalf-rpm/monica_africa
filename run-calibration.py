@@ -86,6 +86,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         f"run-setups={config['run-setups']}",
         f"reader_sr={prod_chan_data['reader_sr']}",
         f"test_mode={config['test_mode']}",
+        f"path_to_out={config['path_to_out']}",
     ] + (config["only_country_ids"] if config["only_country_ids"] else [])))
 
     procs.append(sp.Popen([
@@ -96,6 +97,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         f"port={config['cons-port']}",
         f"run-setups={config['run-setups']}",
         f"writer_sr={cons_chan_data['writer_sr']}",
+        f"path_to_out={config['path_to_out']}",
     ]))
 
     crop_to_observations = defaultdict(list)
@@ -149,7 +151,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     if config["only_country_ids"]:
         only_country_ids = json.loads(config["only_country_ids"])
         observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
-    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader)
+    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
+                                                            config["path_to_out"])
 
     rep = int(config["repetitions"]) #initial number was 10
     results = []

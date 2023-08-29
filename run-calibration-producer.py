@@ -97,8 +97,16 @@ def run_producer(server=None, port=None):
         "run-setups": "[1]",
         "reader_sr": None,
         "test_mode": "false",
+        "path_to_out": "out/",
         "only_country_ids": None  # "[10]",
     }
+
+    path_to_out_file = config["path_to_out"] + "/producer.out"
+    if not os.path.exists(config["path_to_out"]):
+        try:
+            os.makedirs(config["path_to_out"])
+        except OSError:
+            print("run-calibration-producer.py: Couldn't create dir:", config["path_to_out"], "!")
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
@@ -451,6 +459,8 @@ def run_producer(server=None, port=None):
                         }
 
                         socket.send_json(env_template)
+                        with open(path_to_out_file, "a") as _:
+                            _.write(f"sent env {sent_env_count} customId: {env_template['customId']}")
                         #print("sent env ", sent_env_count, " customId: ", env_template["customId"])
 
                         sent_env_count += 1
@@ -458,6 +468,8 @@ def run_producer(server=None, port=None):
                         if config["test_mode"] == "true" and sent_env_count == 100:
                             raise Exception("leave early for test")
             except Exception as e:
+                with open(path_to_out_file, "a") as _:
+                    _.write(f"raised exception: {e}")
                 #print("Exception raised:", e)
                 pass
 
@@ -471,6 +483,8 @@ def run_producer(server=None, port=None):
 
             stop_setup_time = time.perf_counter()
             print("Setup ", sent_env_count, " envs took ", (stop_setup_time - start_setup_time), " seconds")
+            with open(path_to_out_file, "a") as _:
+                _.write(f"Setup {sent_env_count} envs took {stop_setup_time - start_setup_time} seconds")
             sent_env_count = 0
 
     stop_time = time.perf_counter()
