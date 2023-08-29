@@ -110,7 +110,7 @@ def run_producer(server=None, port=None):
         except OSError:
             print("run-calibration-producer.py: Couldn't create dir:", config["path_to_out"], "!")
     with open(path_to_out_file, "a") as _:
-        _.write(f"config: {config}")
+        _.write(f"config: {config}\n")
 
     only_country_ids = json.loads(config["only_country_ids"]) if config["only_country_ids"] else []
 
@@ -338,16 +338,16 @@ def run_producer(server=None, port=None):
                         mgmt = None
                         aer = None
                         if setup["region"] == "nigeria":
-                            aer = eco_data["value"](lat, lon, int, False)
+                            aer = eco_data["value"](lat, lon, False)
                             if aer and aer > 0 and aer in management:
                                 mgmt = management[aer]
                         else:
                             mgmt = {}
-                            planting_doy = planting_data["value"](lat, lon, int, False)
+                            planting_doy = planting_data["value"](lat, lon, False)
                             if planting_doy:
                                 d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
                                 mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
-                            harvest_doy = harvest_data["value"](lat, lon, int, False)
+                            harvest_doy = harvest_data["value"](lat, lon, False)
                             if harvest_doy:
                                 d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
                                 mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
@@ -374,19 +374,19 @@ def run_producer(server=None, port=None):
                         if not mgmt or not valid_mgmt:
                             continue
 
-                        crop_mask_value = crop_mask_data["value"](lat, lon, int, False)
+                        crop_mask_value = crop_mask_data["value"](lat, lon, False)
                         if not crop_mask_value or crop_mask_value == 0:
                             continue
 
-                        country_id = country_id_data["value"](lat, lon, int, False)
+                        country_id = country_id_data["value"](lat, lon, False)
                         if not country_id or (config["only_country_ids"] and country_id not in only_country_ids):
                             continue
 
-                        height_nn = height_data["value"](lat, lon, float, False)
+                        height_nn = height_data["value"](lat, lon, False)
                         if not height_nn:
                             continue
 
-                        slope = slope_data["value"](lat, lon, float, False)
+                        slope = slope_data["value"](lat, lon, False)
                         if not slope:
                             slope = 0
 
@@ -462,7 +462,7 @@ def run_producer(server=None, port=None):
 
                         socket.send_json(env_template)
                         with open(path_to_out_file, "a") as _:
-                            _.write(f"sent env {sent_env_count} customId: {env_template['customId']}")
+                            _.write(f"sent env {sent_env_count} customId: {env_template['customId']}\n")
                         #print("sent env ", sent_env_count, " customId: ", env_template["customId"])
 
                         sent_env_count += 1
@@ -471,7 +471,7 @@ def run_producer(server=None, port=None):
                             raise Exception("leave early for test")
             except Exception as e:
                 with open(path_to_out_file, "a") as _:
-                    _.write(f"raised exception: {e}")
+                    _.write(f"raised exception: {e}\n")
                 #print("Exception raised:", e)
                 pass
 
@@ -486,7 +486,7 @@ def run_producer(server=None, port=None):
             stop_setup_time = time.perf_counter()
             print("Setup ", sent_env_count, " envs took ", (stop_setup_time - start_setup_time), " seconds")
             with open(path_to_out_file, "a") as _:
-                _.write(f"Setup {sent_env_count} envs took {stop_setup_time - start_setup_time} seconds")
+                _.write(f"Setup {sent_env_count} envs took {stop_setup_time - start_setup_time} seconds\n")
             sent_env_count = 0
 
     stop_time = time.perf_counter()

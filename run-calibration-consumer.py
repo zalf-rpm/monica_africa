@@ -65,7 +65,7 @@ def run_consumer(server=None, port=None):
         except OSError:
             print("run-calibration-consumer.py: Couldn't create dir:", config["path_to_out"], "!")
     with open(path_to_out_file, "a") as _:
-        _.write(f"config: {config}")
+        _.write(f"config: {config}\n")
 
     context = zmq.Context()
     socket = context.socket(zmq.PULL)
@@ -93,7 +93,7 @@ def run_consumer(server=None, port=None):
                 envs_received += 1
 
             with open(path_to_out_file, "a") as _:
-                _.write(f"received result customId: {custom_id}")
+                _.write(f"received result customId: {custom_id}\n")
             #print("received result customId:", custom_id)
 
             leave = no_of_envs_expected == envs_received
@@ -108,7 +108,7 @@ def run_consumer(server=None, port=None):
 
             if no_of_envs_expected == envs_received and writer:
                 with open(path_to_out_file, "a") as _:
-                    _.write("last expected env received")
+                    _.write("last expected env received\n")
                 print("last expected env received")
                 country_id_and_year_to_avg_yield = {}
                 for country_id, rest in country_id_to_year_to_yields.items():
@@ -126,12 +126,12 @@ def run_consumer(server=None, port=None):
 
         except zmq.error.Again as _e:
             with open(path_to_out_file, "a") as _:
-                _.write(f"no response from the server (with {socket.RCVTIMEO} ms timeout)")
+                _.write(f"no response from the server (with {socket.RCVTIMEO} ms timeout)\n")
             print('no response from the server (with "timeout"=%d ms) ' % socket.RCVTIMEO)
             continue
         except Exception as e:
             with open(path_to_out_file, "a") as _:
-                _.write(f"Exception: {e}")
+                _.write(f"Exception: {e}\n")
             print("Exception:", e)
             break
 

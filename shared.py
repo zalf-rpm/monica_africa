@@ -141,7 +141,7 @@ def load_grid_cached(path_to_grid, val_type, print_path=False):
     def row(lat):
         return int((ll0r["lat_0"] - lat) / ll0r["res"])
 
-    def value(lat, lon, return_no_data = False):
+    def value(lat, lon, return_no_data=False):
         c = col(lon)
         r = row(lat)
         if 0 <= r < md["nrows"] and 0 <= c < md["ncols"]:

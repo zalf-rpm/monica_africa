@@ -60,7 +60,7 @@ class spot_setup(object):
         out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
         self.prod_writer.write(value=out_ip).wait()
         with open(self.path_to_out_file, "a") as _:
-            _.write(f"sent params to monica setup: {vector}")
+            _.write(f"sent params to monica setup: {vector}\n")
         print("sent params to monica setup:", vector, flush=True)
 
         msg = self.cons_reader.read().wait()
@@ -79,8 +79,8 @@ class spot_setup(object):
                 sim_list.append(country_id_and_year_to_avg_yield[key])
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         with open(self.path_to_out_file, "a") as _:
-            _.write(f"received monica results: {country_id_and_year_to_avg_yield}")
-            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {self.obs_flat_list}")
+            _.write(f"received monica results: {country_id_and_year_to_avg_yield}\n")
+            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {self.obs_flat_list}\n")
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
         return sim_list
