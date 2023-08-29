@@ -52,8 +52,16 @@ def run_consumer(server=None, port=None):
         "port": port if port else "7777",  # local 7778,  remote 7777
         "server": server if server else "login01.cluster.zalf.de",
         "writer_sr": None,
+        "path_to_out": "out/",
         "timeout": 600000  # 10min
     }
+
+    path_to_out_file = config["path_to_out"] + "/consumer.out"
+    if not os.path.exists(config["path_to_out"]):
+        try:
+            os.makedirs(config["path_to_out"])
+        except OSError:
+            print("run-calibration-consumer.py: Couldn't create dir:", config["path_to_out"], "!")
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
@@ -82,15 +90,13 @@ def run_consumer(server=None, port=None):
             else:
                 envs_received += 1
 
+            with open(path_to_out_file, "a") as _:
+                _.write(f"received result customId: {custom_id}")
             #print("received result customId:", custom_id)
 
             leave = no_of_envs_expected == envs_received
 
-            #writer_sr = custom_id["writer_sr"]
             country_id = custom_id["country_id"]
-
-            #if writer is None:
-            #    writer = conman.try_connect(writer_sr, cast_as=fbp_capnp.Channel.Writer, retry_secs=1)
 
             for data in msg.get("data", []):
                 results = data.get("results", [])
@@ -99,7 +105,9 @@ def run_consumer(server=None, port=None):
                         country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
 
             if no_of_envs_expected == envs_received and writer:
-                #print("last expected env received")
+                with open(path_to_out_file, "a") as _:
+                    _.write("last expected env received")
+                print("last expected env received")
                 country_id_and_year_to_avg_yield = {}
                 for country_id, rest in country_id_to_year_to_yields.items():
                     for year, yields in rest.items():
@@ -115,9 +123,13 @@ def run_consumer(server=None, port=None):
                 envs_received = 0
 
         except zmq.error.Again as _e:
+            with open(path_to_out_file, "a") as _:
+                _.write(f"no response from the server (with {socket.RCVTIMEO} ms timeout)")
             print('no response from the server (with "timeout"=%d ms) ' % socket.RCVTIMEO)
             continue
         except Exception as e:
+            with open(path_to_out_file, "a") as _:
+                _.write(f"Exception: {e}")
             print("Exception:", e)
             break
 

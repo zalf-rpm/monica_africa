@@ -29,13 +29,21 @@ abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
 class spot_setup(object):
-    def __init__(self, user_params, observations, prod_writer, cons_reader):
+    def __init__(self, user_params, observations, prod_writer, cons_reader, path_to_out):
         self.user_params = user_params
         self.params = []
         self.observations = observations
         self.obs_flat_list = list(map(lambda d: d["value"], observations))
         self.prod_writer = prod_writer
         self.cons_reader = cons_reader
+        self.path_to_out_file = path_to_out + "/spot_setup.out"
+
+        if not os.path.exists(path_to_out):
+            try:
+                os.makedirs(path_to_out)
+            except OSError:
+                print("spot_setup.__init__: Couldn't create dir:", path_to_out, "!")
+
         for par in user_params:
             par_name = par["name"]
             if "array" in par:
@@ -51,6 +59,8 @@ class spot_setup(object):
         # vector = MaxAssimilationRate, AssimilateReallocation, RootPenetrationRate
         out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
         self.prod_writer.write(value=out_ip).wait()
+        with open(self.path_to_out_file, "a") as _:
+            _.write(f"sent params to monica setup: {vector}")
         print("sent params to monica setup:", vector, flush=True)
 
         msg = self.cons_reader.read().wait()
@@ -68,6 +78,9 @@ class spot_setup(object):
             if key in country_id_and_year_to_avg_yield:
                 sim_list.append(country_id_and_year_to_avg_yield[key])
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
+        with open(self.path_to_out_file, "a") as _:
+            _.write(f"received monica results: {country_id_and_year_to_avg_yield}")
+            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {self.obs_flat_list}")
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
         return sim_list

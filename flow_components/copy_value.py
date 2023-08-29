@@ -27,8 +27,6 @@ if str(PATH_TO_PYTHON_CODE) not in sys.path:
     sys.path.insert(1, str(PATH_TO_PYTHON_CODE))
 
 from pkgs.common import common
-from pkgs.common import geo
-import shared
 
 PATH_TO_CAPNP_SCHEMAS = (PATH_TO_REPO / "capnproto_schemas").resolve()
 abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
@@ -36,12 +34,8 @@ common_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "common.capnp"), imports=a
 geo_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "geo.capnp"), imports=abs_imports)
 
 config = {
-    "path_to_grid": None,
-    "type": "int",  # int | float
-    "debug_out": "true",  # true | false
-    "split_at": ",",
-    "in_sr": None, # string
-    "out_sr": None # utm_coord + id attr
+    "in_sr": None,  # some value struct
+    "out_srs": "",  # sturdy refs separated by |
 }
 common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
@@ -49,16 +43,13 @@ debug_out = config["debug_out"] == "true"
 
 conman = common.ConnectionManager()
 in_p = conman.try_connect(config["in_sr"], cast_as=common_capnp.Channel.Reader, retry_secs=1)
-out_p = conman.try_connect(config["out_sr"], cast_as=common_capnp.Channel.Writer, retry_secs=1)
-
-if not config["path_to_grid"]:
-    raise Exception("No path_to_grid given at start of component.")
-
-grid_data = shared.load_grid_cached(config["path_to_grid"], int if config["type"] == "int" else float,
-                                    print_path=debug_out)
+out_srs = config["out_srs"].split("|")
+out_ps = []
+for out_sr in out_srs:
+    out_ps.append(conman.try_connect(config["out_sr"], cast_as=common_capnp.Channel.Writer, retry_secs=1))
 
 try:
-    if in_p and out_p:
+    if in_p and any(out_ps):
         while True:
             msg = in_p.read().wait()
             # check for end of data from in port
@@ -66,17 +57,20 @@ try:
                 break
             
             in_ip = msg.value.as_struct(common_capnp.IP)
-            ll = in_ip.content.as_struct(geo.name_to_struct_type("latlon"))
-            val = grid_data["value"](ll.lat, ll.lon)
-            out_ip = common_capnp.IP.new_message(content=str(val))
-            common.copy_and_set_fbp_attrs(in_ip, out_ip)
-            out_p.write(value=out_ip).wait()
+            for out_p in out_ps:
+                if out_p:
+                    c = in_ip.content.copy()
+                    out_ip = common_capnp.IP.new_message(content=c)
+                    common.copy_and_set_fbp_attrs(in_ip, out_ip)
+                    out_p.write(value=out_ip).wait()
 
-        # close out port
-        out_p.write(done=None).wait()
+        # close out ports
+        for out_p in out_ps:
+            if out_p:
+                out_p.write(done=None).wait()
 
 except Exception as e:
-    print("get_lat_lon_grid_value.py ex:", e)
+    print("copy_value.py ex:", e)
 
-print("get_lat_lon_grid_value.py: exiting run")
+print("copy_value.py: exiting run")
 
