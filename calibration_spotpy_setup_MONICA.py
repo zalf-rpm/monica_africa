@@ -76,11 +76,24 @@ class spot_setup(object):
         s: str = in_ip.content.as_text()
         country_id_and_year_to_avg_yield = json.loads(s)
         # print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
+
+        # remove all simulation results which are not in the observed list
+        sim_country_id_and_years = set(country_id_and_year_to_avg_yield.keys())
         sim_list = []
         for d in self.observations:
             key = f"{d['id']}|{d['year']}"
             if key in country_id_and_year_to_avg_yield:
                 sim_list.append(country_id_and_year_to_avg_yield[key])
+                sim_country_id_and_years.remove(key)
+
+        # if at all there, remove observed data which where not in the simulation results
+        if len(sim_country_id_and_years) > 0:
+            # create a new observed flat list removing the elements not in the simulation
+            self.obs_flat_list = []
+            for d in self.observations:
+                if f"{d['id']}|{d['year']}" not in sim_country_id_and_years:
+                    self.obs_flat_list.append(d["value"])
+
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         with open(self.path_to_out_file, "a") as _:
             _.write(f"received monica results: {country_id_and_year_to_avg_yield}\n")
