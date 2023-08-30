@@ -44,6 +44,10 @@ class spot_setup(object):
             except OSError:
                 print("spot_setup.__init__: Couldn't create dir:", path_to_out, "!")
 
+        with open(self.path_to_out_file, "a") as _:
+            _.write(f"observations: {self.observations}\n")
+            _.write(f"obs_flat_list: {self.obs_flat_list}\n")
+
         for par in user_params:
             par_name = par["name"]
             if "array" in par:
@@ -80,7 +84,9 @@ class spot_setup(object):
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         with open(self.path_to_out_file, "a") as _:
             _.write(f"received monica results: {country_id_and_year_to_avg_yield}\n")
-            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {self.obs_flat_list}\n")
+            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {len(self.obs_flat_list)}\n")
+            _.write(f"sim_list: {sim_list}\n")
+            _.write(f"obs_list: {self.obs_flat_list}\n")
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
         return sim_list

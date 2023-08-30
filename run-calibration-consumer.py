@@ -113,8 +113,9 @@ def run_consumer(server=None, port=None):
                 country_id_and_year_to_avg_yield = {}
                 for country_id, rest in country_id_to_year_to_yields.items():
                     for year, yields in rest.items():
-                        if len(yields) > 0:
-                            country_id_and_year_to_avg_yield[f"{country_id}|{year}"] = sum(yields) / len(yields)
+                        no_of_yields = len(yields)
+                        if no_of_yields > 0:
+                            country_id_and_year_to_avg_yield[f"{country_id}|{year}"] = sum(yields) / no_of_yields
 
                 out_ip = fbp_capnp.IP.new_message(content=json.dumps(country_id_and_year_to_avg_yield))
                 writer.write(value=out_ip).wait()
