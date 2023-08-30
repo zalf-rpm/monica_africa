@@ -125,7 +125,6 @@ class GlobalSoilDataSet:
 def load_grid_cached(path_to_grid, val_type, print_path=False):
     if not hasattr(load_grid_cached, "cache"):
         load_grid_cached.cache = {}
-        load_grid_cached.val_type = val_type
 
     if path_to_grid in load_grid_cached.cache:
         return load_grid_cached.cache[path_to_grid]
@@ -145,7 +144,7 @@ def load_grid_cached(path_to_grid, val_type, print_path=False):
         c = col(lon)
         r = row(lat)
         if 0 <= r < md["nrows"] and 0 <= c < md["ncols"]:
-            val = load_grid_cached.val_type(grid[r, c])
+            val = val_type(grid[r, c])
             if val != md["nodata_value"] or return_no_data:
                 return val
         return None

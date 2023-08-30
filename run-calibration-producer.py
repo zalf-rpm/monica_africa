@@ -75,6 +75,9 @@ PATHS = {
     },
 }
 
+#height_data = shared.load_grid_cached(
+#    "/home/berg/GitHub/monica_africa/data/elevation_0.5deg_4326_wgs84_africa.asc", int)
+#height_nn = height_data["value"](1.779125, 23.941889, False)
 
 def run_producer(server=None, port=None):
     context = zmq.Context()
@@ -241,7 +244,6 @@ def run_producer(server=None, port=None):
                 else:
                     planting = nitrogen = management = None
 
-                # eco regions
                 eco_data = shared.load_grid_cached(
                     paths["path-to-data-dir"] +
                     "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc", int)
@@ -400,7 +402,7 @@ def run_producer(server=None, port=None):
                         env_template["params"]["siteParameters"]["SoilProfileParameters"] = soil_profile
 
                         if setup["elevation"]:
-                            env_template["params"]["siteParameters"]["heightNN"] = float(height_nn)
+                            env_template["params"]["siteParameters"]["heightNN"] = height_nn
 
                         if setup["slope"]:
                             if setup["slope_unit"] == "degree":

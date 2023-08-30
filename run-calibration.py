@@ -46,6 +46,9 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
+local_run = False
+
+
 def run_calibration(server=None, prod_port=None, cons_port=None):
     config = {
         "mode": "mbm-local-remote",
@@ -58,10 +61,10 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         "setups-file": "sim_setups_africa_calibration.csv",
         "path_to_out": "out/",
         "run-setups": "[1]",
-        #"path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel",
-        "path_to_channel": "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
-        #"path_to_python": "python",
-        "path_to_python": "/home/rpm/.conda/envs/py39/bin/python",
+        "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel" if local_run else
+        "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
+        "path_to_python": "python" if local_run else
+        "/home/rpm/.conda/envs/py39/bin/python",
         "repetitions": "200",
         "test_mode": "false",
         "only_country_ids": None  # "[10]",
@@ -88,7 +91,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     procs.append(sp.Popen([
         config["path_to_python"],
         "run-calibration-producer.py",
-        "mode=hpc-local-remote",
+        "mode=mbm-local-remote" if local_run else "mode=hpc-local-remote",
         f"server={config['server']}",
         f"port={config['prod-port']}",
         f"setups-file={config['setups-file']}",
