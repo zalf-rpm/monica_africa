@@ -89,7 +89,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     procs.append(cons_chan_data["chan"])
 
     for _ in range(20):
-        procs.append(sp.Popen(["python -m timeit -c 'sum(n * n for n in range(1_100_000_001))'"]))
+        procs.append(sp.Popen([config["path_to_python"], "test_x.py"]))
 
     procs.append(sp.Popen([
         config["path_to_python"],

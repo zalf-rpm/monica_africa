@@ -1,0 +1,1 @@
+sum(n * n for n in range(1_100_000_001))
