@@ -16,7 +16,7 @@
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
 import capnp
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 import json
 from netCDF4 import Dataset
 import numpy as np
@@ -463,8 +463,8 @@ def run_producer(server=None, port=None):
                         }
 
                         socket.send_json(env_template)
-                        with open(path_to_out_file, "a") as _:
-                            _.write(f"sent env {sent_env_count} customId: {env_template['customId']}\n")
+                        #with open(path_to_out_file, "a") as _:
+                        #    _.write(f"sent env {sent_env_count} customId: {env_template['customId']}\n")
                         #print("sent env ", sent_env_count, " customId: ", env_template["customId"])
 
                         sent_env_count += 1
@@ -488,7 +488,7 @@ def run_producer(server=None, port=None):
             stop_setup_time = time.perf_counter()
             print("Setup ", sent_env_count, " envs took ", (stop_setup_time - start_setup_time), " seconds")
             with open(path_to_out_file, "a") as _:
-                _.write(f"Setup {sent_env_count} envs took {stop_setup_time - start_setup_time} seconds\n")
+                _.write(f"{datetime.now()} Setup {sent_env_count} envs took {stop_setup_time - start_setup_time} seconds\n")
             sent_env_count = 0
 
     stop_time = time.perf_counter()

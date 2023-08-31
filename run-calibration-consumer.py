@@ -17,6 +17,7 @@
 
 import capnp
 from collections import defaultdict
+from datetime import datetime
 import json
 import os
 from pathlib import Path
@@ -92,8 +93,8 @@ def run_consumer(server=None, port=None):
             else:
                 envs_received += 1
 
-            with open(path_to_out_file, "a") as _:
-                _.write(f"received result customId: {custom_id}\n")
+            #with open(path_to_out_file, "a") as _:
+            #    _.write(f"received result customId: {custom_id}\n")
             #print("received result customId:", custom_id)
 
             leave = no_of_envs_expected == envs_received
@@ -108,7 +109,7 @@ def run_consumer(server=None, port=None):
 
             if no_of_envs_expected == envs_received and writer:
                 with open(path_to_out_file, "a") as _:
-                    _.write("last expected env received\n")
+                    _.write(f"{datetime.now()} last expected env received\n")
                 print("last expected env received")
                 country_id_and_year_to_avg_yield = {}
                 for country_id, rest in country_id_to_year_to_yields.items():

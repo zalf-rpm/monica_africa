@@ -16,6 +16,7 @@
 # Copyright (C: Leibniz Centre for Agricultural Landscape Research (ZALF)
 
 import capnp
+from datetime import datetime
 import json
 import os
 from pathlib import Path
@@ -64,7 +65,7 @@ class spot_setup(object):
         out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
         self.prod_writer.write(value=out_ip).wait()
         with open(self.path_to_out_file, "a") as _:
-            _.write(f"sent params to monica setup: {vector}\n")
+            _.write(f"{datetime.now()} sent params to monica setup: {vector}\n")
         print("sent params to monica setup:", vector, flush=True)
 
         msg = self.cons_reader.read().wait()
@@ -78,7 +79,6 @@ class spot_setup(object):
         # print("received monica results:", country_id_and_year_to_avg_yield, flush=True)
 
         # remove all simulation results which are not in the observed list
-        #sim_country_id_and_years = set(country_id_and_year_to_avg_yield.keys())
         sim_list = []
         self.obs_flat_list = []
         for d in self.observations:
@@ -86,22 +86,13 @@ class spot_setup(object):
             if key in country_id_and_year_to_avg_yield:
                 sim_list.append(country_id_and_year_to_avg_yield[key])
                 self.obs_flat_list.append(d["value"])
-                #sim_country_id_and_years.remove(key)
-
-        # if at all there, remove observed data which where not in the simulation results
-        #if len(sim_country_id_and_years) > 0:
-        #    # create a new observed flat list removing the elements not in the simulation
-        #    self.obs_flat_list = []
-        #    for d in self.observations:
-        #        if f"{d['id']}|{d['year']}" not in sim_country_id_and_years:
-        #            self.obs_flat_list.append(d["value"])
 
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         with open(self.path_to_out_file, "a") as _:
-            _.write(f"received monica results: {country_id_and_year_to_avg_yield}\n")
-            _.write(f"len(sim_list): {len(sim_list)} == len(self.obs_list): {len(self.obs_flat_list)}\n")
-            _.write(f"sim_list: {sim_list}\n")
-            _.write(f"obs_list: {self.obs_flat_list}\n")
+            #_.write(f"received monica results: {country_id_and_year_to_avg_yield}\n")
+            _.write(f"{datetime.now()}  len(sim_list): {len(sim_list)} == len(self.obs_list): {len(self.obs_flat_list)}\n")
+            #_.write(f"sim_list: {sim_list}\n")
+            #_.write(f"obs_list: {self.obs_flat_list}\n")
         # besides the order the length of observation results and simulation results should be the same
         assert(len(sim_list) == len(self.obs_flat_list))
         return sim_list
