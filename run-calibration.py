@@ -9,6 +9,7 @@ from pathlib import Path
 import spotpy
 import subprocess as sp
 import sys
+import time
 import uuid
 
 import calibration_spotpy_setup_MONICA
@@ -46,7 +47,7 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
-local_run = False
+local_run = True
 
 
 def run_calibration(server=None, prod_port=None, cons_port=None):
@@ -65,19 +66,19 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
         "path_to_python": "python" if local_run else
         "/home/rpm/.conda/envs/py39/bin/python",
-        "repetitions": "200",
+        "repetitions": "2",
         "test_mode": "false",
-        "only_country_ids": None  # "[10]",
+        "only_country_ids": "[5,52,33]",  # "[]",
     }
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
-    path_to_out_file = config["path_to_out"] + "/producer.out"
     if not os.path.exists(config["path_to_out"]):
         try:
             os.makedirs(config["path_to_out"])
         except OSError:
             print("run-calibration.py: Couldn't create dir:", config["path_to_out"], "!")
+    path_to_out_file = config["path_to_out"] + "/producer.out"
     with open(path_to_out_file, "a") as _:
         _.write(f"config: {config}\n")
 
@@ -102,7 +103,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         f"reader_sr={prod_chan_data['reader_sr']}",
         f"test_mode={config['test_mode']}",
         f"path_to_out={config['path_to_out']}",
-    ] + (config["only_country_ids"] if config["only_country_ids"] else [])))
+        f"only_country_ids={config['only_country_ids']}"
+    ]))
 
     procs.append(sp.Popen([
         config["path_to_python"],
@@ -163,8 +165,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
     # configure MONICA setup for spotpy
     observations = crop_to_observations[setup["crop"]]
-    if config["only_country_ids"]:
-        only_country_ids = json.loads(config["only_country_ids"])
+    only_country_ids = json.loads(config["only_country_ids"])
+    if len(only_country_ids) > 0:
         observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
     spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
                                                             config["path_to_out"])
@@ -181,6 +183,48 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     #peps = convergence criterion
     #pcento = percent change allowed in kstop loops before convergence
     sampler.sample(rep, ngs=len(params)*2, peps=0.001, pcento=0.001)
+
+    def print_status_final(self, stream):
+        print("\n*** Final SPOTPY summary ***")
+        print(
+            "Total Duration: "
+            + str(round((time.time() - self.starttime), 2))
+            + " seconds"
+        , file=stream)
+        print("Total Repetitions:", self.rep, file=stream)
+
+        if self.optimization_direction == "minimize":
+            print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
+            print("Corresponding parameter setting:", file=stream)
+            for i in range(self.parameters):
+                text = "%s: %g" % (self.parnames[i], self.params_min[i])
+                print(text, file=stream)
+
+        if self.optimization_direction == "maximize":
+            print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
+            print("Corresponding parameter setting:", file=stream)
+            for i in range(self.parameters):
+                text = "%s: %g" % (self.parnames[i], self.params_max[i])
+                print(text, file=stream)
+
+        if self.optimization_direction == "grid":
+            print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
+            print("Corresponding parameter setting:", file=stream)
+            for i in range(self.parameters):
+                text = "%s: %g" % (self.parnames[i], self.params_min[i])
+                print(text, file=stream)
+
+            print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
+            print("Corresponding parameter setting:", file=stream)
+            for i in range(self.parameters):
+                text = "%s: %g" % (self.parnames[i], self.params_max[i])
+                print(text, file=stream)
+
+        print("******************************\n", file=stream)
+
+    path_to_best_out_file = config["path_to_out"] + "/best.out"
+    with open(path_to_best_out_file, "a") as _:
+        print_status_final(sampler.status, _)
 
     #Extract the parameter samples from distribution
     results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
@@ -202,7 +246,6 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         proc.terminate()
 
     print("sampler_MONICA.py finished")
-
 
 if __name__ == "__main__":
     run_calibration()

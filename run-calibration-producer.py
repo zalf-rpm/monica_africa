@@ -101,7 +101,7 @@ def run_producer(server=None, port=None):
         "reader_sr": None,
         "test_mode": "false",
         "path_to_out": "out/",
-        "only_country_ids": None  # "[10]",
+        "only_country_ids": "[]",  # "[10]",
     }
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -115,7 +115,7 @@ def run_producer(server=None, port=None):
     with open(path_to_out_file, "a") as _:
         _.write(f"config: {config}\n")
 
-    only_country_ids = json.loads(config["only_country_ids"]) if config["only_country_ids"] else []
+    only_country_ids = json.loads(config["only_country_ids"])
 
     s_resolution = {"5min": 5 / 60., "30sec": 30 / 3600.}[config["resolution"]]
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]
@@ -381,7 +381,7 @@ def run_producer(server=None, port=None):
                             continue
 
                         country_id = country_id_data["value"](lat, lon, False)
-                        if not country_id or (config["only_country_ids"] and country_id not in only_country_ids):
+                        if not country_id or (len(only_country_ids) > 0 and country_id not in only_country_ids):
                             continue
 
                         height_nn = height_data["value"](lat, lon, False)
