@@ -149,7 +149,7 @@ def run_producer(server={"server": None, "port": None}):
         return {"lat_0": lat_0, "lon_0": lon_0, "res": resolution}
 
     # eco regions
-    path_to_eco_grid = paths["path-to-data-dir"] + "/eco_regions/agro_eco_regions.asc"
+    path_to_eco_grid = paths["path-to-data-dir"] + "/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc"
     eco_metadata, _ = Mrunlib.read_header(path_to_eco_grid)
     eco_grid = np.loadtxt(path_to_eco_grid, dtype=int, skiprows=6)
     aer_ll0r = get_lat_0_lon_0_resolution_from_grid_metadata(eco_metadata)
@@ -264,7 +264,7 @@ def run_producer(server={"server": None, "port": None}):
         nitrogen = setup["nitrogen"].lower()
         management_file = f"agro_ecological_regions_{planting}_planting_{nitrogen}_nitrogen.csv"
         # load management data
-        management = Mrunlib.read_csv(paths["path-to-data-dir"] + "/eco_regions/" + management_file, key="id")
+        management = Mrunlib.read_csv(paths["path-to-data-dir"] + "/agro_ecological_regions_nigeria/" + management_file, key="id")
 
         # height data for germany
         path_to_dem_grid = paths["path-to-data-dir"] + setup["dem_asc_grid"]
