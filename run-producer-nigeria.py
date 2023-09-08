@@ -262,7 +262,7 @@ def run_producer(server={"server": None, "port": None}):
 
         planting = setup["planting"].lower()
         nitrogen = setup["nitrogen"].lower()
-        management_file = f"agro_ecological_regions_{planting}_planting_{nitrogen}_nitrogen.csv"
+        management_file = f"{planting}_planting_{nitrogen}_nitrogen.csv"
         # load management data
         management = Mrunlib.read_csv(paths["path-to-data-dir"] + "/agro_ecological_regions_nigeria/" + management_file, key="id")
 
