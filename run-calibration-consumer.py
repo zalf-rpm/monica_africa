@@ -89,23 +89,22 @@ def run_consumer(server=None, port=None):
             custom_id = msg["customId"]
             if "no_of_sent_envs" in custom_id:
                 no_of_envs_expected = custom_id["no_of_sent_envs"]
-                continue
             else:
                 envs_received += 1
 
-            #with open(path_to_out_file, "a") as _:
-            #    _.write(f"received result customId: {custom_id}\n")
-            #print("received result customId:", custom_id)
+                #with open(path_to_out_file, "a") as _:
+                #    _.write(f"received result customId: {custom_id}\n")
+                #print("received result customId:", custom_id)
 
-            leave = no_of_envs_expected == envs_received
+                leave = no_of_envs_expected == envs_received
 
-            country_id = custom_id["country_id"]
+                country_id = custom_id["country_id"]
 
-            for data in msg.get("data", []):
-                results = data.get("results", [])
-                for vals in results:
-                    if "Year" in vals:
-                        country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
+                for data in msg.get("data", []):
+                    results = data.get("results", [])
+                    for vals in results:
+                        if "Year" in vals:
+                            country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
 
             if no_of_envs_expected == envs_received and writer:
                 with open(path_to_out_file, "a") as _:

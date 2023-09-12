@@ -89,8 +89,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     cons_chan_data = get_reader_writer_srs_from_channel(config["path_to_channel"], "cons_chan")
     procs.append(cons_chan_data["chan"])
 
-    for _ in range(20):
-        procs.append(sp.Popen([config["path_to_python"], "test_x.py"]))
+    #for _ in range(20):
+    #    procs.append(sp.Popen([config["path_to_python"], "test_x.py"]))
 
     procs.append(sp.Popen([
         config["path_to_python"],
