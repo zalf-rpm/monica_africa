@@ -96,8 +96,6 @@ def run_consumer(server=None, port=None):
                 #    _.write(f"received result customId: {custom_id}\n")
                 #print("received result customId:", custom_id)
 
-                leave = no_of_envs_expected == envs_received
-
                 country_id = custom_id["country_id"]
 
                 for data in msg.get("data", []):
