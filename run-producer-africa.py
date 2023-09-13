@@ -101,7 +101,7 @@ def run_producer(server={"server": None, "port": None}):
         "crop.json": "crop.json",
         "site.json": "site.json",
         "setups-file": "sim_setups_nigeria.csv",
-        "run-setups": "[16]"
+        "run-setups": "[17]"
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
