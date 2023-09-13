@@ -201,7 +201,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "timeout": 600000  # 10 minutes
     }
 
-    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+    shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     paths = PATHS[config["mode"]]
 

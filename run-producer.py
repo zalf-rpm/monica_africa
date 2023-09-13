@@ -38,7 +38,7 @@ PATH_TO_PYTHON_CODE = "/mas-infrastructure/src/python"
 if PATH_TO_PYTHON_CODE not in sys.path:
     sys.path.insert(1, PATH_TO_PYTHON_CODE)
 
-from pkgs.common import common
+#from pkgs.common import common
 from pkgs.model import monica_io3
 
 PATHS = {
@@ -104,7 +104,7 @@ def run_producer(server={"server": None, "port": None}):
         "run-setups": "[2]"
     }
 
-    common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+    shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
     s_resolution = {"5min": 5 / 60., "30sec": 30 / 3600.}[config["resolution"]]
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]

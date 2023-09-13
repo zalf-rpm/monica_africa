@@ -20,6 +20,15 @@ import monica_run_lib
 import numpy as np
 
 
+def update_config(config, argv, print_config=False, allow_new_keys=False):
+    if len(argv) > 1:
+        for arg in argv[1:]:
+            k, v = arg.split("=", maxsplit=1)
+            if allow_new_keys or k in config:
+                config[k] = v.lower() == "true" if v.lower() in ["true", "false"] else v
+        if print_config:
+            print(config)
+
 def get_lat_0_lon_0_resolution_from_grid_metadata(metadata):
     lat_0 = float(metadata["yllcorner"]) \
                 + (float(metadata["cellsize"]) * float(metadata["nrows"])) \
