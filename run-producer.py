@@ -95,13 +95,13 @@ def run_producer(server={"server": None, "port": None}):
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
         "end_lon": "179.50000000",
-        "region": "africa",
+        "region": "nigeria",
         "resolution": "5min",  # 30sec,
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_africa.csv",
-        "run-setups": "[2]"
+        "setups-file": "sim_setups_nigeria.csv",
+        "run-setups": "[16]"
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -178,19 +178,19 @@ def run_producer(server={"server": None, "port": None}):
         else:
             planting = nitrogen = management = None
 
-        path_to_planting_grid = \
-            paths["path-to-data-dir"] + f"/{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
-        planting_metadata, _ = monica_run_lib.read_header(path_to_planting_grid)
-        planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=len(planting_metadata))
-        # print("read: ", path_to_planting_grid)
-        planting_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
+            path_to_planting_grid = \
+                paths["path-to-data-dir"] + f"/{setup['crop']}-planting-doy_0.5deg_4326_wgs84_africa.asc"
+            planting_metadata, _ = monica_run_lib.read_header(path_to_planting_grid)
+            planting_grid = np.loadtxt(path_to_planting_grid, dtype=int, skiprows=len(planting_metadata))
+            # print("read: ", path_to_planting_grid)
+            planting_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(planting_metadata)
 
-        path_to_harvest_grid = \
-            paths["path-to-data-dir"] + f"/{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
-        harvest_metadata, _ = monica_run_lib.read_header(path_to_harvest_grid)
-        harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
-        # print("read: ", path_to_harvest_grid)
-        harvest_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
+            path_to_harvest_grid = \
+                paths["path-to-data-dir"] + f"/{setup['crop']}-harvest-doy_0.5deg_4326_wgs84_africa.asc"
+            harvest_metadata, _ = monica_run_lib.read_header(path_to_harvest_grid)
+            harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
+            # print("read: ", path_to_harvest_grid)
+            harvest_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
 
         # height data for germany
         path_to_dem_grid = setup["path_to_dem_asc_grid"]
@@ -209,7 +209,7 @@ def run_producer(server={"server": None, "port": None}):
         # read template sim.json
         with open(setup.get("sim.json", config["sim.json"])) as _:
             sim_json = json.load(_)
-        # change start and end date acording to setup
+        # change start and end date according to setup
         if setup["start_date"]:
             sim_json["climate.csv-options"]["start-date"] = str(setup["start_date"])
         if setup["end_date"]:
@@ -231,8 +231,8 @@ def run_producer(server={"server": None, "port": None}):
                 if "Sowing" in ws["type"]:
                     ws["crop"][2] = crop
 
-        crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = setup[
-            "use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
+        crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = \
+            setup["use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
 
         # create environment template from json templates
         env_template = monica_io3.create_env_json_from_json_config({
