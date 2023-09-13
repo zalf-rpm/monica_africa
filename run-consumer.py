@@ -23,6 +23,8 @@ from pathlib import Path
 import sys
 import zmq
 
+import shared
+
 PATH_TO_REPO = Path(os.path.realpath(__file__)).parent
 PATH_TO_MAS_INFRASTRUCTURE_REPO = PATH_TO_REPO / "../mas-infrastructure"
 PATH_TO_PYTHON_CODE = PATH_TO_MAS_INFRASTRUCTURE_REPO / "src/python"
