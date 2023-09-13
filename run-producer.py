@@ -320,11 +320,13 @@ def run_producer(server={"server": None, "port": None}):
                             ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
                             ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Tillage date"])
-                        elif ws["type"] == "MineralFertilization" and mgmt[:2] == "N " and mgmt[-5:] == " date":
+                        elif ws["type"] == "MineralFertilization":
                             app_no = int(ws["application"])
                             app_str = str(app_no) + ["st", "nd", "rd", "th"][app_no - 1]
-                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt[f"N {app_str} date"])
-                            ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
+                            name = f"N {app_str} date"
+                            if name in mgmt:
+                                ws["date"] = shared.mgmt_date_to_rel_date(mgmt[name])
+                                ws["amount"] = [float(mgmt[f"N {app_str} application (kg/ha)"]), "kg"]
                 else:
                     mgmt = None
 
@@ -362,7 +364,7 @@ def run_producer(server={"server": None, "port": None}):
                 dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
                 dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
                 height_nn = dem_grid[dem_row, dem_col]
-                if height_nn == dem_metadata["nodata_value"]:
+                if "nodata_value" in dem_metadata and height_nn == dem_metadata["nodata_value"]:
                     send_nodata_msg(sent_env_count)
                     sent_env_count += 1
                     continue
