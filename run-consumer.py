@@ -34,7 +34,7 @@ PATH_TO_PYTHON_CODE = "/mas-infrastructure/src/python"
 if PATH_TO_PYTHON_CODE not in sys.path:
     sys.path.insert(1, PATH_TO_PYTHON_CODE)
 
-from pkgs.common import common
+#from pkgs.common import common
 from pkgs.model import monica_io3
 
 PATHS = {
