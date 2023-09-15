@@ -42,6 +42,8 @@
 	"MaxNUptakeParam": 7.400000095367432,
 	"MinimumNConcentration": 0.004000000189989805,
 	"MinimumTemperatureForAssimilation": 9,
+	"_OptimumTemperatureForAssimilation": 29,
+	"_MaximumTemperatureForAssimilation": 42,
 	"MinimumTemperatureRootGrowth": 9,
 	"NConcentrationAbovegroundBiomass": 0.05999999865889549,
 	"NConcentrationB0": 6.267000198364258,
@@ -81,7 +83,7 @@
 	"StorageOrgan": [
 		false,
 		false,
-		false
+		true
 	],
 	"TargetN30": 60,
 	"TargetNSamplingDepth": 200,
