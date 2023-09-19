@@ -38,7 +38,7 @@ PATH_TO_PYTHON_CODE = "/mas-infrastructure/src/python"
 if PATH_TO_PYTHON_CODE not in sys.path:
     sys.path.insert(1, PATH_TO_PYTHON_CODE)
 
-#from pkgs.common import common
+# from pkgs.common import common
 from pkgs.model import monica_io3
 
 PATHS = {
@@ -64,7 +64,7 @@ PATHS = {
         "path-debug-write-folder": "./debug-out/",
     },
     "hpc-local-remote": {
-        #"path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
+        # "path-to-climate-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
         # mounted path to archive or hard drive with climate data
         "path-to-soil-dir": "/beegfs/common/data/soil/global_soil_dataset_for_earth_system_modeling/",
         "monica-path-to-climate-dir": "/monica_data/climate-data/",
@@ -95,16 +95,20 @@ def run_producer(server={"server": None, "port": None}):
         "end_lat": "-55.95833206",
         "start_lon": "-179.95832825",
         "end_lon": "179.50000000",
-        "region": "nigeria",
+        "region": "africa",
         "resolution": "5min",  # 30sec,
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_nigeria.csv",
-        "run-setups": "[17]"
+        "setups-file": "sim_setups_africa.csv",
+        "run-setups": "[1]",
+        "only_country_ids": "[]",
+        "use_optimized_params": False
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
+
+    only_country_ids = json.loads(config["only_country_ids"])
 
     s_resolution = {"5min": 5 / 60., "30sec": 30 / 3600.}[config["resolution"]]
     s_res_scale_factor = {"5min": 60., "30sec": 3600.}[config["resolution"]]
@@ -161,6 +165,10 @@ def run_producer(server={"server": None, "port": None}):
         scenario = setup["scenario"]
         ensmem = setup["ensmem"]
         crop = setup["crop"]
+        if setup["only_country_ids"]:
+            only_country_ids = list(map(int, setup["only_country_ids"].split("|")))
+        if setup["use_optimized_params"]:
+            config["use_optimized_params"] = setup["use_optimized_params"]
 
         region = setup["region"] if "region" in setup else config["region"]
         lat_lon_bounds = region_to_lat_lon_bounds.get(region, {
@@ -168,13 +176,14 @@ def run_producer(server={"server": None, "port": None}):
             "br": {"lat": float(config["end_lat"]), "lon": float(config["end_lon"])}
         })
 
+        optimized_params = None
         if setup["region"] == "nigeria":
             planting = setup["planting"].lower()
             nitrogen = setup["nitrogen"].lower()
             management_file = f"{planting}_planting_{nitrogen}_nitrogen.csv"
             # load management data
             management = monica_run_lib.read_csv(paths["path-to-data-dir"] +
-                                          "/agro_ecological_regions_nigeria/" + management_file, key="id")
+                                                 "/agro_ecological_regions_nigeria/" + management_file, key="id")
         else:
             planting = nitrogen = management = None
 
@@ -191,6 +200,15 @@ def run_producer(server={"server": None, "port": None}):
             harvest_grid = np.loadtxt(path_to_harvest_grid, dtype=int, skiprows=len(harvest_metadata))
             # print("read: ", path_to_harvest_grid)
             harvest_ll0r = shared.get_lat_0_lon_0_resolution_from_grid_metadata(harvest_metadata)
+
+            country_id_data = shared.load_grid_cached(
+                paths["path-to-data-dir"] + "country-id_0.083deg_4326_wgs84_africa.asc", int)
+
+            if config["use_optimized_params"]:
+                optimized_params = monica_run_lib.read_csv(paths["path-to-data-dir"] +
+                                                           "/country_id_to_optimized_parameters.csv",
+                                                           key=("Country_ID", "Crop"),
+                                                           key_type=(int, lambda v: v.lower()))
 
         # height data for germany
         path_to_dem_grid = setup["path_to_dem_asc_grid"]
@@ -230,6 +248,7 @@ def run_producer(server={"server": None, "port": None}):
             for ws in crop_json["cropRotation"][0]["worksteps"]:
                 if "Sowing" in ws["type"]:
                     ws["crop"][2] = crop
+            ps = crop_json["crops"][crop]["cropParams"]
 
         crop_json["CropParameters"]["__enable_vernalisation_factor_fix__"] = \
             setup["use_vernalisation_fix"] if "use_vernalisation_fix" in setup else False
@@ -296,7 +315,7 @@ def run_producer(server={"server": None, "port": None}):
                             and 0 <= planting_col < int(planting_metadata["ncols"]):
                         planting_doy = int(planting_grid[planting_row, planting_col])
                         if planting_doy != planting_metadata["nodata_value"]:
-                            d = date(2023, 1, 1) + timedelta(days=planting_doy-1)
+                            d = date(2023, 1, 1) + timedelta(days=planting_doy - 1)
                             mgmt["Sowing date"] = f"0000-{d.month:02}-{d.day:02}"
 
                     harvest_col = int((lon - harvest_ll0r["lon_0"]) / harvest_ll0r["res"])
@@ -375,6 +394,19 @@ def run_producer(server={"server": None, "port": None}):
                 if slope == slope_metadata["nodata_value"]:
                     slope = 0
 
+                country_id = country_id_data["value"](lat, lon, False)
+                if not country_id or (len(only_country_ids) > 0 and country_id not in only_country_ids):
+                    send_nodata_msg(sent_env_count)
+                    sent_env_count += 1
+                    continue
+
+                if optimized_params and (country_id, crop) in optimized_params:
+                    ps = env_template["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]
+                    params = optimized_params[(country_id, crop)]
+                    ps["species"]["AssimilateReallocation"] = params["AssimilateReallocation"]
+                    ps["species"]["RootPenetrationRate"] = params["RootPenetrationRate"]
+                    ps["cultivar"]["MaxAssimilationRate"] = params["MaxAssimilationRate"]
+
                 env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
                     "LeafExtensionModifier"]
 
@@ -398,7 +430,7 @@ def run_producer(server={"server": None, "port": None}):
                         if "Sowing" in ws["type"]:
                             if "|" in setup["FieldConditionModifier"] and aer and aer > 0:
                                 fcms = setup["FieldConditionModifier"].split("|")
-                                fcm = float(fcms[aer-1])
+                                fcm = float(fcms[aer - 1])
                                 if fcm > 0:
                                     ws["crop"]["cropParams"]["species"]["FieldConditionModifier"] = fcm
                             else:
