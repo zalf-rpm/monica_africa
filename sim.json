@@ -31,8 +31,6 @@
 				["Year", "LAST"],
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
-				["AbBiom", "LAST"],
-				["LAI", "LAST"],
 				["ETa/ETc", "LAST"]
 				
 			]
