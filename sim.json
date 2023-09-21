@@ -31,8 +31,7 @@
 				["Year", "LAST"],
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
-				["ETa/ETc", "LAST"],
-				["Act_ET", "LAST"]
+				"ETa/ETc"
 			]
 		]
 	},
