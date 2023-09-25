@@ -1,6 +1,6 @@
 Crop,Country,Country_ID,MaxAssimilationRate,AssimilateReallocation,RootPenetrationRate
 Maize,Algeria,10,40.3035,0.135137,0.00317274
-Maize,Angola,43,1,1,1
+Maize,Angola,43,173.739,0.296631,0.00247296
 Maize,Burkina Faso,18,40.2871,0.0596563,0.00145833
 Maize,Burundi,42,175.759,0.296568,0.00696489
 Maize,Cameroon,21,40.4465,0.0855637,0.00166778
@@ -15,12 +15,11 @@ Maize,Guinea,8,40.5514,0.156939,0.00180418
 Maize,Guinea-Bissau,7,41.856,0.13721,0.00170199
 Maize,Kenya,33,40.1391,0.117983,0.00154234
 Maize,Libya,11,40.8859,0.195313,0.00159186
-Maize,Madagascar,48,1,1,1
 Maize,Mali,13,40.4574,0.0982769,0.00265196
 Maize,Mauritania,3,40.6354,0.176692,0.00150374
 Maize,Morocco,1,40.0783,0.0808403,0.00737193
 Maize,Mozambique,46,40.2016,0.225484,0.00153609
-Maize,Namibia,50,1,1,1
+Maize,Namibia,50,41.2905,0.115477,0.00148039
 Maize,Niger,14,40.8726,0.214777,0.00142632
 Maize,Nigeria,20,42.6749,0.0664559,0.00144341
 Maize,Rwanda,41,178.873,0.295454,0.00603424
@@ -33,7 +32,7 @@ Maize,Tanzania,40,42.0135,0.051618,0.0018509
 Maize,Togo,28,40.1916,0.0711167,0.00176245
 Maize,Uganda,35,40.0094,0.127962,0.00159631
 Maize,Zambia,44,40.3822,0.0556878,0.00257681
-Maize,Zimbabwe,49,1,1,1
+Maize,Zimbabwe,49,41.1341,0.084855,0.00244963
 Millet,Algeria,10,1,1,1
 Millet,Angola,43,1,1,1
 Millet,Burkina Faso,18,1,1,1
