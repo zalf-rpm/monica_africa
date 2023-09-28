@@ -31,7 +31,8 @@
 				["Year", "LAST"],
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
-				["ETa/ETc|ETa_ETc", "LAST"]
+				["ETa/ETc|ETa_ETc", "LAST"],
+				["Abbiom", "LAST"]
 			]
 		]
 	},
