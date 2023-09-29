@@ -32,7 +32,7 @@
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
 				["ETa/ETc|ETa_ETc", "LAST"],
-				["AbBiom", "LAST"]
+				#["AbBiom", "LAST"]
 			]
 		]
 	},
