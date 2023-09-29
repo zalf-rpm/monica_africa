@@ -88,7 +88,7 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
     output_grids = {
         "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
         "ETa_ETc": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-        "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+       # "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
        #  "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
         # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
         # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
