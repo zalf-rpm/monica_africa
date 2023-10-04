@@ -156,7 +156,7 @@ def run_stats():
                 averageValuesClimateZonePerYear[climateZone][year] = sumValuesClimateZonePerYear[climateZone][year] / numValuesClimateZonePerYear[climateZone][year]
 
         # write output as csv
-        with open(TEMP_OUTPUT_FILE.format(gcm), "w") as f:
+        with open(TEMP_OUTPUT_FILE.format(gcm=gcm), "w") as f:
             # column names are years
             # row names are climate zones
             f.write("climate_zone/years")
