@@ -10,7 +10,7 @@ config = {
     "climate_data_path": "/beegfs/common/data/climate",
     "gcm": ["GFDL-ESM4","UKESM1-0-LL"],
     "scenario": ["historical","ssp126"],
-    "ensmem": "r1i1p1f1",
+    "ensmem": ["r1i1p1f1","r1i1p1f2"], 
     "start-year": 1970, 
     "end-year": 2020,
     "column_name": "tavg",
@@ -80,8 +80,11 @@ def run_stats():
                 int(lat_lon_bounds["br"]["lon"] * s_res_scale_factor) + 1,
                 int(s_resolution * s_res_scale_factor))
     
-    for gcm in config["gcm"]:
 
+    # get index and value from config["gcm"]
+    for indexGcm in range(len(config["gcm"])):
+        gcm =  config["gcm"][indexGcm]
+        ensmem = config["ensmem"][indexGcm]
         numValuesClimateZonePerYear = dict()
         for climateZone in climateZoneLookup:
             numValuesClimateZonePerYear[climateZone] = dict()
@@ -116,7 +119,7 @@ def run_stats():
 
                     for scenario in config["scenario"]:
 
-                        climFile = TEMP_CLIMATE_FILE.format(gcm=gcm, scenario=scenario, ensmem=config["ensmem"], crow=c_row, ccol=c_col)
+                        climFile = TEMP_CLIMATE_FILE.format(gcm=gcm, scenario=scenario, ensmem=ensmem, crow=c_row, ccol=c_col)
                         climateFilePath = os.path.join(config["climate_data_path"], climFile)
 
                         firstline = True
