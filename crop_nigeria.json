@@ -10,7 +10,7 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.5,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "StageTemperatureSum": [70,300,250,220,270,360,30]
         }
@@ -26,7 +26,7 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.5,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
           "StageTemperatureSum": [70,300,250,220,270,360,25]
@@ -40,7 +40,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 9.1,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
@@ -53,7 +53,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.5,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "StageTemperatureSum": [68, 300, 250, 250, 200, 400, 25]
         }
@@ -66,7 +66,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 3.4,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
@@ -79,7 +79,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.4,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
@@ -95,7 +95,7 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/moderately-early-potato.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.4,
           "PlantDensity": 2.28,
           "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
           "StageTemperatureSum":[70,250,275,395,195,360,25]
@@ -109,7 +109,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.08,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
@@ -122,7 +122,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.08,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
@@ -135,7 +135,7 @@
         "species": ["include-from-file", "crops/species/potato.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/moderately-early-potato.json"],
-          "CropSpecificMaxRootingDepth": 1.2,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 2.4,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
