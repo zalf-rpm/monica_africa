@@ -12,7 +12,7 @@ config = {
     "scenario": ["historical","ssp126"],
     "ensmem": ["r1i1p1f1","r1i1p1f2"], 
     "start-year": 1970, 
-    "end-year": 2020,
+    "end-year": 2100,
     "column_name": "tavg",
     "climate_zone_lookup": "./data/agro_ecological_regions_nigeria/early_planting_high_nitrogen.csv",
     "climate_zone_config": "./data/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc",
@@ -20,7 +20,7 @@ config = {
 }
 
 TEMP_CLIMATE_FILE = "isimip/3b_v1.1_CMIP6/csvs/{gcm}/{scenario}/{ensmem}/row-{crow}/col-{ccol}.csv.gz"
-TEMP_OUTPUT_FILE = "climate_statistic_nigeria_{gcm}.csv"
+TEMP_OUTPUT_FILE = "climate_statistic_nigeria_{prop}_{gcm}.csv"
 
 def run_stats():
     """
@@ -159,7 +159,7 @@ def run_stats():
                 averageValuesClimateZonePerYear[climateZone][year] = sumValuesClimateZonePerYear[climateZone][year] / numValuesClimateZonePerYear[climateZone][year]
 
         # write output as csv
-        with open(TEMP_OUTPUT_FILE.format(gcm=gcm), "w") as f:
+        with open(TEMP_OUTPUT_FILE.format(gcm=gcm, prop=config["column_name"]), "w") as f:
             # column names are years
             # row names are climate zones
             f.write("climate_zone/years")
