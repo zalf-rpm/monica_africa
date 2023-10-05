@@ -79,7 +79,7 @@
         "species": ["include-from-file", "crops/species/maize.json"],
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 0.7,
+          "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
