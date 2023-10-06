@@ -14,6 +14,7 @@ config = {
     "start-year": 1970, 
     "end-year": 2100,
     "column_name": "tavg",
+    "mode": "average",
     "climate_zone_lookup": "./data/agro_ecological_regions_nigeria/early_planting_high_nitrogen.csv",
     "climate_zone_config": "./data/agro_ecological_regions_nigeria/agro-eco-regions_0.038deg_4326_wgs84_nigeria.asc",
     "resolution": "5min"
@@ -127,7 +128,8 @@ def run_stats():
                         columnIndex = -1
 
                         # read zipped climate file
-
+                        sumPerYear = dict()
+                        daysPerYear = dict()
                         with gzip.open(climateFilePath,'rt') as f:
                             for line in f:
                                 
@@ -148,15 +150,28 @@ def run_stats():
                                     # get value in the column
                                     value = line.split(",")[columnIndex]
                                     # add value to sum
-                                    numValuesClimateZonePerYear[currentClimateZoneIndex][year] += 1
-                                    sumValuesClimateZonePerYear[currentClimateZoneIndex][year] += float(value)
+                                    # numValuesClimateZonePerYear[currentClimateZoneIndex][year] += 1
+                                    # sumValuesClimateZonePerYear[currentClimateZoneIndex][year] += float(value)
+                                    if year not in sumPerYear:
+                                        sumPerYear[year] = 0
+                                        daysPerYear[year] = 0
+                                    daysPerYear[year] += 1
+                                    sumPerYear[year] += float(value)
+                        for year in sumPerYear:
+                            numValuesClimateZonePerYear[currentClimateZoneIndex][year] += 1
+                            if config["mode"] == "average":
+                                sumValuesClimateZonePerYear[currentClimateZoneIndex][year] += sumPerYear[year] / daysPerYear[year]
+                            elif config["mode"] == "sum":
+                                sumValuesClimateZonePerYear[currentClimateZoneIndex][year] += sumPerYear[year] 
+                        
 
         # calculate average
-        averageValuesClimateZonePerYear = dict()
+        valuesClimateZonePerYear = dict()
         for climateZone in climateZoneLookup:
-            averageValuesClimateZonePerYear[climateZone] = dict()
+            valuesClimateZonePerYear[climateZone] = dict()
             for year in range(config["start-year"], config["end-year"] + 1):
-                averageValuesClimateZonePerYear[climateZone][year] = sumValuesClimateZonePerYear[climateZone][year] / numValuesClimateZonePerYear[climateZone][year]
+                valuesClimateZonePerYear[climateZone][year] = sumValuesClimateZonePerYear[climateZone][year] / numValuesClimateZonePerYear[climateZone][year]
+
 
         # write output as csv
         with open(TEMP_OUTPUT_FILE.format(gcm=gcm, prop=config["column_name"]), "w") as f:
@@ -169,7 +184,7 @@ def run_stats():
             for climateZone in climateZoneLookup:
                 f.write(climateZoneLookup[climateZone])
                 for year in range(config["start-year"], config["end-year"] + 1):
-                    f.write(",{}".format(averageValuesClimateZonePerYear[climateZone][year]))
+                    f.write(",{}".format(valuesClimateZonePerYear[climateZone][year]))
                 f.write("\n")
 
 
