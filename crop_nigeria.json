@@ -26,7 +26,7 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
-          "CropSpecificMaxRootingDepth": 0.3,
+          "CropSpecificMaxRootingDepth": 0.2,
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
           "StageTemperatureSum": [70,270,250,220,210,280,25]
