@@ -13,7 +13,7 @@
           "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "StageTemperatureSum": [70,300,250,220,270,360,30],
-          "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
+          "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25]
         }
       },
       "residueParams": ["include-from-file", "crops/residues/maize.json"]
