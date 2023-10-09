@@ -308,6 +308,7 @@ def run_producer(server={"server": None, "port": None}):
                             mgmt = management[aer]
                 else:
                     mgmt = {}
+                    planting_doy = None
 
                     planting_col = int((lon - planting_ll0r["lon_0"]) / planting_ll0r["res"])
                     planting_row = int((planting_ll0r["lat_0"] - lat) / planting_ll0r["res"])
@@ -323,9 +324,10 @@ def run_producer(server={"server": None, "port": None}):
                     if 0 <= harvest_row < int(harvest_metadata["nrows"]) \
                             and 0 <= harvest_col < int(harvest_metadata["ncols"]):
                         harvest_doy = int(harvest_grid[harvest_row, harvest_col])
+                        harvest_next_year = planting_doy and harvest_doy < planting_doy
                         if harvest_doy != harvest_metadata["nodata_value"]:
                             d = date(2023, 1, 1) + timedelta(days=harvest_doy - 1)
-                            mgmt["Harvest date"] = f"0000-{d.month:02}-{d.day:02}"
+                            mgmt["Harvest date"] = f"000{1 if harvest_next_year else 0}-{d.month:02}-{d.day:02}"
 
                 valid_mgmt = False
                 if mgmt and shared.check_for_nill_dates(mgmt) and len(mgmt) > 1:
