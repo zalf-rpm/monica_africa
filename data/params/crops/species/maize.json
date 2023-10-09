@@ -78,7 +78,7 @@
 	"RootDistributionParam": 0.0035000001080334187,
 	"RootFormFactor": 3,
 	"RootGrowthLag": -30,
-	"RootPenetrationRate": 0.00129999995008111,
+	"RootPenetrationRate": 0.0007,
 	"SamplingDepth": 0.8999999761581421,
 	"SpeciesName": "maize",
 	"SpecificRootLength": 300,
