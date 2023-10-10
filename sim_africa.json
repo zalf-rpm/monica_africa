@@ -31,7 +31,7 @@
 				["Year", "FIRST"],
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
-				["ETa/ETc|ETa_ETc", "LAST"]
+				["TraDef", "AVG"]
 			]
 		]
 	},
