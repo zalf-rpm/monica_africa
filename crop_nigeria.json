@@ -7,8 +7,8 @@
         "species": {
           "=": ["include-from-file", "crops/species/maize.json"],
           "FieldConditionModifier": 0.95, 
-          "AssimilateReallocation": 0.0664559,
-          "RootPenetrationRate": 0.00144341
+          "_AssimilateReallocation": 0.0664559,
+          "_RootPenetrationRate": 0.00144341
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
@@ -16,7 +16,7 @@
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [70,300,250,220,270,360,30],
           "StageTemperatureSum": [70,270,250,220,210,280,25],
-          "MaxAssimilationRate": 42.6749
+          "_MaxAssimilationRate": 42.6749
         }
       },
       "residueParams": ["include-from-file", "crops/residues/maize.json"]
