@@ -11,7 +11,7 @@
           "_RootPenetrationRate": 0.00144341
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
+          "=": ["include-from-file", "crops/cultivars/grain-maize-nigeria.json"],
           "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [70,300,250,220,270,360,30],
@@ -29,7 +29,7 @@
           "FieldConditionModifier": 0.95
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/grain-maize.json"],
+          "=": ["include-from-file", "crops/cultivars/grain-maize-nigeria.json"],
           "CropSpecificMaxRootingDepth": 1.5,
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
