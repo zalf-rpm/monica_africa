@@ -76,7 +76,7 @@ def mgmt_date_to_rel_date(mgmt_date):
     elif month_short_name == "Dec":
         month_str = "12"
 
-    return "0000-" + month_str + "-" + day_str
+    return f"0000-{month_str}-{int(day_str):02}"
 
 
 class GlobalSoilDataSet:
