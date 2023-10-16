@@ -12,7 +12,7 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/grain-maize-nigeria.json"],
-          "CropSpecificMaxRootingDepth": 0.9,
+          "CropSpecificMaxRootingDepth": 0.4,
           "PlantDensity": 8.4,
           "_StageTemperatureSum": [70,300,250,220,270,360,30],
           "StageTemperatureSum": [70,270,250,220,210,280,25],
