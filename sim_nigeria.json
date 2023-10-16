@@ -32,7 +32,7 @@
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
 				["AbBiom", "LAST"],
-				["LAI", "LAST"]
+				["LAI", "MAX"]
 			]
 		]
 	},
