@@ -4,25 +4,25 @@
       "is-winter-crop": true,
       "cropParams": {
         "species": {
-          "=": ["include-from-file", "crops/species/maize.json"]
+          "=": ["include-from-file", "crops/species/maize_africa.json"]
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/grain-maize.json"]
+          "=": ["include-from-file", "crops/cultivars/grain-maize_africa.json"]
         }
       },
-      "residueParams": ["include-from-file", "crops/residues/maize.json"]
+      "residueParams": ["include-from-file", "crops/residues/maize_africa.json"]
     },
     "millet": {
       "is-winter-crop": true,
       "cropParams": {
         "species": {
-          "=": ["include-from-file", "crops/species/sorghum.json"]
+          "=": ["include-from-file", "crops/species/millet.json"]
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/sorghum.json"]
+          "=": ["include-from-file", "crops/cultivars/millet.json"]
         }
       },
-      "residueParams": ["include-from-file", "crops/residues/sorghum.json"]
+      "residueParams": ["include-from-file", "crops/residues/millet.json"]
     },
     "sorghum": {
       "is-winter-crop": true,
