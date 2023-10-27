@@ -337,6 +337,8 @@ def run_producer(server={"server": None, "port": None}):
                             ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Sowing date"])
                             if "Planting density" in mgmt:
                                 ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                        elif ws["type"] == "Harvest" and "Harvest date" in mgmt:
+                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
                             ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
@@ -402,12 +404,14 @@ def run_producer(server={"server": None, "port": None}):
                     sent_env_count += 1
                     continue
 
+                #opt_params = None
                 if optimized_params and (country_id, crop) in optimized_params:
                     ps = env_template["cropRotation"][0]["worksteps"][0]["crop"]["cropParams"]
                     params = optimized_params[(country_id, crop)]
                     ps["species"]["AssimilateReallocation"] = params["AssimilateReallocation"]
                     ps["species"]["RootPenetrationRate"] = params["RootPenetrationRate"]
                     ps["cultivar"]["MaxAssimilationRate"] = params["MaxAssimilationRate"]
+                    #opt_params = params
 
                 env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
                     "LeafExtensionModifier"]
@@ -480,7 +484,9 @@ def run_producer(server={"server": None, "port": None}):
                     "nitrogen": nitrogen,
                     "region": region,
                     "crop": crop,
-                    "nodata": False
+                    "nodata": False,
+                    "country_id": int(country_id),
+                    #"opt_params": opt_params
                 }
 
                 socket.send_json(env_template)
