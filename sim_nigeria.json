@@ -29,10 +29,17 @@
 			"crop", [
 				["CM-count", "FIRST"],
 				["Year", "LAST"],
+				["DOY|HarvDOY", "LAST"],
 				["Crop", "FIRST"],
 				["Yield", "LAST"],
 				["AbBiom", "LAST"],
 				["LAI", "MAX"]
+			],
+
+			{"while": ["Stage", "=", 2]}, [
+				["CM-count", "FIRST"],				
+				["Year", "LAST"],
+				["DOY|EmergDOY", "FIRST"]
 			]
 		]
 	},

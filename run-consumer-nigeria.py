@@ -120,6 +120,8 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
 
     def make_dict_nparr():
         return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=float))
+    def make_dict_nparr_int():
+        return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=int))
 
     output_grids = None
     if not is_daily:
@@ -127,6 +129,8 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
             "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
             "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
             "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "EmergDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
+            "HarvDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
             # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
