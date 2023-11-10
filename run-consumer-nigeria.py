@@ -545,7 +545,7 @@ NODATA_value -9999
             if is_nodata:
                 data["row_col_data"][row][col] = -9999
             else:
-                val= create_output(msg, True, 30) # limit daily output 30 days after sowing
+                val= create_output(msg, True) # limit daily output 30 days after sowing
                 data["row_col_data"][row][col].append(val[1])
             data["cols@row_received"][row] += 1
 
