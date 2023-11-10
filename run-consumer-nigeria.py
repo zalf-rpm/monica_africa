@@ -127,9 +127,9 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
     if not is_daily:
         output_grids = {
             "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "EmergDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
+            # "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "EmergDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
             "HarvDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
             # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
@@ -137,17 +137,19 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
         }
     else:
         output_grids = {
-            "Evapotranspiration": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "Evapotranspiration": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
             "Mois_0_10" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "Mois_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "Mois_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "Mois_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "rootDensity_0_10" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "rootDensity_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "rootDensity_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "rootDensity_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "rootingZone": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "EffRootDep": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "tavg" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "tmax" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "Mois_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "Mois_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "Mois_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "rootDensity_0_10" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "rootDensity_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "rootDensity_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "rootDensity_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "rootingZone": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            # "EffRootDep": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
         }
     
     output_keys = list(output_grids.keys())
