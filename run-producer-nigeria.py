@@ -316,6 +316,8 @@ def run_producer(server={"server": None, "port": None}):
                             ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Sowing date"])
                             if "Planting density" in mgmt:
                                 ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                        elif ws["type"] == "Harvest" and "Harvest date" in mgmt:
+                            ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
                             ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                         elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
