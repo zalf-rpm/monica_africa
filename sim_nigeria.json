@@ -26,6 +26,18 @@
 		"obj-outputs?": true,
 
 		"events": [
+			"year", [
+				["CM-count", "FIRST"],
+				["Year", "LAST"],
+				["Tmin|avg_tmin", "AVG"],
+				["Tmin|min_tmin", "MIN"],
+				["Tavg|avg_tavg", "AVG"],
+				["Tmax|avg_tmax", "AVG"],
+				["Tmax|max_tmax", "MAX"],
+				["Precip|sum_precip", "SUM"],
+				["Relhumid|avg_relhumid", "AVG"]
+			],
+
 			"crop", [
 				["CM-count", "FIRST"],
 				["Year", "LAST"],

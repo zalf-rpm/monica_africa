@@ -134,6 +134,14 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
             # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
             # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "min_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "avg_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "avg_tavg": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "max_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "avg_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "sum_precip": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            "avg_relhumid": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+            #"avg_globrad": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
         }
     else:
         output_grids = {
