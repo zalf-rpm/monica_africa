@@ -30,7 +30,7 @@ abs_imports = [str(PATH_TO_CAPNP_SCHEMAS)]
 fbp_capnp = capnp.load(str(PATH_TO_CAPNP_SCHEMAS / "fbp.capnp"), imports=abs_imports)
 
 class spot_setup(object):
-    def __init__(self, user_params, observations, prod_writer, cons_reader, path_to_out):
+    def __init__(self, user_params, observations, prod_writer, cons_reader, path_to_out, only_country_ids):
         self.user_params = user_params
         self.params = []
         self.observations = observations
@@ -38,6 +38,7 @@ class spot_setup(object):
         self.prod_writer = prod_writer
         self.cons_reader = cons_reader
         self.path_to_out_file = path_to_out + "/spot_setup.out"
+        self.only_country_ids = only_country_ids
 
         if not os.path.exists(path_to_out):
             try:
@@ -62,7 +63,9 @@ class spot_setup(object):
 
     def simulation(self, vector):
         # vector = MaxAssimilationRate, AssimilateReallocation, RootPenetrationRate
-        out_ip = fbp_capnp.IP.new_message(content=json.dumps(dict(zip(vector.name, vector))))
+        msg_content = dict(zip(vector.name, vector))
+        msg_content["only_country_ids"] = self.only_country_ids
+        out_ip = fbp_capnp.IP.new_message(content=json.dumps(msg_content))
         self.prod_writer.write(value=out_ip).wait()
         with open(self.path_to_out_file, "a") as _:
             _.write(f"{datetime.now()} sent params to monica setup: {vector}\n")
@@ -94,7 +97,7 @@ class spot_setup(object):
             #_.write(f"sim_list: {sim_list}\n")
             #_.write(f"obs_list: {self.obs_flat_list}\n")
         # besides the order the length of observation results and simulation results should be the same
-        assert(len(sim_list) == len(self.obs_flat_list))
+        assert len(sim_list) == len(self.obs_flat_list)
         return sim_list
 
     def evaluation(self):

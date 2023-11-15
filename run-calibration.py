@@ -64,10 +64,10 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         "run-setups": "[1]",
         "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel" if local_run else
         "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
-        "path_to_python": "python" if local_run else
-        "/home/rpm/.conda/envs/py39/bin/python",
-        "repetitions": "2",
+        "path_to_python": "python" if local_run else "/home/rpm/.conda/envs/py39/bin/python",
+        "repetitions": "500",
         "test_mode": "false",
+        "all_countries_one_by_one": True,
         "only_country_ids": "[5]",  # "[]",
     }
 
@@ -89,9 +89,6 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     cons_chan_data = get_reader_writer_srs_from_channel(config["path_to_channel"], "cons_chan")
     procs.append(cons_chan_data["chan"])
 
-    #for _ in range(20):
-    #    procs.append(sp.Popen([config["path_to_python"], "test_x.py"]))
-
     procs.append(sp.Popen([
         config["path_to_python"],
         "run-calibration-producer.py",
@@ -103,7 +100,6 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         f"reader_sr={prod_chan_data['reader_sr']}",
         f"test_mode={config['test_mode']}",
         f"path_to_out={config['path_to_out']}",
-        f"only_country_ids={config['only_country_ids']}"
     ]))
 
     procs.append(sp.Popen([
@@ -133,6 +129,15 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     # order obslist by exp_id to avoid mismatch between observation/evaluation lists
     for crop, obs in crop_to_observations.items():
         obs.sort(key=lambda r: [r["id"], r["year"]])
+
+    country_id_to_name = {}
+    with open("data/country_name_to_id.csv") as file:
+        dialect = csv.Sniffer().sniff(file.read(), delimiters=';,\t')
+        file.seek(0)
+        reader = csv.reader(file, dialect)
+        next(reader, None)  # skip the header
+        for row in reader:
+            country_id_to_name[int(row[1])] = row[0].strip()
 
     # read parameters which are to be calibrated
     params = []
@@ -166,80 +171,91 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     # configure MONICA setup for spotpy
     observations = crop_to_observations[setup["crop"]]
     only_country_ids = json.loads(config["only_country_ids"])
-    if len(only_country_ids) > 0:
-        observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
-    spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
-                                                            config["path_to_out"])
 
-    rep = int(config["repetitions"]) #initial number was 10
-    results = []
-    #Set up the sampler with the model above
-    sampler = spotpy.algorithms.sceua(spot_setup, dbname='SCEUA_monica_results', dbformat='csv')
+    for country_id, country_name in country_id_to_name.items():
 
-    #Run the sampler to produce the paranmeter distribution
-    #and identify optimal parameters based on objective function
-    #ngs = number of complexes
-    #kstop = max number of evolution loops before convergence
-    #peps = convergence criterion
-    #pcento = percent change allowed in kstop loops before convergence
-    sampler.sample(rep, ngs=len(params)*2, peps=0.001, pcento=0.001)
+        if config["all_countries_one_by_one"]:
+            only_country_ids = [country_id]
+            country_folder_name = str(country_id)
+        else:
+            country_folder_name = "all"
 
-    def print_status_final(self, stream):
-        print("\n*** Final SPOTPY summary ***")
-        print(
-            "Total Duration: "
-            + str(round((time.time() - self.starttime), 2))
-            + " seconds"
-        , file=stream)
-        print("Total Repetitions:", self.rep, file=stream)
+        if len(only_country_ids) > 0:
+            observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
+            if not config["all_countries_one_by_one"]:
+                country_folder_name = "-".join(map(str, only_country_ids))
+        spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
+                                                                config["path_to_out"], only_country_ids)
 
-        if self.optimization_direction == "minimize":
-            print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
-            print("Corresponding parameter setting:", file=stream)
-            for i in range(self.parameters):
-                text = "%s: %g" % (self.parnames[i], self.params_min[i])
-                print(text, file=stream)
+        rep = int(config["repetitions"]) #initial number was 10
+        results = []
+        #Set up the sampler with the model above
+        sampler = spotpy.algorithms.sceua(spot_setup, dbname="SCEUA_monica_results", dbformat="csv")
 
-        if self.optimization_direction == "maximize":
-            print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
-            print("Corresponding parameter setting:", file=stream)
-            for i in range(self.parameters):
-                text = "%s: %g" % (self.parnames[i], self.params_max[i])
-                print(text, file=stream)
+        #Run the sampler to produce the paranmeter distribution
+        #and identify optimal parameters based on objective function
+        #ngs = number of complexes
+        #kstop = max number of evolution loops before convergence
+        #peps = convergence criterion
+        #pcento = percent change allowed in kstop loops before convergence
+        sampler.sample(rep, ngs=len(params)*2, peps=0.001, pcento=0.001)
 
-        if self.optimization_direction == "grid":
-            print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
-            print("Corresponding parameter setting:", file=stream)
-            for i in range(self.parameters):
-                text = "%s: %g" % (self.parnames[i], self.params_min[i])
-                print(text, file=stream)
+        def print_status_final(self, stream):
+            print("\n*** Final SPOTPY summary ***")
+            print(
+                "Total Duration: "
+                + str(round((time.time() - self.starttime), 2))
+                + " seconds"
+            , file=stream)
+            print("Total Repetitions:", self.rep, file=stream)
 
-            print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
-            print("Corresponding parameter setting:", file=stream)
-            for i in range(self.parameters):
-                text = "%s: %g" % (self.parnames[i], self.params_max[i])
-                print(text, file=stream)
+            if self.optimization_direction == "minimize":
+                print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
+                print("Corresponding parameter setting:", file=stream)
+                for i in range(self.parameters):
+                    text = "%s: %g" % (self.parnames[i], self.params_min[i])
+                    print(text, file=stream)
 
-        print("******************************\n", file=stream)
+            if self.optimization_direction == "maximize":
+                print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
+                print("Corresponding parameter setting:", file=stream)
+                for i in range(self.parameters):
+                    text = "%s: %g" % (self.parnames[i], self.params_max[i])
+                    print(text, file=stream)
 
-    path_to_best_out_file = config["path_to_out"] + "/best.out"
-    with open(path_to_best_out_file, "a") as _:
-        print_status_final(sampler.status, _)
+            if self.optimization_direction == "grid":
+                print("Minimal objective value: %g" % (self.objectivefunction_min), file=stream)
+                print("Corresponding parameter setting:", file=stream)
+                for i in range(self.parameters):
+                    text = "%s: %g" % (self.parnames[i], self.params_min[i])
+                    print(text, file=stream)
 
-    #Extract the parameter samples from distribution
-    results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
+                print("Maximal objective value: %g" % (self.objectivefunction_max), file=stream)
+                print("Corresponding parameter setting:", file=stream)
+                for i in range(self.parameters):
+                    text = "%s: %g" % (self.parnames[i], self.params_max[i])
+                    print(text, file=stream)
 
-    # Plot how the objective function was minimized during sampling
-    #font = {"family": "calibri",
-    #        "weight": "normal",
-    #        "size": 18}
-    fig = plt.figure(1, figsize=(9, 6))
-    #plt.plot(results["like1"],  marker='o')
-    plt.plot(results["like1"], "r+")
-    plt.show()
-    plt.ylabel("RMSE")
-    plt.xlabel("Iteration")
-    fig.savefig(f"{config['path_to_out']}/SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
+            print("******************************\n", file=stream)
+
+        path_to_best_out_file = f"{config['path_to_out']}/{country_folder_name}/best.out"
+        with open(path_to_best_out_file, "a") as _:
+            print_status_final(sampler.status, _)
+
+        #Extract the parameter samples from distribution
+        results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
+
+        # Plot how the objective function was minimized during sampling
+        #font = {"family": "calibri",
+        #        "weight": "normal",
+        #        "size": 18}
+        fig = plt.figure(1, figsize=(9, 6))
+        #plt.plot(results["like1"],  marker='o')
+        plt.plot(results["like1"], "r+")
+        plt.show()
+        plt.ylabel("RMSE")
+        plt.xlabel("Iteration")
+        fig.savefig(f"{config['path_to_out']}/{country_folder_name}/SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
 
     # kill the two channels and the producer and consumer
     for proc in procs:

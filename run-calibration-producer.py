@@ -75,9 +75,6 @@ PATHS = {
     },
 }
 
-#height_data = shared.load_grid_cached(
-#    "/home/berg/GitHub/monica_africa/data/elevation_0.5deg_4326_wgs84_africa.asc", int)
-#height_nn = height_data["value"](1.779125, 23.941889, False)
 
 def run_producer(server=None, port=None):
     context = zmq.Context()
@@ -219,6 +216,9 @@ def run_producer(server=None, port=None):
                 in_ip = msg.value.as_struct(fbp_capnp.IP)
                 s: str = in_ip.content.as_text()
                 params = json.loads(s)  # keys: MaxAssimilationRate, AssimilateReallocation, RootPenetrationRate
+                if "only_country_ids" in params:
+                    only_country_ids = params["only_country_ids"]
+                    del params["only_country_ids"]
 
                 start_setup_time = time.perf_counter()
 
