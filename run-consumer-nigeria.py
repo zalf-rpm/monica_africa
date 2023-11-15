@@ -36,9 +36,6 @@ PATH_TO_PYTHON_CODE = "/mas-infrastructure/src/python"
 if PATH_TO_PYTHON_CODE not in sys.path:
     sys.path.insert(1, PATH_TO_PYTHON_CODE)
 
-#from pkgs.common import common
-from pkgs.model import monica_io3
-
 PATHS = {
     "mbm-local-remote": {
         "path-to-data-dir": "data/",
@@ -53,48 +50,17 @@ PATHS = {
 }
 
 
-def create_output(msg, processDaily=False,  maxDailyIndex=366):
+def create_output(msg):
     cm_count_to_vals = defaultdict(dict)
     date_to_vals = defaultdict(dict)
     for data in msg.get("data", []):
         results = data.get("results", [])
 
         is_daily_section = data.get("origSpec", "") == '"daily"'
-        if processDaily != is_daily_section:
-            continue
-        
-        allDates = list()
-        # scan the dates
-        for vals in results:
-            if is_daily_section:
-                if "Date" in vals and "Crop" in vals and vals["Crop"] != "" and "Year" in vals: # only write data if crop is not empty
-                    date = vals["Date"]
-                    # convert date string to datetime object
-                    date = datetime.strptime(date, '%Y-%m-%d')
-                    allDates.append(date)
-
-        # sort the dates
-        allDates.sort()
-        # convert all dates back to strings and store them in a dict with the year*1000 + index as value
-        allDatesDict = dict()
-        index = 0
-        currentYear = 0
-        for date in allDates:
-            year = date.year
-            if year != currentYear:
-                index = 0
-                currentYear = year
-            if index > maxDailyIndex: # limit daily output to a number of days after sowing
-                continue
-            allDatesDict[date.strftime('%Y-%m-%d')] = year*1000 + index
-            index += 1            
 
         for vals in results:
             if "CM-count" in vals:
                 cm_count_to_vals[vals["CM-count"]].update(vals)
-            elif is_daily_section:
-                if "Date" in vals and vals["Date"] in allDatesDict: # only write data if date is in allDatesDict
-                    date_to_vals[allDatesDict[vals["Date"]]].update(vals) # use the year*1000 + index as key
 
     if len(cm_count_to_vals) > 0:
         cmcs = list(cm_count_to_vals.keys())
@@ -106,60 +72,37 @@ def create_output(msg, processDaily=False,  maxDailyIndex=366):
     return cm_count_to_vals, date_to_vals
 
 
-def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, setup_id, is_daily=False):
-    "write grids row by row"
+def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, setup_id):
+    """write grids row by row"""
 
-    if is_daily:
-        if not hasattr(write_row_to_grids, "nodata_row_count_daily"):
-            write_row_to_grids.nodata_row_count_daily = defaultdict(lambda: 0)
-            write_row_to_grids.list_of_output_files_daily = defaultdict(list)
-    else :
-        if not hasattr(write_row_to_grids, "nodata_row_count"):
-            write_row_to_grids.nodata_row_count = defaultdict(lambda: 0)
-            write_row_to_grids.list_of_output_files = defaultdict(list)
+    if not hasattr(write_row_to_grids, "nodata_row_count"):
+        write_row_to_grids.nodata_row_count = defaultdict(lambda: 0)
+        write_row_to_grids.list_of_output_files = defaultdict(list)
 
     def make_dict_nparr():
         return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=float))
     def make_dict_nparr_int():
         return defaultdict(lambda: np.full((no_of_cols,), -9999, dtype=int))
 
-    output_grids = None
-    if not is_daily:
-        output_grids = {
-            "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "EmergDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
-            "HarvDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
-            # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "min_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "avg_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "avg_tavg": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "max_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "avg_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "sum_precip": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "avg_relhumid": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            #"avg_globrad": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-        }
-    else:
-        output_grids = {
-            # "Evapotranspiration": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "Mois_0_10" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "tavg" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            "tmax" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "Mois_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "Mois_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "Mois_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "rootDensity_0_10" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "rootDensity_10_20" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "rootDensity_20_30" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "rootDensity_30_40" : {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "rootingZone": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-            # "EffRootDep": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
-        }
-    
+    output_grids = {
+        "Yield": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        # "AbBiom": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        # "LAI": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        # "EmergDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
+        "HarvDOY": {"data": make_dict_nparr_int(), "cast-to": "int"},
+        # "tradefavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+        # "heatredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+        # "frostredavg": {"data" : make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "min_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "avg_tmin": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "avg_tavg": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "max_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "avg_tmax": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "sum_precip": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        "avg_relhumid": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+        #"avg_globrad": {"data": make_dict_nparr(), "cast-to": "float", "digits": 2},
+    }
+
     output_keys = list(output_grids.keys())
 
     cmc_to_crop = {}
@@ -199,7 +142,7 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
                                 # if a key is missing, because that monica event was never raised/reached, create the empty list
                                 # so a no-data value is being produced
                                 else:
-                                    cmc_and_year_to_vals[(cm_count, data["Year"])][key]
+                                    cmc_and_year_to_vals[(cm_count, data["Year"])][key] = []
 
                     # potentially aggregate multiple data per cell and finally store them for this row
                     for (cm_count, year), key_to_vals in cmc_and_year_to_vals.items():
@@ -213,20 +156,12 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
         is_no_data_row = no_data_cols == no_of_cols
 
     if is_no_data_row:
-        if is_daily:
-            write_row_to_grids.nodata_row_count_daily[setup_id] += 1
-        else:
-            write_row_to_grids.nodata_row_count[setup_id] += 1
+        write_row_to_grids.nodata_row_count[setup_id] += 1
 
     def write_nodata_rows(file_):
-        if is_daily:
-            for _ in range(write_row_to_grids.nodata_row_count_daily[setup_id]):
-                rowstr = " ".join(["-9999" for __ in range(no_of_cols)])
-                file_.write(rowstr + "\n")
-        else :
-            for _ in range(write_row_to_grids.nodata_row_count[setup_id]):
-                rowstr = " ".join(["-9999" for __ in range(no_of_cols)])
-                file_.write(rowstr + "\n")
+        for _ in range(write_row_to_grids.nodata_row_count[setup_id]):
+            rowstr = " ".join(["-9999" for __ in range(no_of_cols)])
+            file_.write(rowstr + "\n")
 
     # iterate over all prepared data for a single row and write row
     for key, y2d_ in output_grids.items():
@@ -241,19 +176,12 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
         for (cm_count, year), row_arr in y2d.items():
             crop = cmc_to_crop[cm_count] if cm_count in cmc_to_crop else "none"
             crop = crop.replace("/", "").replace(" ", "")
-            if is_daily:
-                timeFromSowing = int(cm_count)- int(year)*1000
-                path_to_file = path_to_output_dir + crop + "_" + key + "_" + str(year) + "_" + str(timeFromSowing) + "_daily.asc"
-            else:
-                path_to_file = path_to_output_dir + crop + "_" + key + "_" + str(year) + "_" + str(cm_count) + ".asc"
+            path_to_file = path_to_output_dir + crop + "_" + key + "_" + str(year) + "_" + str(cm_count) + ".asc"
 
             if not os.path.isfile(path_to_file):
                 with open(path_to_file, "w") as _:
                     _.write(header)
-                    if is_daily:
-                        write_row_to_grids.list_of_output_files_daily[setup_id].append(path_to_file)
-                    else:
-                        write_row_to_grids.list_of_output_files[setup_id].append(path_to_file)
+                    write_row_to_grids.list_of_output_files[setup_id].append(path_to_file)
 
             with open(path_to_file, "a") as file_:
                 write_nodata_rows(file_)
@@ -262,30 +190,18 @@ def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_out
 
     # clear the no-data row count when no-data rows have been written before a data row
     if not is_no_data_row:
-        if is_daily:
-            write_row_to_grids.nodata_row_count_daily[setup_id] = 0
-        else:
-            write_row_to_grids.nodata_row_count[setup_id] = 0
+        write_row_to_grids.nodata_row_count[setup_id] = 0
 
     # if we're at the end of the output and just empty lines are left, then they won't be written in the
     # above manner because there won't be any rows with data where they could be written before
     # so add no-data rows simply to all files we've written to before
-    if not is_daily:
-        if is_no_data_row \
-                and write_row_to_grids.list_of_output_files[setup_id] \
-                and write_row_to_grids.nodata_row_count[setup_id] > 0:
-            for path_to_file in write_row_to_grids.list_of_output_files[setup_id]:
-                with open(path_to_file, "a") as file_:
-                    write_nodata_rows(file_)
-            write_row_to_grids.nodata_row_count[setup_id] = 0
-    else :
-        if is_no_data_row \
-                and write_row_to_grids.list_of_output_files_daily[setup_id] \
-                and write_row_to_grids.nodata_row_count_daily[setup_id] > 0:
-            for path_to_file in write_row_to_grids.list_of_output_files_daily[setup_id]:
-                with open(path_to_file, "a") as file_:
-                    write_nodata_rows(file_)
-            write_row_to_grids.nodata_row_count_daily[setup_id] = 0
+    if is_no_data_row \
+            and write_row_to_grids.list_of_output_files[setup_id] \
+            and write_row_to_grids.nodata_row_count[setup_id] > 0:
+        for path_to_file in write_row_to_grids.list_of_output_files[setup_id]:
+            with open(path_to_file, "a") as file_:
+                write_nodata_rows(file_)
+        write_row_to_grids.nodata_row_count[setup_id] = 0
 
     if row in row_col_data:
         del row_col_data[row]
@@ -316,9 +232,6 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
     socket.connect("tcp://" + config["server"] + ":" + config["port"])
     socket.RCVTIMEO = config["timeout"]
     leave = False
-    write_csv = False
-    write_crop_maps = True
-    write_daily_maps = True
 
     setup_id_to_data = defaultdict(lambda: {
         "header": None,
@@ -329,16 +242,6 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "cols@row_received": {},
         "next_row": None
     })
-    setup_daily_to_data = defaultdict(lambda: {
-        "header": None,
-        "no_of_cols": None,
-        "no_of_rows": None,
-        "out_dir_exists": False,
-        "row_col_data": defaultdict(lambda: defaultdict(list)),
-        "cols@row_received": {},
-        "next_row": None
-    })
-
 
     def process_message(msg):
         if len(msg["errors"]) > 0:
@@ -352,249 +255,86 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         leave = False
 
         hasProcessedSetup = False
-        if write_crop_maps:
-            custom_id = msg["customId"]
-            setup_id = custom_id["setup_id"]
-            region = custom_id["region"]
-            planting = custom_id["planting"]
-            nitrogen = custom_id["nitrogen"]
-            crop = custom_id["crop"]
+        custom_id = msg["customId"]
+        setup_id = custom_id["setup_id"]
+        region = custom_id["region"]
+        planting = custom_id["planting"]
+        nitrogen = custom_id["nitrogen"]
+        crop = custom_id["crop"]
 
-            data = setup_id_to_data[setup_id]
+        data = setup_id_to_data[setup_id]
 
-            row = custom_id["s_row"]
-            col = custom_id["s_col"]
-            no_of_cols = custom_id["no_of_s_cols"]
-            no_of_rows = custom_id["no_of_s_rows"]
-            row_0 = custom_id["s_row_0"]
-            col_0 = custom_id["s_col_0"]
-            if row not in data["cols@row_received"]:
-                data["cols@row_received"][row] = 0
-            if data["next_row"] is None:
-                data["next_row"] = row_0
-            if data["header"] is None:
-                data["header"] = f"""ncols        {no_of_cols}
+        row = custom_id["s_row"]
+        col = custom_id["s_col"]
+        no_of_cols = custom_id["no_of_s_cols"]
+        no_of_rows = custom_id["no_of_s_rows"]
+        row_0 = custom_id["s_row_0"]
+        col_0 = custom_id["s_col_0"]
+        if row not in data["cols@row_received"]:
+            data["cols@row_received"][row] = 0
+        if data["next_row"] is None:
+            data["next_row"] = row_0
+        if data["header"] is None:
+            data["header"] = \
+f"""\
+ncols        {no_of_cols}
 nrows        {no_of_rows}
 xllcorner    {custom_id["b_lon_0"]}
 yllcorner    {custom_id["b_lat_0"] - (no_of_rows * custom_id["s_resolution"])}
 cellsize     {custom_id["s_resolution"]}
 NODATA_value -9999
 """
-            is_nodata = custom_id["nodata"]
+        is_nodata = custom_id["nodata"]
 
-            debug_msg = "received work result " + str(process_message.received_env_count) \
-                        + " customId: " + str(msg.get("customId", "")) \
-                        + " next row: " + str(data["next_row"]) \
-                        + " cols@row to go: " + str(no_of_cols - data["cols@row_received"][row]) + "@" \
-                        + str(row) + " cols_per_row: " + str(no_of_cols)
-            print(debug_msg)
-            # debug_file.write(debug_msg + "\n")
-            if is_nodata:
-                data["row_col_data"][row][col] = -9999
-            else:
-                val= create_output(msg)
-                data["row_col_data"][row][col].append(val[0])
-            data["cols@row_received"][row] += 1
+        debug_msg = "received work result " + str(process_message.received_env_count) \
+                    + " customId: " + str(msg.get("customId", "")) \
+                    + " next row: " + str(data["next_row"]) \
+                    + " cols@row to go: " + str(no_of_cols - data["cols@row_received"][row]) + "@" \
+                    + str(row) + " cols_per_row: " + str(no_of_cols)
+        print(debug_msg)
+        # debug_file.write(debug_msg + "\n")
+        if is_nodata:
+            data["row_col_data"][row][col] = -9999
+        else:
+            val = create_output(msg)
+            data["row_col_data"][row][col].append(val[0])
+        data["cols@row_received"][row] += 1
 
-            #process_message.received_env_count = process_message.received_env_count + 1
+        #process_message.received_env_count = process_message.received_env_count + 1
 
-            while (data["next_row"] in data["row_col_data"] and
-                   data["cols@row_received"][data["next_row"]] == no_of_cols):   #\
-                    #or (len(data["cols@row_received"]) > data["next_row"] and
-                    #    data["cols@row_received"][data["next_row"]] == 0):
+        while (data["next_row"] in data["row_col_data"] and
+               data["cols@row_received"][data["next_row"]] == no_of_cols):   #\
+                #or (len(data["cols@row_received"]) > data["next_row"] and
+                #    data["cols@row_received"][data["next_row"]] == 0):
 
-                path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
-                print(path_to_out_dir)
-                if not data["out_dir_exists"]:
-                    if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
-                        data["out_dir_exists"] = True
-                    else:
-                        try:
-                            os.makedirs(path_to_out_dir)
-                            data["out_dir_exists"] = True
-                        except OSError:
-                            print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
-                            exit(1)
-
-                write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
-                                   path_to_out_dir, setup_id)
-
-                debug_msg = "wrote row: " + str(data["next_row"]) \
-                            + " next_row: " + str(data["next_row"] + 1) \
-                            + " rows unwritten: " + str(list(data["row_col_data"].keys()))
-                print(debug_msg)
-                # debug_file.write(debug_msg + "\n")
-
-                data["next_row"] += 1  # move to next row (to be written)
-
-                # this setup is finished
-                if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
-                    if not hasProcessedSetup:
-                        process_message.setup_count += 1
-
-        elif write_csv:
-
-            if msg.get("type", "") in ["jobs-per-cell", "no-data", "setup_data"]:
-                # print "ignoring", result.get("type", "")
-                return
-
-            # print("received work result ", process_message.received_env_count, " customId: ",
-            #       str(msg.get("customId", "")))
-
-            custom_id = msg["customId"]
-            setup_id = custom_id["setup_id"]
-            region = custom_id["region"]
-            planting = custom_id["planting"]
-            nitrogen = custom_id["nitrogen"]
-            crop = custom_id["crop"]
-
-            data = setup_daily_to_data[setup_id]
-
-            row = custom_id["s_row"]
-            col = custom_id["s_col"]
-            no_of_cols = custom_id["no_of_s_cols"]
-            no_of_rows = custom_id["no_of_s_rows"]
-            row_0 = custom_id["s_row_0"]
-            col_0 = custom_id["s_col_0"]
-
-
-            debug_msg = "received work result " + str(process_message.received_env_count) \
-                        + " customId: " + str(msg.get("customId", "")) \
-                        + str(row) + " cols_per_row: " + str(no_of_cols)
-            print(debug_msg)
-
-            # crow = custom_id.get("crow", -1)
-            # ccol = custom_id.get("ccol", -1)
-            # soil_id = custom_id.get("soil_id", -1)
-
-            process_message.wnof_count += 1
-
-            # check if result exists
-            if len(msg.get("data", [])) == 0:
-                print("no data for customId:", custom_id)
-                return
-            path_to_out_dir = config["out"] + str(setup_id) + "/" + str(row) + "/"
+            path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
             print(path_to_out_dir)
-            if not os.path.exists(path_to_out_dir):
-                try:
-                    os.makedirs(path_to_out_dir)
-                except OSError:
-                    print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
-                    exit(1)
+            if not data["out_dir_exists"]:
+                if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
+                    data["out_dir_exists"] = True
+                else:
+                    try:
+                        os.makedirs(path_to_out_dir)
+                        data["out_dir_exists"] = True
+                    except OSError:
+                        print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
+                        exit(1)
 
-            # with open("out/out-" + str(i) + ".csv", 'wb') as _:
-            with open(path_to_out_dir + "col-" + str(col) + ".csv", "w", newline='') as _:
+            write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
+                               path_to_out_dir, setup_id)
 
-                writer = csv.writer(_, delimiter=",")
-                for data_ in msg.get("data", []):
-                    if len(data_) == 0:
-                        continue
-                    if "results" not in data_:
-                        # check if error
-                        if "error" in data_:
-                            print("error in data:", data_["error"])
-                            continue
-
-                    results = data_.get("results", [])
-                    orig_spec = data_.get("origSpec", "")
-                    output_ids = data_.get("outputIds", [])
-
-
-                    if len(results) > 0:
-                        writer.writerow([orig_spec.replace("\"", "")])
-                        for row in monica_io3.write_output_header_rows(output_ids,
-                                                                       include_header_row=True,
-                                                                       include_units_row=True,
-                                                                       include_time_agg=False):
-                            writer.writerow(row)
-
-
-                            for row in monica_io3.write_output(output_ids, results):
-                                writer.writerow(row)
-
-                    writer.writerow([])
-
-        
-        if write_daily_maps:
-            custom_id = msg["customId"]
-            setup_id = custom_id["setup_id"]
-            region = custom_id["region"]
-            planting = custom_id["planting"]
-            nitrogen = custom_id["nitrogen"]
-            crop = custom_id["crop"]
-
-            data = setup_daily_to_data[setup_id]
-
-            row = custom_id["s_row"]
-            col = custom_id["s_col"]
-            no_of_cols = custom_id["no_of_s_cols"]
-            no_of_rows = custom_id["no_of_s_rows"]
-            row_0 = custom_id["s_row_0"]
-            col_0 = custom_id["s_col_0"]
-            if row not in data["cols@row_received"]:
-                data["cols@row_received"][row] = 0
-            if data["next_row"] is None:
-                data["next_row"] = row_0
-            if data["header"] is None:
-                data["header"] = f"""ncols        {no_of_cols}
-nrows        {no_of_rows}
-xllcorner    {custom_id["b_lon_0"]}
-yllcorner    {custom_id["b_lat_0"] - (no_of_rows * custom_id["s_resolution"])}
-cellsize     {custom_id["s_resolution"]}
-NODATA_value -9999
-"""
-            is_nodata = custom_id["nodata"]
-
-            debug_msg = "received work result " + str(process_message.received_env_count) \
-                        + " customId: " + str(msg.get("customId", "")) \
-                        + " next row: " + str(data["next_row"]) \
-                        + " cols@row to go: " + str(no_of_cols - data["cols@row_received"][row]) + "@" \
-                        + str(row) + " cols_per_row: " + str(no_of_cols)
+            debug_msg = "wrote row: " + str(data["next_row"]) \
+                        + " next_row: " + str(data["next_row"] + 1) \
+                        + " rows unwritten: " + str(list(data["row_col_data"].keys()))
             print(debug_msg)
             # debug_file.write(debug_msg + "\n")
-            if is_nodata:
-                data["row_col_data"][row][col] = -9999
-            else:
-                val= create_output(msg, True) # limit daily output 30 days after sowing
-                data["row_col_data"][row][col].append(val[1])
-            data["cols@row_received"][row] += 1
 
-            #process_message.received_env_count = process_message.received_env_count + 1
+            data["next_row"] += 1  # move to next row (to be written)
 
-            while (data["next_row"] in data["row_col_data"] and
-                   data["cols@row_received"][data["next_row"]] == no_of_cols):   #\
-                    #or (len(data["cols@row_received"]) > data["next_row"] and
-                    #    data["cols@row_received"][data["next_row"]] == 0):
-
-                path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
-                print(path_to_out_dir)
-                if not data["out_dir_exists"]:
-                    if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
-                        data["out_dir_exists"] = True
-                    else:
-                        try:
-                            os.makedirs(path_to_out_dir)
-                            data["out_dir_exists"] = True
-                        except OSError:
-                            print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
-                            exit(1)
-
-                write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
-                                   path_to_out_dir, setup_id, is_daily=True)
-
-                debug_msg = "wrote row: " + str(data["next_row"]) \
-                            + " next_row: " + str(data["next_row"] + 1) \
-                            + " rows unwritten: " + str(list(data["row_col_data"].keys()))
-                print(debug_msg)
-                # debug_file.write(debug_msg + "\n")
-
-                data["next_row"] += 1  # move to next row (to be written)
-
-                # this setup is finished
-                if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
-                    if not hasProcessedSetup:
-                        process_message.setup_count += 1
-
+            # this setup is finished
+            if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
+                if not hasProcessedSetup:
+                    process_message.setup_count += 1
 
         process_message.received_env_count = process_message.received_env_count + 1
         return leave
