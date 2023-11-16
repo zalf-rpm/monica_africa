@@ -52,11 +52,8 @@ PATHS = {
 
 def create_output(msg):
     cm_count_to_vals = defaultdict(dict)
-    date_to_vals = defaultdict(dict)
     for data in msg.get("data", []):
         results = data.get("results", [])
-
-        is_daily_section = data.get("origSpec", "") == '"daily"'
 
         for vals in results:
             if "CM-count" in vals:
@@ -69,7 +66,7 @@ def create_output(msg):
         if "Year" not in cm_count_to_vals[last_cmc]:
             cm_count_to_vals.pop(last_cmc)
 
-    return cm_count_to_vals, date_to_vals
+    return cm_count_to_vals
 
 
 def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, setup_id):
@@ -254,7 +251,6 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
 
         leave = False
 
-        hasProcessedSetup = False
         custom_id = msg["customId"]
         setup_id = custom_id["setup_id"]
         region = custom_id["region"]
@@ -296,8 +292,7 @@ NODATA_value -9999
         if is_nodata:
             data["row_col_data"][row][col] = -9999
         else:
-            val = create_output(msg)
-            data["row_col_data"][row][col].append(val[0])
+            data["row_col_data"][row][col].append(create_output(msg))
         data["cols@row_received"][row] += 1
 
         #process_message.received_env_count = process_message.received_env_count + 1
@@ -333,10 +328,9 @@ NODATA_value -9999
 
             # this setup is finished
             if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
-                if not hasProcessedSetup:
-                    process_message.setup_count += 1
+                process_message.setup_count += 1
 
-        process_message.received_env_count = process_message.received_env_count + 1
+        process_message.received_env_count += 1
         return leave
 
     process_message.received_env_count = 1
