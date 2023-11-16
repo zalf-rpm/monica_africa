@@ -238,7 +238,14 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
             print("******************************\n", file=stream)
 
-        path_to_best_out_file = f"{config['path_to_out']}/{country_folder_name}/best.out"
+        path_to_out_folder = f"{config['path_to_out']}/{country_folder_name}"
+        if not os.path.exists(path_to_out_folder):
+            try:
+                os.makedirs(path_to_out_folder)
+            except OSError:
+                print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
+
+        path_to_best_out_file = f"{path_to_out_folder}/best.out"
         with open(path_to_best_out_file, "a") as _:
             print_status_final(sampler.status, _)
 
@@ -255,7 +262,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         plt.show()
         plt.ylabel("RMSE")
         plt.xlabel("Iteration")
-        fig.savefig(f"{config['path_to_out']}/{country_folder_name}/SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
+        fig.savefig(f"{path_to_out_folder}/SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
 
     # kill the two channels and the producer and consumer
     for proc in procs:
