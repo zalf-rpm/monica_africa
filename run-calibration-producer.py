@@ -175,7 +175,6 @@ def run_producer(server=None, port=None):
                     if i < layer_depth:
                         layer_depth = i
                     break
-                    #return None
         layer_depth -= 1
 
         if layer_depth < 4:
@@ -362,6 +361,8 @@ def run_producer(server=None, port=None):
                                     ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Sowing date"])
                                     if "Planting density" in mgmt:
                                         ws["PlantDensity"] = [float(mgmt["Planting density"]), "plants/m2"]
+                                elif ws["type"] == "Harvest" and "Harvest date" in mgmt:
+                                    ws["date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                                 elif ws["type"] == "AutomaticHarvest" and "Harvest date" in mgmt:
                                     ws["latest-date"] = shared.mgmt_date_to_rel_date(mgmt["Harvest date"])
                                 elif ws["type"] == "Tillage" and "Tillage date" in mgmt:
@@ -393,7 +394,7 @@ def run_producer(server=None, port=None):
                             slope = 0
 
                         soil_profile = create_soil_profile(s_row, s_col)
-                        if not soil_profile:
+                        if len(soil_profile) == 0:
                             continue
 
                         env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
@@ -481,7 +482,8 @@ def run_producer(server=None, port=None):
             if env_template:
                 env_template["pathToClimateCSV"] = ""
                 env_template["customId"] = {
-                    "no_of_sent_envs": sent_env_count
+                    "no_of_sent_envs": sent_env_count,
+                    "nodata": True
                 }
                 socket.send_json(env_template)
 

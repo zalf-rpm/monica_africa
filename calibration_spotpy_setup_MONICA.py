@@ -58,6 +58,10 @@ class spot_setup(object):
             if "derive_function" not in par:  # spotpy does not care about derived params
                 self.params.append(spotpy.parameter.Uniform(**par))
 
+    def __del__(self):
+        print("deleted object")
+
+
     def parameters(self):
         return spotpy.parameter.generate(self.params)
 

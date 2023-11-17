@@ -86,23 +86,27 @@ def run_consumer(server=None, port=None):
         try:
             msg: dict = socket.recv_json()  # encoding="latin-1"
 
-            custom_id = msg["customId"]
-            if "no_of_sent_envs" in custom_id:
-                no_of_envs_expected = custom_id["no_of_sent_envs"]
+            if len(msg["errors"]) == 0:
+                custom_id = msg["customId"]
+                if "no_of_sent_envs" in custom_id:
+                    no_of_envs_expected = custom_id["no_of_sent_envs"]
+                else:
+                    envs_received += 1
+
+                    #with open(path_to_out_file, "a") as _:
+                    #    _.write(f"received result customId: {custom_id}\n")
+                    #print("received result customId:", custom_id)
+
+                    country_id = custom_id["country_id"]
+
+                    for data in msg.get("data", []):
+                        results = data.get("results", [])
+                        for vals in results:
+                            if "Year" in vals:
+                                country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
             else:
-                envs_received += 1
-
-                #with open(path_to_out_file, "a") as _:
-                #    _.write(f"received result customId: {custom_id}\n")
-                #print("received result customId:", custom_id)
-
-                country_id = custom_id["country_id"]
-
-                for data in msg.get("data", []):
-                    results = data.get("results", [])
-                    for vals in results:
-                        if "Year" in vals:
-                            country_id_to_year_to_yields[country_id][int(vals["Year"])].append(vals["Yield"])
+                print("errors:", msg["errors"])
+                no_of_envs_expected = 0
 
             if no_of_envs_expected == envs_received and writer:
                 with open(path_to_out_file, "a") as _:

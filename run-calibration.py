@@ -47,7 +47,7 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
-local_run = False
+local_run = True
 
 
 def run_calibration(server=None, prod_port=None, cons_port=None):
@@ -65,7 +65,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         "path_to_channel": "/home/berg/GitHub/mas-infrastructure/src/cpp/common/_cmake_debug/channel" if local_run else
         "/home/rpm/start_manual_test_services/GitHub/mas-infrastructure/src/cpp/common/_cmake_release/channel",
         "path_to_python": "python" if local_run else "/home/rpm/.conda/envs/py39/bin/python",
-        "repetitions": "500",
+        "repetitions": "2",
         "test_mode": "false",
         "all_countries_one_by_one": True,
         "only_country_ids": "[5]",  # "[]",
@@ -172,6 +172,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     observations = crop_to_observations[setup["crop"]]
     only_country_ids = json.loads(config["only_country_ids"])
 
+    spot_setup = None
     for country_id, country_name in country_id_to_name.items():
 
         if config["all_countries_one_by_one"]:
@@ -184,6 +185,8 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
             observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
             if not config["all_countries_one_by_one"]:
                 country_folder_name = "-".join(map(str, only_country_ids))
+        if spot_setup:
+            del spot_setup
         spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
                                                                 config["path_to_out"], only_country_ids)
 
@@ -238,14 +241,14 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
             print("******************************\n", file=stream)
 
-        path_to_out_folder = f"{config['path_to_out']}/{country_folder_name}"
+        path_to_out_folder = f"{config['path_to_out']}"  #/{country_folder_name}"
         if not os.path.exists(path_to_out_folder):
             try:
                 os.makedirs(path_to_out_folder)
             except OSError:
                 print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
 
-        path_to_best_out_file = f"{path_to_out_folder}/best.out"
+        path_to_best_out_file = f"{path_to_out_folder}/{country_folder_name}_best.out"
         with open(path_to_best_out_file, "a") as _:
             print_status_final(sampler.status, _)
 
@@ -262,7 +265,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         plt.show()
         plt.ylabel("RMSE")
         plt.xlabel("Iteration")
-        fig.savefig(f"{path_to_out_folder}/SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
+        fig.savefig(f"{path_to_out_folder}/{country_folder_name}_SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
 
     # kill the two channels and the producer and consumer
     for proc in procs:
