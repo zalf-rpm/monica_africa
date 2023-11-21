@@ -20,6 +20,8 @@ from datetime import datetime
 import json
 import os
 from pathlib import Path
+
+import numpy as np
 import spotpy
 import re
 
@@ -57,10 +59,6 @@ class spot_setup(object):
                     par_name += "_" + par["array"]  # spotpy does not allow two parameters to have the same name
             if "derive_function" not in par:  # spotpy does not care about derived params
                 self.params.append(spotpy.parameter.Uniform(**par))
-
-    def __del__(self):
-        print("deleted object")
-
 
     def parameters(self):
         return spotpy.parameter.generate(self.params)
@@ -102,10 +100,13 @@ class spot_setup(object):
             #_.write(f"obs_list: {self.obs_flat_list}\n")
         # besides the order the length of observation results and simulation results should be the same
         assert len(sim_list) == len(self.obs_flat_list)
-        return sim_list
+        return sim_list if len(sim_list) > 0 else None
 
     def evaluation(self):
         return self.obs_flat_list
 
     def objectivefunction(self, simulation, evaluation):
-        return spotpy.objectivefunctions.rmse(evaluation, simulation)
+        if not simulation or len(simulation) != len(evaluation) or len(simulation) == 0 or len(evaluation) == 0:
+            return np.nan
+        else:
+            return spotpy.objectivefunctions.rmse(evaluation, simulation)

@@ -47,7 +47,7 @@ def get_reader_writer_srs_from_channel(path_to_channel_binary, chan_name=None):
     return {"chan": chan, "reader_sr": reader_sr, "writer_sr": writer_sr}
 
 
-local_run = True
+local_run = False
 
 
 def run_calibration(server=None, prod_port=None, cons_port=None):
@@ -68,7 +68,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         "repetitions": "2",
         "test_mode": "false",
         "all_countries_one_by_one": True,
-        "only_country_ids": "[5]",  # "[]",
+        "only_country_ids": "[12]",  # "[]",
     }
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -172,23 +172,24 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     observations = crop_to_observations[setup["crop"]]
     only_country_ids = json.loads(config["only_country_ids"])
 
+    to_be_run_only_country_ids = []
+    if config["all_countries_one_by_one"]:
+        to_be_run_only_country_ids = list([id] for id in sorted(country_id_to_name.keys()))
+    else:
+        to_be_run_only_country_ids = [only_country_ids]
+
     spot_setup = None
-    for country_id, country_name in country_id_to_name.items():
-
-        if config["all_countries_one_by_one"]:
-            only_country_ids = [country_id]
-            country_folder_name = str(country_id)
-        else:
-            country_folder_name = "all"
-
+    for current_only_country_ids in to_be_run_only_country_ids:
+        country_folder_name = "-".join(map(str, current_only_country_ids))
+        filtered_observations = observations
         if len(only_country_ids) > 0:
-            observations = list(filter(lambda d: d["id"] in only_country_ids, observations))
-            if not config["all_countries_one_by_one"]:
-                country_folder_name = "-".join(map(str, only_country_ids))
+            filtered_observations = list(filter(lambda d: d["id"] in current_only_country_ids, observations))
+            if len(filtered_observations) == 0:
+                continue
         if spot_setup:
             del spot_setup
-        spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, observations, prod_writer, cons_reader,
-                                                                config["path_to_out"], only_country_ids)
+        spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, filtered_observations, prod_writer, cons_reader,
+                                                                config["path_to_out"], current_only_country_ids)
 
         rep = int(config["repetitions"]) #initial number was 10
         results = []

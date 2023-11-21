@@ -394,7 +394,7 @@ def run_producer(server=None, port=None):
                             slope = 0
 
                         soil_profile = create_soil_profile(s_row, s_col)
-                        if len(soil_profile) == 0:
+                        if not soil_profile or len(soil_profile) == 0:
                             continue
 
                         env_template["params"]["userCropParameters"]["__enable_T_response_leaf_expansion__"] = setup[
@@ -476,7 +476,8 @@ def run_producer(server=None, port=None):
                 with open(path_to_out_file, "a") as _:
                     _.write(f"raised exception: {e}\n")
                 #print("Exception raised:", e)
-                pass
+                raise e
+            #    pass
 
             # send a last message will be just forwarded by monica to signify last
             if env_template:
