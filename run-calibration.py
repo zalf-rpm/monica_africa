@@ -194,7 +194,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         rep = int(config["repetitions"]) #initial number was 10
         results = []
         #Set up the sampler with the model above
-        sampler = spotpy.algorithms.sceua(spot_setup, dbname="SCEUA_monica_results", dbformat="csv")
+        sampler = spotpy.algorithms.sceua(spot_setup, dbname=f"{country_folder_name}_SCEUA_monica_results", dbformat="csv")
 
         #Run the sampler to produce the paranmeter distribution
         #and identify optimal parameters based on objective function
@@ -254,7 +254,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
             print_status_final(sampler.status, _)
 
         #Extract the parameter samples from distribution
-        results = spotpy.analyser.load_csv_results("SCEUA_monica_results")
+        results = spotpy.analyser.load_csv_results(f"{country_folder_name}_SCEUA_monica_results")
 
         # Plot how the objective function was minimized during sampling
         #font = {"family": "calibri",
