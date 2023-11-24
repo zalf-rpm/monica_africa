@@ -178,6 +178,13 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     else:
         to_be_run_only_country_ids = [only_country_ids]
 
+    path_to_out_folder = f"{config['path_to_out']}"
+    if not os.path.exists(path_to_out_folder):
+        try:
+            os.makedirs(path_to_out_folder)
+        except OSError:
+            print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
+
     spot_setup = None
     for current_only_country_ids in to_be_run_only_country_ids:
         country_folder_name = "-".join(map(str, current_only_country_ids))
@@ -194,7 +201,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         rep = int(config["repetitions"]) #initial number was 10
         results = []
         #Set up the sampler with the model above
-        sampler = spotpy.algorithms.sceua(spot_setup, dbname=f"{country_folder_name}_SCEUA_monica_results", dbformat="csv")
+        sampler = spotpy.algorithms.sceua(spot_setup, dbname=f"{path_to_out_folder}/{country_folder_name}_SCEUA_monica_results", dbformat="csv")
 
         #Run the sampler to produce the paranmeter distribution
         #and identify optimal parameters based on objective function
@@ -242,19 +249,13 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
             print("******************************\n", file=stream)
 
-        path_to_out_folder = f"{config['path_to_out']}"  #/{country_folder_name}"
-        if not os.path.exists(path_to_out_folder):
-            try:
-                os.makedirs(path_to_out_folder)
-            except OSError:
-                print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
 
         path_to_best_out_file = f"{path_to_out_folder}/{country_folder_name}_best.out"
         with open(path_to_best_out_file, "a") as _:
             print_status_final(sampler.status, _)
 
         #Extract the parameter samples from distribution
-        results = spotpy.analyser.load_csv_results(f"{country_folder_name}_SCEUA_monica_results")
+        results = spotpy.analyser.load_csv_results(f"{path_to_out_folder}/{country_folder_name}_SCEUA_monica_results")
 
         # Plot how the objective function was minimized during sampling
         #font = {"family": "calibri",
@@ -268,6 +269,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         plt.xlabel("Iteration")
         fig.savefig(f"{path_to_out_folder}/{country_folder_name}_SCEUA_objectivefunctiontrace_MONICA.png", dpi=150)
 
+        del results
     # kill the two channels and the producer and consumer
     for proc in procs:
         proc.terminate()
