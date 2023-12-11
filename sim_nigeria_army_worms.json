@@ -26,21 +26,23 @@
 		"obj-outputs?": true,
 
 		"events": [
+			"crop", [
+				["CM-count", "FIRST"],
+				["Year|year", "LAST"],
+				["Crop|crop", "FIRST"],
+				["Yield", "LAST"],
+				["DOY|sowing_doy", "FIRST"],
+				["DOY|harvest_doy", "LAST"]
+			],
 
 			"daily", [
 				"Date", 
-				"Crop", 
-				"Year",
-				["Mois|Mois_0_10", [1, 1]],
-				["tavg"],
-				["tmax"]
-			],
-			"crop", [
-				["CM-count", "FIRST"],
-				["Year", "LAST"],
-				["Crop", "FIRST"],
-				["Yield", "LAST"],
-				["DOY|HarvDOY", "LAST"]
+				"Crop|crop",
+				"Year|year",
+				"CM-count",
+				["Mois|sm_0-10", 1],
+				"Tmax|tmax",
+				"Tmin|tmin"
 			]
 		]
 
