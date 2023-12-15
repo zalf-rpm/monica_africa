@@ -85,6 +85,9 @@ def calculate_index_data(msg):
         "hot": 0,
     })
 
+    all_years = set()
+    all_cm_counts = set()
+
     for data in msg.get("data", []):
         results = data.get("results", [])
 
@@ -93,14 +96,16 @@ def calculate_index_data(msg):
 
         days_in_window = 0
         for vals in results:
-            if "CM-count" not in vals:
+            if "CM-count" not in vals or "year" not in vals:
                 continue
 
             if is_crop_section:
+                all_cm_counts.add(vals["CM-count"])
                 cm_count_to_season_info[vals["CM-count"]]["year"] = vals["year"]
                 cm_count_to_season_info[vals["CM-count"]]["sowing_doy"] = vals["sowing_doy"]
                 cm_count_to_season_info[vals["CM-count"]]["harvest_doy"] = vals["harvest_doy"]
             elif is_daily_section:
+                all_years.add(vals["year"])
                 date = datetime.fromisoformat(vals["Date"])
                 doy = date.timetuple().tm_yday
                 s_doy = cm_count_to_season_info[vals["CM-count"]]["sowing_doy"]
@@ -121,13 +126,13 @@ def calculate_index_data(msg):
                         year_to_worm_index_info[year]["worm_index"] += 1./7.
                     if days_in_window >= 7 and year_to_worm_index_info[year]["year"] is None:
                         year_to_worm_index_info[year]["year"] = year
-                        year_to_worm_index_info[year]["crop"] = vals["crop"]
+                        year_to_worm_index_info[year]["crop"] = "none"
 
                     if s_doy <= doy <= h_doy:
                         cmc = vals["CM-count"]
                         if days_in_window == 7:
                             cm_count_to_worm_index_info[cmc]["worm_index"] += 1
-                            cm_count_to_worm_index_info[year]["window_count"] += 1
+                            cm_count_to_worm_index_info[cmc]["window_count"] += 1
                         elif days_in_window > 7:
                             cm_count_to_worm_index_info[cmc]["worm_index"] += 1./7.
                         if days_in_window >= 7 and cm_count_to_worm_index_info[cmc]["year"] is None:
@@ -179,6 +184,14 @@ def calculate_index_data(msg):
             cm_count_to_vals[cmc].update(i)
         else:
             cm_count_to_vals[cmc] = i
+
+    # fill in years and cm_counts which produced no data
+    for cmc in all_cm_counts:
+        if cmc not in cm_count_to_vals:
+            cm_count_to_vals[cmc] = {"year": cm_count_to_season_info[cmc]["year"]}
+    for year in all_years:
+        if year not in cm_count_to_vals:
+            cm_count_to_vals[year] = {"year": year}
 
     return cm_count_to_vals
 

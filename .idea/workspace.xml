@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="wrong slope file name">
+    <list default="true" id="138f35ac-3a38-43f4-8ba9-1ccaf1fdcc16" name="Changes" comment="move sceua db into out folder">
+      <change afterPath="$PROJECT_DIR$/create_image_from_ascii_army_worms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../mas-infrastructure/src/python/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/../mas-infrastructure/src/python/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-calibration-africa.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-calibration.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-calibration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-calibration_micheal.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-consumer-nigeria.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-producer-nigeria.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/run-producer.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sim_setups_nigeria.csv" beforeDir="false" afterPath="$PROJECT_DIR$/sim_setups_nigeria.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run-producer-nigeria.py" beforeDir="false" afterPath="$PROJECT_DIR$/run-producer-nigeria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_consumer_nigeria_army_worms.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_consumer_nigeria_army_worms.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,82 +61,43 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.create_image_from_ascii_army_worms.executor": "Debug",
+    "Python.flush-queue.executor": "Debug",
+    "Python.run-producer-nigeria.executor": "Debug",
+    "Python.run_consumer_nigeria_army_worms.executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/berg/GitHub/monica_africa/run-producer-nigeria.py",
+    "last_opened_file_path": "/home/berg/GitHub/monica_africa",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PythonContentEntriesConfigurable",
-    "two.files.diff.last.used.file": "/home/berg/GitHub/monica_africa/run-producer-nigeria.py",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.Mappings",
+    "two.files.diff.last.used.file": "/home/berg/GitHub/monica_africa/data/params/crops/cultivars/sorghum.json",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/out" />
-      <recent name="$PROJECT_DIR$/flow_components" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/data/params/crops/residues" />
+      <recent name="$PROJECT_DIR$/data/params/crops/species" />
       <recent name="$PROJECT_DIR$/data/params/crops/cultivars" />
+      <recent name="$PROJECT_DIR$/data/params/crops/residues" />
+      <recent name="$PROJECT_DIR$/data" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\projects\KlimErtrag\scripts" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="run-consumer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="klimertrag" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run-consumer.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="run-producer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="klimertrag" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run-producer.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.run-producer" />
-        <item itemvalue="Python.run-consumer" />
-      </list>
-    </recent_temporary>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-7a29c1521ef0-c986f194a52a-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.11799.298" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -197,7 +157,22 @@
       <workItem from="1692349596622" duration="52014000" />
       <workItem from="1692805377684" duration="17580000" />
       <workItem from="1692965296484" duration="45752000" />
-      <workItem from="1694020386794" duration="17585000" />
+      <workItem from="1694020386794" duration="21394000" />
+      <workItem from="1694621448466" duration="85000" />
+      <workItem from="1694621543828" duration="6543000" />
+      <workItem from="1694778577783" duration="30473000" />
+      <workItem from="1696926693423" duration="1016000" />
+      <workItem from="1697100077668" duration="566000" />
+      <workItem from="1697100872675" duration="9732000" />
+      <workItem from="1697470711501" duration="115000" />
+      <workItem from="1697470846734" duration="37113000" />
+      <workItem from="1698833601072" duration="5193000" />
+      <workItem from="1699294047050" duration="598000" />
+      <workItem from="1699950158348" duration="22499000" />
+      <workItem from="1700215269927" duration="1141000" />
+      <workItem from="1700216423958" duration="25436000" />
+      <workItem from="1701974310858" duration="11262000" />
+      <workItem from="1702556528149" duration="13106000" />
     </task>
     <task id="LOCAL-00001" summary="Add analysis scripts and necessary reference data">
       <created>1641577973292</created>
@@ -261,190 +236,6 @@
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
       <updated>1686930062269</updated>
-    </task>
-    <task id="LOCAL-00036" summary="initial tests for calibration work locally">
-      <option name="closed" value="true" />
-      <created>1692725252165</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1692725252165</updated>
-    </task>
-    <task id="LOCAL-00037" summary="test">
-      <option name="closed" value="true" />
-      <created>1692777872083</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1692777872083</updated>
-    </task>
-    <task id="LOCAL-00038" summary="test">
-      <option name="closed" value="true" />
-      <created>1692780382348</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1692780382348</updated>
-    </task>
-    <task id="LOCAL-00039" summary="test">
-      <option name="closed" value="true" />
-      <created>1692780628644</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1692780628644</updated>
-    </task>
-    <task id="LOCAL-00040" summary="test">
-      <option name="closed" value="true" />
-      <created>1692780831663</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1692780831663</updated>
-    </task>
-    <task id="LOCAL-00041" summary="test">
-      <option name="closed" value="true" />
-      <created>1692781115574</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1692781115574</updated>
-    </task>
-    <task id="LOCAL-00042" summary="some cleanup">
-      <option name="closed" value="true" />
-      <created>1692783022479</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1692783022479</updated>
-    </task>
-    <task id="LOCAL-00043" summary="cleanup for real test">
-      <option name="closed" value="true" />
-      <created>1692790100904</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1692790100904</updated>
-    </task>
-    <task id="LOCAL-00044" summary="cleanup for real test">
-      <option name="closed" value="true" />
-      <created>1692792267768</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1692792267768</updated>
-    </task>
-    <task id="LOCAL-00045" summary="cleanup for real test">
-      <option name="closed" value="true" />
-      <created>1692792384031</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1692792384031</updated>
-    </task>
-    <task id="LOCAL-00046" summary="cleanup for real test">
-      <option name="closed" value="true" />
-      <created>1692792395289</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1692792395289</updated>
-    </task>
-    <task id="LOCAL-00047" summary="cleanup for real test">
-      <option name="closed" value="true" />
-      <created>1692800414530</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1692800414530</updated>
-    </task>
-    <task id="LOCAL-00048" summary="adjusted sim results to available observations">
-      <option name="closed" value="true" />
-      <created>1692804857673</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1692804857674</updated>
-    </task>
-    <task id="LOCAL-00049" summary="added flow component for getting grid values">
-      <option name="closed" value="true" />
-      <created>1692812901461</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1692812901461</updated>
-    </task>
-    <task id="LOCAL-00050" summary="fix for test run">
-      <option name="closed" value="true" />
-      <created>1692863635612</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1692863635613</updated>
-    </task>
-    <task id="LOCAL-00051" summary="further refactoring for test runs">
-      <option name="closed" value="true" />
-      <created>1692884553257</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1692884553257</updated>
-    </task>
-    <task id="LOCAL-00052" summary="further refactoring for test runs">
-      <option name="closed" value="true" />
-      <created>1692965225187</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1692965225187</updated>
-    </task>
-    <task id="LOCAL-00053" summary="further refactoring for test runs">
-      <option name="closed" value="true" />
-      <created>1692967301353</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1692967301354</updated>
-    </task>
-    <task id="LOCAL-00054" summary="more debug output to get full calibration runs working">
-      <option name="closed" value="true" />
-      <created>1693311001617</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1693311001617</updated>
-    </task>
-    <task id="LOCAL-00055" summary="more debug output to get full calibration runs working">
-      <option name="closed" value="true" />
-      <created>1693311176286</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1693311176286</updated>
-    </task>
-    <task id="LOCAL-00056" summary="more debug output to get full calibration runs working">
-      <option name="closed" value="true" />
-      <created>1693312312781</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1693312312781</updated>
-    </task>
-    <task id="LOCAL-00057" summary="more debug output to get full calibration runs working">
-      <option name="closed" value="true" />
-      <created>1693312721626</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1693312721626</updated>
-    </task>
-    <task id="LOCAL-00058" summary="more debug output to get full calibration runs working">
-      <option name="closed" value="true" />
-      <created>1693384116197</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1693384116197</updated>
     </task>
     <task id="LOCAL-00059" summary="more debug output to get full calibration runs working">
       <option name="closed" value="true" />
@@ -582,7 +373,191 @@
       <option name="project" value="LOCAL" />
       <updated>1694605648928</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="clean up of repo and nigeria works in africa repo again">
+      <option name="closed" value="true" />
+      <created>1694611434395</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1694611434395</updated>
+    </task>
+    <task id="LOCAL-00077" summary="copy and rename of consumer/producer for africa and nigeria to prevent future problems">
+      <option name="closed" value="true" />
+      <created>1694614809414</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1694614809414</updated>
+    </task>
+    <task id="LOCAL-00078" summary="test">
+      <option name="closed" value="true" />
+      <created>1694691489107</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1694691489107</updated>
+    </task>
+    <task id="LOCAL-00079" summary="added a storage organ to sorghum&#10;-&gt; just to get it running, might be the wrong one!!!">
+      <option name="closed" value="true" />
+      <created>1694796077468</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1694796077469</updated>
+    </task>
+    <task id="LOCAL-00080" summary="added field condition modifier to HaskePotato in crop file">
+      <option name="closed" value="true" />
+      <created>1695034546266</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1695034546266</updated>
+    </task>
+    <task id="LOCAL-00081" summary="copy of eco region data for maize">
+      <option name="closed" value="true" />
+      <created>1695034852306</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1695034852306</updated>
+    </task>
+    <task id="LOCAL-00082" summary="added option to run africa with optimized params">
+      <option name="closed" value="true" />
+      <created>1695144209429</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1695144209429</updated>
+    </task>
+    <task id="LOCAL-00083" summary="test to check use of dummy optimized params for run-id 1">
+      <option name="closed" value="true" />
+      <created>1695144524237</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1695144524238</updated>
+    </task>
+    <task id="LOCAL-00084" summary="fixed potential problem when a date didn't use two digits">
+      <option name="closed" value="true" />
+      <created>1697473909548</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1697473909548</updated>
+    </task>
+    <task id="LOCAL-00085" summary="added africa version of maize and ...&#10;... copy of maize as sorghum and millet&#10;-&gt; the maize_africa is taken from the default maize in monica-parameters so needs to be parameterized">
+      <option name="closed" value="true" />
+      <created>1698408847455</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1698408847456</updated>
+    </task>
+    <task id="LOCAL-00086" summary="use africa maize and own millet files ...&#10;... which are just a copy of maize">
+      <option name="closed" value="true" />
+      <created>1698408885171</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1698408885172</updated>
+    </task>
+    <task id="LOCAL-00087" summary="fixed bug, where harvest dates weren't updated ...&#10;... only automatic harvest dates">
+      <option name="closed" value="true" />
+      <created>1698408947376</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1698408947376</updated>
+    </task>
+    <task id="LOCAL-00088" summary="forgot to commit millet cultivar params">
+      <option name="closed" value="true" />
+      <created>1698409008688</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1698409008689</updated>
+    </task>
+    <task id="LOCAL-00089" summary="create maps for some climate data">
+      <option name="closed" value="true" />
+      <created>1699975492379</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1699975492380</updated>
+    </task>
+    <task id="LOCAL-00090" summary="fix: year should have been yearly">
+      <option name="closed" value="true" />
+      <created>1699978397503</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1699978397503</updated>
+    </task>
+    <task id="LOCAL-00091" summary="africa calibration which should ...&#10;... calibrate each country automatically">
+      <option name="closed" value="true" />
+      <created>1700072215723</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1700072215723</updated>
+    </task>
+    <task id="LOCAL-00092" summary="cleanup trying to find problem">
+      <option name="closed" value="true" />
+      <created>1700072630533</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1700072630533</updated>
+    </task>
+    <task id="LOCAL-00093" summary="create folders if not existing">
+      <option name="closed" value="true" />
+      <created>1700139683294</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1700139683294</updated>
+    </task>
+    <task id="LOCAL-00094" summary="fixed bug wrong header name in setups file ...&#10;... and cleanup left over code in consumer">
+      <option name="closed" value="true" />
+      <created>1700140344988</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1700140344989</updated>
+    </task>
+    <task id="LOCAL-00095" summary="dev dump -&gt; getting automated calibration ...&#10;... for all countries to work&#10;-&gt; monica zmq server has to be fixed for that">
+      <option name="closed" value="true" />
+      <created>1700236212998</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1700236212998</updated>
+    </task>
+    <task id="LOCAL-00096" summary="calibration setup should work now ...&#10;... and calibrate all countries automatically for selected setup">
+      <option name="closed" value="true" />
+      <created>1700577170646</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1700577170647</updated>
+    </task>
+    <task id="LOCAL-00097" summary="one spotpy results db per country&#10;... as using one for all countries seams or might merge all results">
+      <option name="closed" value="true" />
+      <created>1700670317382</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1700670317382</updated>
+    </task>
+    <task id="LOCAL-00098" summary="move sceua db into out folder">
+      <option name="closed" value="true" />
+      <created>1700843415727</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1700843415727</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -614,78 +589,110 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add analysis scripts and necessary reference data" />
-    <MESSAGE value="Add script for final plots of report" />
-    <MESSAGE value="added files for management and dem and slope for all of africa" />
-    <MESSAGE value="africa setup somewhat works" />
-    <MESSAGE value="Update sim_setups_africa.csv" />
-    <MESSAGE value="starting adding code for calibration" />
-    <MESSAGE value="initial tests for calibration work locally" />
-    <MESSAGE value="some cleanup" />
-    <MESSAGE value="Merge branch 'main' of https://github.com/zalf-rpm/monica_africa" />
-    <MESSAGE value="cleanup for real test" />
-    <MESSAGE value="adjusted sim results to available observations" />
-    <MESSAGE value="added flow component for getting grid values" />
-    <MESSAGE value="fix for test run" />
-    <MESSAGE value="further refactoring and fixes for test runs" />
-    <MESSAGE value="further refactoring for test runs" />
-    <MESSAGE value="more debug output to get full calibration runs working" />
-    <MESSAGE value="test" />
-    <MESSAGE value="fixed bug when consumer couldn't finish on received no of jobs" />
-    <MESSAGE value="dev dump" />
-    <MESSAGE value="fix for using it with hpc Start Monica Project New" />
-    <MESSAGE value="removed pkgs.common from these files because capnp is missing in singularity image used for running python" />
-    <MESSAGE value="missing column in test entry" />
     <MESSAGE value="furter fix for getting nigeria back working" />
     <MESSAGE value="wrong slope file name" />
-    <option name="LAST_COMMIT_MESSAGE" value="wrong slope file name" />
+    <MESSAGE value="clean up of repo and nigeria works in africa repo again" />
+    <MESSAGE value="copy and rename of consumer/producer for africa and nigeria to prevent future problems" />
+    <MESSAGE value="test" />
+    <MESSAGE value="added a storage organ to sorghum&#10;-&gt; just to get it running, might be the wrong one!!!" />
+    <MESSAGE value="added field condition modifier to HaskePotato in crop file" />
+    <MESSAGE value="copy of eco region data for maize" />
+    <MESSAGE value="added option to run africa with optimized params" />
+    <MESSAGE value="test to check use of dummy optimized params for run-id 1" />
+    <MESSAGE value="fixed potential problem when a date didn't use two digits" />
+    <MESSAGE value="added africa version of maize and ...&#10;... copy of maize as sorghum and millet&#10;-&gt; the maize_africa is taken from the default maize in monica-parameters so needs to be parameterized" />
+    <MESSAGE value="use africa maize and own millet files ...&#10;... which are just a copy of maize" />
+    <MESSAGE value="fixed bug, where harvest dates weren't updated ...&#10;... only automatic harvest dates" />
+    <MESSAGE value="forgot to commit millet cultivar params" />
+    <MESSAGE value="create maps for some climate data" />
+    <MESSAGE value="fix: year should have been yearly" />
+    <MESSAGE value="africa calibration which should ...&#10;... calibrate each country automatically" />
+    <MESSAGE value="cleanup trying to find problem" />
+    <MESSAGE value="create folders if not existing" />
+    <MESSAGE value="fixed bug wrong header name in setups file ...&#10;... and cleanup left over code in consumer" />
+    <MESSAGE value="dev dump -&gt; getting automated calibration ...&#10;... for all countries to work&#10;-&gt; monica zmq server has to be fixed for that" />
+    <MESSAGE value="calibration setup should work now ...&#10;... and calibrate all countries automatically for selected setup" />
+    <MESSAGE value="one spotpy results db per country&#10;... as using one for all countries seams or might merge all results" />
+    <MESSAGE value="move sceua db into out folder" />
+    <option name="LAST_COMMIT_MESSAGE" value="move sceua db into out folder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run-calibration.py</url>
-          <line>187</line>
-          <option name="timeStamp" value="11" />
+          <url>file://$PROJECT_DIR$/shared.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/run-calibration-consumer.py</url>
-          <line>100</line>
-          <option name="timeStamp" value="12" />
+          <url>file://$PROJECT_DIR$/run-consumer-nigeria.py</url>
+          <line>294</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run-producer-africa.py</url>
+          <line>332</line>
+          <option name="timeStamp" value="90" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/create_image_from_ascii_army_worms.py</url>
+          <line>57</line>
+          <option name="timeStamp" value="118" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/run_consumer_nigeria_army_worms.py</url>
+          <line>195</line>
+          <option name="timeStamp" value="121" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/run_consumer_nigeria_army_worms.py" line="297">
+        <watch expression="path_to_file" />
+      </inline-watch>
+      <inline-watch fileUrl="file://$PROJECT_DIR$/run_consumer_nigeria_army_worms.py" line="285">
+        <watch expression="key" />
+      </inline-watch>
+    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/monica_africa$run_calibration_producer.coverage" NAME="run-calibration-producer Coverage Results" MODIFIED="1693313465884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1692270678067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/monica_africa$flush_queue.coverage" NAME="flush-queue Coverage Results" MODIFIED="1694534563788" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/monica_africa$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1694611029422" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_results.coverage" NAME="05_plot_results Coverage Results" MODIFIED="1647537897438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$parameter.coverage" NAME="parameter Coverage Results" MODIFIED="1692287394896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/miniconda3/lib/python3.9/site-packages/spotpy" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$post_process.coverage" NAME="post_process Coverage Results" MODIFIED="1688130909041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$plot_book_chapter_map.coverage" NAME="plot_book_chapter_map Coverage Results" MODIFIED="1643034535583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$common.coverage" NAME="common Coverage Results" MODIFIED="1692283726805" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/common" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$create_image_from_ascii.coverage" NAME="create_image_from_ascii Coverage Results" MODIFIED="1688131178299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_final.coverage" NAME="run-consumer_final Coverage Results" MODIFIED="1641900202962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations.coverage" NAME="01_compare_simulation_and_observations Coverage Results" MODIFIED="1647424341475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration_consumer.coverage" NAME="run-calibration-consumer Coverage Results" MODIFIED="1692627229802" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$prepare_input_files.coverage" NAME="prepare_input_files Coverage Results" MODIFIED="1645540979552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_plot_final_calibration_figures.coverage" NAME="01_plot_final_calibration_figures Coverage Results" MODIFIED="1648741551358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AgoraNatura/agora_natura/result_analysis" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1692270653965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/monica_africa$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1694611033828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_clemens_local.coverage" NAME="run-producer_clemens_local Coverage Results" MODIFIED="1643792315236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$dummy.coverage" NAME="dummy Coverage Results" MODIFIED="1647616452099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$calibration_spotpy_setup_MONICA.coverage" NAME="calibration_spotpy_setup_MONICA Coverage Results" MODIFIED="1692620048737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_producer_nigeria.coverage" NAME="run-producer-nigeria Coverage Results" MODIFIED="1702664811262" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$flush_queue.coverage" NAME="flush-queue Coverage Results" MODIFIED="1691665073842" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$06_plot_final_calibration_figures.coverage" NAME="06_plot_final_calibration_figures Coverage Results" MODIFIED="1647863270409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
-    <SUITE FILE_PATH="coverage/monica_africa$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1694535016131" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$reformat_output.coverage" NAME="reformat_output Coverage Results" MODIFIED="1645625904623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_final_maps_and_figures.coverage" NAME="05_plot_final_maps_and_figures Coverage Results" MODIFIED="1647614666353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
-    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1692792176861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations.coverage" NAME="01_compare_simulation_and_observations Coverage Results" MODIFIED="1647424341475" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_compare_simulation_and_observations__1_.coverage" NAME="01_compare_simulation_and_observations (1) Coverage Results" MODIFIED="1642161896630" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/phenology_calibration_dwd" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1692792176861" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$monica_run_lib.coverage" NAME="monica_run_lib Coverage Results" MODIFIED="1695140979712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1694611033828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$reformat_output.coverage" NAME="reformat_output Coverage Results" MODIFIED="1645625904623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_consumer_africa.coverage" NAME="run-consumer-africa Coverage Results" MODIFIED="1698073165197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration_producer.coverage" NAME="run-calibration-producer Coverage Results" MODIFIED="1692627224512" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$common.coverage" NAME="common Coverage Results" MODIFIED="1692283726805" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/common" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$01_plot_final_calibration_figures.coverage" NAME="01_plot_final_calibration_figures Coverage Results" MODIFIED="1648741551358" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/AgoraNatura/agora_natura/result_analysis" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_final_local.coverage" NAME="run-producer_final_local Coverage Results" MODIFIED="1643790703511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$calibration_spotpy_setup_MONICA.coverage" NAME="calibration_spotpy_setup_MONICA Coverage Results" MODIFIED="1692620048737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$prepare_input_files.coverage" NAME="prepare_input_files Coverage Results" MODIFIED="1645540979552" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts/simulations_jki" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer_clemens_local.coverage" NAME="run-producer_clemens_local Coverage Results" MODIFIED="1643792315236" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_final_maps_and_figures.coverage" NAME="05_plot_final_maps_and_figures Coverage Results" MODIFIED="1647614666353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_calibration_producer.coverage" NAME="run-calibration-producer Coverage Results" MODIFIED="1700484457172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_calibration.coverage" NAME="run-calibration Coverage Results" MODIFIED="1700489797815" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_consumer_nigeria.coverage" NAME="run-consumer-nigeria Coverage Results" MODIFIED="1700139965426" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_consumer_nigeria_army_worms.coverage" NAME="run_consumer_nigeria_army_worms Coverage Results" MODIFIED="1702664809120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$flush_queue.coverage" NAME="flush-queue Coverage Results" MODIFIED="1702653539511" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_final.coverage" NAME="run-consumer_final Coverage Results" MODIFIED="1641900202962" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$post_process.coverage" NAME="post_process Coverage Results" MODIFIED="1688130909041" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_producer_africa.coverage" NAME="run-producer-africa Coverage Results" MODIFIED="1698073172164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1692270678067" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer_clemens_local.coverage" NAME="run-consumer_clemens_local Coverage Results" MODIFIED="1643792268465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$create_image_from_ascii_army_worms.coverage" NAME="create_image_from_ascii_army_worms Coverage Results" MODIFIED="1702660799792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_producer.coverage" NAME="run-producer Coverage Results" MODIFIED="1694613440032" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$05_plot_results.coverage" NAME="05_plot_results Coverage Results" MODIFIED="1647537897438" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$dummy.coverage" NAME="dummy Coverage Results" MODIFIED="1647616452099" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
+    <SUITE FILE_PATH="coverage/monica_africa$run_calibration_consumer.coverage" NAME="run-calibration-consumer Coverage Results" MODIFIED="1700214883000" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$parameter.coverage" NAME="parameter Coverage Results" MODIFIED="1692287394896" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/miniconda3/lib/python3.9/site-packages/spotpy" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$06_plot_final_calibration_figures.coverage" NAME="06_plot_final_calibration_figures Coverage Results" MODIFIED="1647863270409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/result_analysis/analyse_final_grid_outputs" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$plot_book_chapter_map.coverage" NAME="plot_book_chapter_map Coverage Results" MODIFIED="1643034535583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../scripts" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_consumer.coverage" NAME="run-consumer Coverage Results" MODIFIED="1692270653965" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$run_calibration_consumer.coverage" NAME="run-calibration-consumer Coverage Results" MODIFIED="1692627229802" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/00_draw_sample_from_mask_py$create_image_from_ascii.coverage" NAME="create_image_from_ascii Coverage Results" MODIFIED="1688131178299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
