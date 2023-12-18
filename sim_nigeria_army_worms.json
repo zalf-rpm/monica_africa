@@ -42,7 +42,8 @@
 				"CM-count",
 				["Mois|sm_0-10", 1],
 				"Tmax|tmax",
-				"Tmin|tmin"
+				"Tmin|tmin",
+				"Tavg|tavg"
 			]
 		]
 

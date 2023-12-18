@@ -52,13 +52,13 @@ DEFAULT_DPI_PNG = 300
 PROJECTION = "3035"  # epsg code
 
 
-def build():
+def build(source_path=None, output_path=None, generate_pdf=False):
     """main"""
 
     pathId = USER
-    sourceFolder = ""
-    outputFolder = ""
-    generatePDF = False
+    sourceFolder = source_path
+    outputFolder = output_path
+    generatePDF = generate_pdf
     png_dpi = DEFAULT_DPI_PNG
     projection = PROJECTION
     if len(sys.argv) > 1 and __name__ == "__main__":

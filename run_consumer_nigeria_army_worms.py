@@ -56,6 +56,7 @@ PATHS = {
 def calculate_index_data(msg):
     year_to_worm_index_info = defaultdict(lambda: {
         "year": None,
+        "crop": "none",
         "worm_index": 0,
         "window_count": 0,
     })
@@ -85,8 +86,8 @@ def calculate_index_data(msg):
         "hot": 0,
     })
 
-    all_years = set()
-    all_cm_counts = set()
+    #all_years = set()
+    #all_cm_counts = set()
 
     for data in msg.get("data", []):
         results = data.get("results", [])
@@ -100,12 +101,12 @@ def calculate_index_data(msg):
                 continue
 
             if is_crop_section:
-                all_cm_counts.add(vals["CM-count"])
+                #all_cm_counts.add(vals["CM-count"])
                 cm_count_to_season_info[vals["CM-count"]]["year"] = vals["year"]
                 cm_count_to_season_info[vals["CM-count"]]["sowing_doy"] = vals["sowing_doy"]
                 cm_count_to_season_info[vals["CM-count"]]["harvest_doy"] = vals["harvest_doy"]
             elif is_daily_section:
-                all_years.add(vals["year"])
+                #all_years.add(vals["year"])
                 date = datetime.fromisoformat(vals["Date"])
                 doy = date.timetuple().tm_yday
                 s_doy = cm_count_to_season_info[vals["CM-count"]]["sowing_doy"]
@@ -114,62 +115,71 @@ def calculate_index_data(msg):
                 sm = vals["sm_0-10"][0]
                 tmin = vals["tmin"]
                 tmax = vals["tmax"]
+                tavg = vals["tavg"]
+                year = vals["year"]
+                cmc = vals["CM-count"]
+                crop = vals.get("crop", "none")
+
+                wii_year = year_to_worm_index_info[year]
+                if wii_year["year"] is None:
+                    wii_year["year"] = vals["year"]
+                wii_cmc = cm_count_to_worm_index_info[cmc]
+                if wii_cmc["year"] is None:
+                    wii_cmc["year"] = vals["year"]
+                if wii_cmc["crop"] is None and len(crop) > 0:
+                    wii_cmc["crop"] = crop
+                stresses_cmc = cm_count_to_stresses[cmc]
+                if stresses_cmc["year"] is None:
+                    stresses_cmc["year"] = vals["year"]
+                if stresses_cmc["crop"] is None and len(crop) > 0:
+                    stresses_cmc["crop"] = crop
 
                 # breeding condition met
                 if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
                     days_in_window += 1
-                    year = vals["year"]
+
                     if days_in_window == 7:
-                        year_to_worm_index_info[year]["worm_index"] += 1
-                        year_to_worm_index_info[year]["window_count"] += 1
+                        wii_year["worm_index"] += 1
+                        wii_year["window_count"] += 1
                     elif days_in_window > 7:
-                        year_to_worm_index_info[year]["worm_index"] += 1./7.
-                    if days_in_window >= 7 and year_to_worm_index_info[year]["year"] is None:
-                        year_to_worm_index_info[year]["year"] = year
-                        year_to_worm_index_info[year]["crop"] = "none"
+                        wii_year["worm_index"] += 1./7.
 
                     if s_doy <= doy <= h_doy:
-                        cmc = vals["CM-count"]
                         if days_in_window == 7:
-                            cm_count_to_worm_index_info[cmc]["worm_index"] += 1
-                            cm_count_to_worm_index_info[cmc]["window_count"] += 1
+                            wii_cmc["worm_index"] += 1
+                            wii_cmc["window_count"] += 1
                         elif days_in_window > 7:
-                            cm_count_to_worm_index_info[cmc]["worm_index"] += 1./7.
-                        if days_in_window >= 7 and cm_count_to_worm_index_info[cmc]["year"] is None:
-                            cm_count_to_worm_index_info[cmc]["year"] = vals["year"]
-                            cm_count_to_worm_index_info[cmc]["crop"] = vals["crop"]
+                            wii_cmc["worm_index"] += 1./7.
 
                 # stress conditions might apply
                 else:
                     days_in_window = 0
 
                     if s_doy <= doy <= h_doy:
+                        if stresses_cmc["crop"] is None:
+                            stresses_cmc["crop"] = vals["crop"]
+
                         dry = sm < 0.15
                         wet = sm > 0.2
                         cold = tmin < 15
                         hot = tmax > 36
 
-                        cmc = vals["CM-count"]
                         if dry:
-                            cm_count_to_stresses[cmc]["dry"] += 1
+                            stresses_cmc["dry"] += 1
                             if hot:
-                                cm_count_to_stresses[cmc]["dry_and_hot"] += 1
+                                stresses_cmc["dry_and_hot"] += 1
                             elif cold:
-                                cm_count_to_stresses[cmc]["dry_and_cold"] += 1
+                                stresses_cmc["dry_and_cold"] += 1
                         elif wet:
-                            cm_count_to_stresses[cmc]["wet"] += 1
+                            stresses_cmc["wet"] += 1
                             if hot:
-                                cm_count_to_stresses[cmc]["wet_and_hot"] += 1
+                                stresses_cmc["wet_and_hot"] += 1
                             elif cold:
-                                cm_count_to_stresses[cmc]["wet_and_cold"] += 1
+                                stresses_cmc["wet_and_cold"] += 1
                         elif hot:
-                            cm_count_to_stresses[cmc]["hot"] += 1
+                            stresses_cmc["hot"] += 1
                         elif cold:
-                            cm_count_to_stresses[cmc]["cold"] += 1
-
-                        if (dry or wet or cold or hot) and cm_count_to_stresses[cmc]["year"] is None:
-                            cm_count_to_stresses[cmc]["year"] = vals["year"]
-                            cm_count_to_stresses[cmc]["crop"] = vals["crop"]
+                            stresses_cmc["cold"] += 1
 
     cm_count_to_vals = defaultdict(dict)
     for y, i in year_to_worm_index_info.items():
@@ -186,12 +196,15 @@ def calculate_index_data(msg):
             cm_count_to_vals[cmc] = i
 
     # fill in years and cm_counts which produced no data
-    for cmc in all_cm_counts:
-        if cmc not in cm_count_to_vals:
-            cm_count_to_vals[cmc] = {"year": cm_count_to_season_info[cmc]["year"]}
-    for year in all_years:
-        if year not in cm_count_to_vals:
-            cm_count_to_vals[year] = {"year": year}
+    #for cmc in all_cm_counts:
+    #    if cmc not in cm_count_to_vals:
+    #        cm_count_to_vals[cmc] = {"year": cm_count_to_season_info[cmc]["year"]}
+    #for year in all_years:
+    #    if year not in cm_count_to_vals:
+    #        cm_count_to_vals[year] = {"year": year}
+
+    # remove cm_count=0, which we don't need
+    cm_count_to_vals.pop(0, None)
 
     return cm_count_to_vals
 
