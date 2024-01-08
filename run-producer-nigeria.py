@@ -100,8 +100,8 @@ def run_producer(server={"server": None, "port": None}):
         "sim.json": "sim.json",
         "crop.json": "crop.json",
         "site.json": "site.json",
-        "setups-file": "sim_setups_nigeria.csv",
-        "run-setups": "[17]"
+        "setups-file": "sim_setups_nigeria_army_worms.csv",
+        "run-setups": "[1]"
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -347,7 +347,8 @@ def run_producer(server={"server": None, "port": None}):
                         "nitrogen": nitrogen,
                         "region": region,
                         "crop": crop,
-                        "nodata": True
+                        "nodata": True,
+                        "aer": str(aer) if aer else "none",
                     }
                     socket.send_json(env_template)
                     print("sent nodata env ", sec, " customId: ", env_template["customId"])
@@ -448,7 +449,8 @@ def run_producer(server={"server": None, "port": None}):
                     "nitrogen": nitrogen,
                     "region": region,
                     "crop": crop,
-                    "nodata": False
+                    "nodata": False,
+                    "aer": str(aer) if aer else "none",
                 }
 
                 socket.send_json(env_template)

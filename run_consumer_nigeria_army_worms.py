@@ -52,8 +52,20 @@ PATHS = {
     }
 }
 
+histogram_keys = [
+    "days_in_breeding_window",
+    "dry",
+    "dry_and_hot",
+    "dry_and_cold",
+    "wet",
+    "wet_and_hot",
+    "wet_and_cold",
+    "cold",
+    "hot",
+]
 
-def calculate_index_data(msg):
+
+def calculate_index_data(data_sections, aer):
     year_to_worm_index_info = defaultdict(lambda: {
         "year": None,
         "crop": "none",
@@ -73,6 +85,19 @@ def calculate_index_data(msg):
         "harvest_doy": 0,
     })
 
+    year_to_stresses = defaultdict(lambda: {
+        "year": None,
+        "crop": "none",
+        "dry": 0,
+        "dry_and_hot": 0,
+        "dry_and_cold": 0,
+        "wet": 0,
+        "wet_and_hot": 0,
+        "wet_and_cold": 0,
+        "cold": 0,
+        "hot": 0,
+    })
+
     cm_count_to_stresses = defaultdict(lambda: {
         "year": None,
         "crop": None,
@@ -86,10 +111,54 @@ def calculate_index_data(msg):
         "hot": 0,
     })
 
-    #all_years = set()
-    #all_cm_counts = set()
+    aer_to_year_to_week_to_histogram_data = defaultdict(  # aer
+        lambda: defaultdict(  # year
+            lambda: defaultdict(  # week
+                lambda: {k: 0 for k in histogram_keys}
+            )
+        )
+    )
 
-    for data in msg.get("data", []):
+    def check_and_record_if_in_breeding_conditions_window(store, hist_data, days_in_window):
+        # during the whole year record the worm index and count the number of windows
+        # so if we have 7 days in a row, we add 1 to the worm index
+        # and increase the window count by 1
+        if days_in_window == 7:
+            store["worm_index"] += 1
+            store["window_count"] += 1
+            hist_data["days_in_breeding_window"] += 1
+        # for every further day in the same window increase the index by 1/7
+        elif days_in_window > 7:
+            store["worm_index"] += 1./7.
+            hist_data["days_in_breeding_window"] += 1
+
+    def check_and_record_stresses(store, hist_data, dry, wet, cold, hot):
+        if dry:
+            store["dry"] += 1
+            hist_data["dry"] += 1
+            if hot:
+                store["dry_and_hot"] += 1
+                hist_data["dry_and_hot"] += 1
+            elif cold:
+                store["dry_and_cold"] += 1
+                hist_data["dry_and_cold"] += 1
+        elif wet:
+            store["wet"] += 1
+            hist_data["wet"] += 1
+            if hot:
+                store["wet_and_hot"] += 1
+                hist_data["wet_and_hot"] += 1
+            elif cold:
+                store["wet_and_cold"] += 1
+                hist_data["wet_and_cold"] += 1
+        elif hot:
+            store["hot"] += 1
+            hist_data["hot"] += 1
+        elif cold:
+            store["cold"] += 1
+            hist_data["cold"] += 1
+
+    for data in data_sections:
         results = data.get("results", [])
 
         is_daily_section = data.get("origSpec", "") == '"daily"'
@@ -101,12 +170,10 @@ def calculate_index_data(msg):
                 continue
 
             if is_crop_section:
-                #all_cm_counts.add(vals["CM-count"])
                 cm_count_to_season_info[vals["CM-count"]]["year"] = vals["year"]
                 cm_count_to_season_info[vals["CM-count"]]["sowing_doy"] = vals["sowing_doy"]
                 cm_count_to_season_info[vals["CM-count"]]["harvest_doy"] = vals["harvest_doy"]
             elif is_daily_section:
-                #all_years.add(vals["year"])
                 date = datetime.fromisoformat(vals["Date"])
                 doy = date.timetuple().tm_yday
                 s_doy = cm_count_to_season_info[vals["CM-count"]]["sowing_doy"]
@@ -120,93 +187,79 @@ def calculate_index_data(msg):
                 cmc = vals["CM-count"]
                 crop = vals.get("crop", "none")
 
-                wii_year = year_to_worm_index_info[year]
-                if wii_year["year"] is None:
-                    wii_year["year"] = vals["year"]
-                wii_cmc = cm_count_to_worm_index_info[cmc]
-                if wii_cmc["year"] is None:
-                    wii_cmc["year"] = vals["year"]
-                if wii_cmc["crop"] is None and len(crop) > 0:
-                    wii_cmc["crop"] = crop
-                stresses_cmc = cm_count_to_stresses[cmc]
-                if stresses_cmc["year"] is None:
-                    stresses_cmc["year"] = vals["year"]
-                if stresses_cmc["crop"] is None and len(crop) > 0:
-                    stresses_cmc["crop"] = crop
+                # get week number from doy
+                week = datetime.strptime(f"{year} {doy}", "%Y %j").isocalendar()[1]
 
                 # breeding condition met
                 if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
+                    # add one day to the window count
                     days_in_window += 1
 
-                    if days_in_window == 7:
-                        wii_year["worm_index"] += 1
-                        wii_year["window_count"] += 1
-                    elif days_in_window > 7:
-                        wii_year["worm_index"] += 1./7.
+                    if year_to_worm_index_info[year]["year"] is None:
+                        year_to_worm_index_info[year]["year"] = vals["year"]
+                    check_and_record_if_in_breeding_conditions_window(year_to_worm_index_info[year],
+                                                                      aer_to_year_to_week_to_histogram_data[aer][year][week],
+                                                                      days_in_window)
 
+                    # additionally record the worm index and count the number of windows
+                    # only for the cropping season, so when day of year is between sowing and harvest
                     if s_doy <= doy <= h_doy:
-                        if days_in_window == 7:
-                            wii_cmc["worm_index"] += 1
-                            wii_cmc["window_count"] += 1
-                        elif days_in_window > 7:
-                            wii_cmc["worm_index"] += 1./7.
+                        if cm_count_to_worm_index_info[cmc]["year"] is None:
+                            cm_count_to_worm_index_info[cmc]["year"] = year
+                        if cm_count_to_worm_index_info[cmc]["crop"] is None:
+                            cm_count_to_worm_index_info[cmc]["crop"] = crop
+                        check_and_record_if_in_breeding_conditions_window(cm_count_to_worm_index_info[cmc],
+                                                                          defaultdict(int),
+                                                                          days_in_window)
 
                 # stress conditions might apply
                 else:
                     days_in_window = 0
 
+                    dry = sm < 0.15
+                    wet = sm > 0.2
+                    cold = tmin < 15
+                    hot = tmax > 36
+
+                    # during the whole year record the stresses
+                    if year_to_stresses[year]["year"] is None:
+                        year_to_stresses[year]["year"] = vals["year"]
+                    check_and_record_stresses(year_to_stresses[year],
+                                              aer_to_year_to_week_to_histogram_data[aer][year][week],
+                                              dry, wet, cold, hot)
+
+                    # and record the same stresses just in the cropping season
                     if s_doy <= doy <= h_doy:
-                        if stresses_cmc["crop"] is None:
-                            stresses_cmc["crop"] = vals["crop"]
-
-                        dry = sm < 0.15
-                        wet = sm > 0.2
-                        cold = tmin < 15
-                        hot = tmax > 36
-
-                        if dry:
-                            stresses_cmc["dry"] += 1
-                            if hot:
-                                stresses_cmc["dry_and_hot"] += 1
-                            elif cold:
-                                stresses_cmc["dry_and_cold"] += 1
-                        elif wet:
-                            stresses_cmc["wet"] += 1
-                            if hot:
-                                stresses_cmc["wet_and_hot"] += 1
-                            elif cold:
-                                stresses_cmc["wet_and_cold"] += 1
-                        elif hot:
-                            stresses_cmc["hot"] += 1
-                        elif cold:
-                            stresses_cmc["cold"] += 1
+                        if cm_count_to_stresses[cmc]["year"] is None:
+                            cm_count_to_stresses[cmc]["year"] = year
+                        if cm_count_to_stresses[cmc]["crop"] is None:
+                            cm_count_to_stresses[cmc]["crop"] = crop
+                        check_and_record_stresses(cm_count_to_stresses[cmc], defaultdict(int),
+                                                  dry, wet, cold, hot)
 
     cm_count_to_vals = defaultdict(dict)
-    for y, i in year_to_worm_index_info.items():
-        cm_count_to_vals[y] = i
-    for cmc, i in cm_count_to_worm_index_info.items():
+    for year, wii in year_to_worm_index_info.items():
+        cm_count_to_vals[year] = wii
+    for cmc, wii in cm_count_to_worm_index_info.items():
         if cmc in cm_count_to_vals:
-            cm_count_to_vals[cmc].update(i)
+            cm_count_to_vals[cmc].update(wii)
         else:
-            cm_count_to_vals[cmc] = i
-    for cmc, i in cm_count_to_stresses.items():
+            cm_count_to_vals[cmc] = wii
+    for year, s in year_to_stresses.items():
+        if year in cm_count_to_vals:
+            cm_count_to_vals[year].update(s)
+        else:
+            cm_count_to_vals[year] = s
+    for cmc, s in cm_count_to_stresses.items():
         if cmc in cm_count_to_vals:
-            cm_count_to_vals[cmc].update(i)
+            cm_count_to_vals[cmc].update(s)
         else:
-            cm_count_to_vals[cmc] = i
-
-    # fill in years and cm_counts which produced no data
-    #for cmc in all_cm_counts:
-    #    if cmc not in cm_count_to_vals:
-    #        cm_count_to_vals[cmc] = {"year": cm_count_to_season_info[cmc]["year"]}
-    #for year in all_years:
-    #    if year not in cm_count_to_vals:
-    #        cm_count_to_vals[year] = {"year": year}
+            cm_count_to_vals[cmc] = s
 
     # remove cm_count=0, which we don't need
     cm_count_to_vals.pop(0, None)
 
-    return cm_count_to_vals
+    return cm_count_to_vals, aer_to_year_to_week_to_histogram_data
 
 
 def write_row_to_grids(row_col_data, row, col_0, no_of_cols, header, path_to_output_dir, setup_id):
@@ -375,6 +428,14 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "next_row": None
     })
 
+    aer_to_year_to_week_to_histogram_data = defaultdict(  # aer
+        lambda: defaultdict(  # year
+            lambda: defaultdict(  # week
+                lambda: {k: [] for k in histogram_keys}
+            )
+        )
+    )
+    cached_hist_data = []
 
     def process_message(msg):
         if len(msg["errors"]) > 0:
@@ -389,10 +450,11 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
 
         custom_id = msg["customId"]
         setup_id = custom_id["setup_id"]
-        region = custom_id["region"]
+        aer = custom_id["region"]
         planting = custom_id["planting"]
         nitrogen = custom_id["nitrogen"]
         crop = custom_id["crop"]
+        aer = custom_id["aer"]
 
         data = setup_id_to_data[setup_id]
 
@@ -426,7 +488,14 @@ NODATA_value -9999
         if is_nodata:
             data["row_col_data"][row][col] = -9999
         else:
-            data["row_col_data"][row][col].append(calculate_index_data(msg))
+            grid_data, histogram_data = calculate_index_data(msg.get("data", []), aer)
+            cached_hist_data.append(histogram_data)
+            #for r, d in histogram_data.items():
+            #    for y, d2 in d.items():
+            #        for w, d3 in d2.items():
+            #            for k, v in d3.items():
+            #                region_to_year_to_week_to_histogram_data[r][y][w][k].append(v)
+            data["row_col_data"][row][col].append(grid_data)
         data["cols@row_received"][row] += 1
 
         #process_message.received_env_count = process_message.received_env_count + 1
@@ -436,7 +505,7 @@ NODATA_value -9999
                 #or (len(data["cols@row_received"]) > data["next_row"] and
                 #    data["cols@row_received"][data["next_row"]] == 0):
 
-            path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
+            path_to_out_dir = f"{config['out']}{setup_id}_reg-{aer}_{crop}_plant-{planting}_{nitrogen}-N/"
             print(path_to_out_dir)
             if not data["out_dir_exists"]:
                 if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
@@ -462,6 +531,34 @@ NODATA_value -9999
 
             # this setup is finished
             if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
+            #if leave_after_finished_run and data["next_row"] > (row_0 + 5):
+                # write histogram csv files
+
+                for hist_data in cached_hist_data:
+                    for aer, d in hist_data.items():
+                        for y, d2 in d.items():
+                            for w, d3 in d2.items():
+                                for k, v in d3.items():
+                                    aer_to_year_to_week_to_histogram_data[aer][y][w][k].append(v)
+
+                path_to_csv_out_dir = f"{config['csv-out']}"
+                print(path_to_csv_out_dir)
+                if not os.path.exists(path_to_csv_out_dir):
+                    try:
+                        os.makedirs(path_to_csv_out_dir)
+                    except OSError:
+                        print("c: Couldn't create dir:", path_to_csv_out_dir, "! Exiting.")
+                        exit(1)
+
+                for aer, year_to_week_to_hist_data in aer_to_year_to_week_to_histogram_data.items():
+                    path_to_csv_file = f"{path_to_csv_out_dir}{setup_id}_aer-{aer}.csv"
+                    with open(path_to_csv_file, "w") as csv_file:
+                        writer = csv.writer(csv_file, delimiter=",")
+                        writer.writerow(["year", "week"] + histogram_keys)
+                        for year, week_to_hist_data in year_to_week_to_hist_data.items():
+                            for week, hist_data in week_to_hist_data.items():
+                                writer.writerow([year, week] + [sum(hist_data[k]) for k in histogram_keys])
+
                 process_message.setup_count += 1
 
         process_message.received_env_count = process_message.received_env_count + 1
