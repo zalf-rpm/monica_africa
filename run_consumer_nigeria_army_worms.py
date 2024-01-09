@@ -224,8 +224,9 @@ def calculate_index_data(data_sections, aer):
                     # during the whole year record the stresses
                     if year_to_stresses[year]["year"] is None:
                         year_to_stresses[year]["year"] = vals["year"]
+                    week_year = year - (1 if doy < 8 and week > 50 else 0)
                     check_and_record_stresses(year_to_stresses[year],
-                                              aer_to_year_to_week_to_histogram_data[aer][year][week],
+                                              aer_to_year_to_week_to_histogram_data[aer][week_year][week],
                                               dry, wet, cold, hot)
 
                     # and record the same stresses just in the cropping season
@@ -399,7 +400,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "mode": "mbm-local-remote",
         "port": server["port"] if server["port"] else "7777",  # local 7778,  remote 7777
         "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
-        "timeout": 600000*6  # 10 minutes
+        "timeout": 600000*3  # 30 minutes
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -490,11 +491,6 @@ NODATA_value -9999
         else:
             grid_data, histogram_data = calculate_index_data(msg.get("data", []), aer)
             cached_hist_data.append(histogram_data)
-            #for r, d in histogram_data.items():
-            #    for y, d2 in d.items():
-            #        for w, d3 in d2.items():
-            #            for k, v in d3.items():
-            #                region_to_year_to_week_to_histogram_data[r][y][w][k].append(v)
             data["row_col_data"][row][col].append(grid_data)
         data["cols@row_received"][row] += 1
 
