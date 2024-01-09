@@ -399,7 +399,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "mode": "mbm-local-remote",
         "port": server["port"] if server["port"] else "7777",  # local 7778,  remote 7777
         "server": server["server"] if server["server"] else "login01.cluster.zalf.de",
-        "timeout": 600000  # 10 minutes
+        "timeout": 600000*6  # 10 minutes
     }
 
     shared.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
@@ -450,7 +450,7 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
 
         custom_id = msg["customId"]
         setup_id = custom_id["setup_id"]
-        aer = custom_id["region"]
+        region = custom_id["region"]
         planting = custom_id["planting"]
         nitrogen = custom_id["nitrogen"]
         crop = custom_id["crop"]
@@ -530,10 +530,12 @@ NODATA_value -9999
             data["next_row"] += 1  # move to next row (to be written)
 
             # this setup is finished
-            if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
-            #if leave_after_finished_run and data["next_row"] > (row_0 + 5):
+            #if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
+            if leave_after_finished_run and data["next_row"] > (row_0 + 40):
                 # write histogram csv files
+                print("writing histogram csv files")
 
+                # tranform cached data
                 for hist_data in cached_hist_data:
                     for aer, d in hist_data.items():
                         for y, d2 in d.items():
