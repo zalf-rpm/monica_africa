@@ -189,6 +189,7 @@ def calculate_index_data(data_sections, aer):
 
                 # get week number from doy
                 week = datetime.strptime(f"{year} {doy}", "%Y %j").isocalendar()[1]
+                week_year = year - (1 if doy < 8 and week > 50 else 0)
 
                 # breeding condition met
                 if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
@@ -198,7 +199,7 @@ def calculate_index_data(data_sections, aer):
                     if year_to_worm_index_info[year]["year"] is None:
                         year_to_worm_index_info[year]["year"] = vals["year"]
                     check_and_record_if_in_breeding_conditions_window(year_to_worm_index_info[year],
-                                                                      aer_to_year_to_week_to_histogram_data[aer][year][week],
+                                                                      aer_to_year_to_week_to_histogram_data[aer][week_year][week],
                                                                       days_in_window)
 
                     # additionally record the worm index and count the number of windows
@@ -224,7 +225,6 @@ def calculate_index_data(data_sections, aer):
                     # during the whole year record the stresses
                     if year_to_stresses[year]["year"] is None:
                         year_to_stresses[year]["year"] = vals["year"]
-                    week_year = year - (1 if doy < 8 and week > 50 else 0)
                     check_and_record_stresses(year_to_stresses[year],
                                               aer_to_year_to_week_to_histogram_data[aer][week_year][week],
                                               dry, wet, cold, hot)
