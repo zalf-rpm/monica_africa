@@ -85,12 +85,12 @@ class spot_setup(object):
 
         # remove all simulation results which are not in the observed list
         sim_list = []
-        self.obs_flat_list = []
         for d in self.observations:
             key = f"{d['id']}|{d['year']}"
             if key in country_id_and_year_to_avg_yield:
                 sim_list.append(country_id_and_year_to_avg_yield[key])
-                self.obs_flat_list.append(d["value"])
+            else:
+                sim_list.append(np.nan)
 
         print("len(sim_list):", len(sim_list), "== len(self.obs_list):", len(self.obs_flat_list), flush=True)
         with open(self.path_to_out_file, "a") as _:
@@ -106,7 +106,4 @@ class spot_setup(object):
         return self.obs_flat_list
 
     def objectivefunction(self, simulation, evaluation):
-        if not simulation or len(simulation) != len(evaluation) or len(simulation) == 0 or len(evaluation) == 0:
-            return np.nan
-        else:
-            return spotpy.objectivefunctions.rmse(evaluation, simulation)
+        return spotpy.objectivefunctions.rmse(evaluation, simulation)

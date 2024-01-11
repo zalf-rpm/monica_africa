@@ -4,6 +4,7 @@ import json
 import csv
 import matplotlib.pyplot as plt
 import monica_run_lib
+import numpy as np
 import os
 from pathlib import Path
 import spotpy
@@ -73,12 +74,13 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
 
     common.update_config(config, sys.argv, print_config=True, allow_new_keys=False)
 
-    if not os.path.exists(config["path_to_out"]):
+    path_to_out_folder = config['path_to_out']
+    if not os.path.exists(path_to_out_folder):
         try:
-            os.makedirs(config["path_to_out"])
+            os.makedirs(path_to_out_folder)
         except OSError:
-            print("run-calibration.py: Couldn't create dir:", config["path_to_out"], "!")
-    path_to_out_file = config["path_to_out"] + "/producer.out"
+            print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
+    path_to_out_file = path_to_out_folder + "/run-calibration.out"
     with open(path_to_out_file, "a") as _:
         _.write(f"config: {config}\n")
 
@@ -178,13 +180,6 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
     else:
         to_be_run_only_country_ids = [only_country_ids]
 
-    path_to_out_folder = f"{config['path_to_out']}"
-    if not os.path.exists(path_to_out_folder):
-        try:
-            os.makedirs(path_to_out_folder)
-        except OSError:
-            print("run-calibration.py: Couldn't create dir:", path_to_out_folder, "!")
-
     spot_setup = None
     for current_only_country_ids in to_be_run_only_country_ids:
         country_folder_name = "-".join(map(str, current_only_country_ids))
@@ -196,7 +191,7 @@ def run_calibration(server=None, prod_port=None, cons_port=None):
         if spot_setup:
             del spot_setup
         spot_setup = calibration_spotpy_setup_MONICA.spot_setup(params, filtered_observations, prod_writer, cons_reader,
-                                                                config["path_to_out"], current_only_country_ids)
+                                                                path_to_out_folder, current_only_country_ids)
 
         rep = int(config["repetitions"]) #initial number was 10
         results = []
