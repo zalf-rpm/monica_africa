@@ -146,7 +146,7 @@ def run_producer(server={"server": None, "port": None}):
 
     global_soil_dataset = shared.GlobalSoilDataSet(paths["path-to-soil-dir"], config["resolution"])
 
-    sent_env_count = 1
+    sent_env_count = 0
     start_time = time.perf_counter()
 
     # run calculations for each setup
@@ -342,7 +342,7 @@ def run_producer(server={"server": None, "port": None}):
                         "s_row_0": s_row_0, "s_col_0": s_col_0,
                         "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
                         "c_row": int(c_row), "c_col": int(c_col),
-                        "env_id": sec,
+                        "env_id": sec + 1,
                         "planting": planting,
                         "nitrogen": nitrogen,
                         "region": region,
@@ -437,14 +437,20 @@ def run_producer(server={"server": None, "port": None}):
 
                 env_template["customId"] = {
                     "setup_id": setup_id,
-                    "lat": lat, "lon": lon,
-                    "s_lat_0": s_lat_0, "s_lon_0": s_lon_0,
+                    "lat": lat,
+                    "lon": lon,
+                    "s_lat_0": s_lat_0,
+                    "s_lon_0": s_lon_0,
                     "s_resolution": s_resolution,
-                    "s_row": s_row, "s_col": s_col,
-                    "s_row_0": s_row_0, "s_col_0": s_col_0,
-                    "no_of_s_cols": no_of_lons, "no_of_s_rows": no_of_lats,
-                    "c_row": int(c_row), "c_col": int(c_col),
-                    "env_id": sent_env_count,
+                    "s_row": s_row,
+                    "s_col": s_col,
+                    "s_row_0": s_row_0,
+                    "s_col_0": s_col_0,
+                    "no_of_s_cols": no_of_lons,
+                    "no_of_s_rows": no_of_lats,
+                    "c_row": int(c_row),
+                    "c_col": int(c_col),
+                    "env_id": sent_env_count + 1,
                     "planting": planting,
                     "nitrogen": nitrogen,
                     "region": region,
@@ -454,9 +460,22 @@ def run_producer(server={"server": None, "port": None}):
                 }
 
                 socket.send_json(env_template)
-                print("sent env ", sent_env_count, " customId: ", env_template["customId"])
+                print("sent env ", sent_env_count+1, " customId: ", env_template["customId"])
 
                 sent_env_count += 1
+
+            #if sent_env_count > 300:
+            #    break
+
+        # send the number of envs the consumer has to receive
+        if env_template:
+            env_template["pathToClimateCSV"] = ""
+            env_template["customId"] = {
+                "setup_id": setup_id,
+                "no_of_sent_envs": sent_env_count,
+                "nodata": True
+            }
+            socket.send_json(env_template)
 
         stop_setup_time = time.perf_counter()
         print("Setup ", (sent_env_count - 1), " envs took ", (stop_setup_time - start_setup_time), " seconds")

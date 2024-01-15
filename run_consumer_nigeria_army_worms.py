@@ -66,27 +66,21 @@ histogram_keys = [
 
 
 def calculate_index_data(data_sections, aer):
-    year_to_worm_index_info = defaultdict(lambda: {
-        "year": None,
-        "crop": "none",
-        "worm_index": 0,
-        "window_count": 0,
-    })
-    cm_count_to_worm_index_info = defaultdict(lambda: {
-        "year": None,
-        "crop": None,
-        "worm_index": 0,
-        "window_count": 0,
-    })
-
     cm_count_to_season_info = defaultdict(lambda: {
         "year": None,
         "sowing_doy": 0,
         "harvest_doy": 0,
     })
-
+    year_to_worm_index_info = defaultdict(lambda: {
+        "crop": "none",
+        "worm_index": 0,
+        "window_count": 0,
+    })
+    cm_count_to_worm_index_info = defaultdict(lambda: {
+        "worm_index": 0,
+        "window_count": 0,
+    })
     year_to_stresses = defaultdict(lambda: {
-        "year": None,
         "crop": "none",
         "dry": 0,
         "dry_and_hot": 0,
@@ -97,10 +91,7 @@ def calculate_index_data(data_sections, aer):
         "cold": 0,
         "hot": 0,
     })
-
     cm_count_to_stresses = defaultdict(lambda: {
-        "year": None,
-        "crop": None,
         "dry": 0,
         "dry_and_hot": 0,
         "dry_and_cold": 0,
@@ -132,29 +123,29 @@ def calculate_index_data(data_sections, aer):
             store["worm_index"] += 1./7.
             hist_data["days_in_breeding_window"] += 1
 
-    def check_and_record_stresses(store, hist_data, dry, wet, cold, hot):
-        if dry:
+    def check_and_record_stresses(store, hist_data, dry_, wet_, cold_, hot_):
+        if dry_:
             store["dry"] += 1
             hist_data["dry"] += 1
-            if hot:
+            if hot_:
                 store["dry_and_hot"] += 1
                 hist_data["dry_and_hot"] += 1
-            elif cold:
+            if cold_:
                 store["dry_and_cold"] += 1
                 hist_data["dry_and_cold"] += 1
-        elif wet:
+        if wet_:
             store["wet"] += 1
             hist_data["wet"] += 1
-            if hot:
+            if hot_:
                 store["wet_and_hot"] += 1
                 hist_data["wet_and_hot"] += 1
-            elif cold:
+            if cold_:
                 store["wet_and_cold"] += 1
                 hist_data["wet_and_cold"] += 1
-        elif hot:
+        if hot_:
             store["hot"] += 1
             hist_data["hot"] += 1
-        elif cold:
+        if cold_:
             store["cold"] += 1
             hist_data["cold"] += 1
 
@@ -191,24 +182,23 @@ def calculate_index_data(data_sections, aer):
                 week = datetime.strptime(f"{year} {doy}", "%Y %j").isocalendar()[1]
                 week_year = year - (1 if doy < 8 and week > 50 else 0)
 
+                histogram_data = aer_to_year_to_week_to_histogram_data[aer][week_year][week]
+
                 # breeding condition met
                 if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
                     # add one day to the window count
                     days_in_window += 1
 
-                    if year_to_worm_index_info[year]["year"] is None:
-                        year_to_worm_index_info[year]["year"] = vals["year"]
+                    year_to_worm_index_info[year].setdefault("year", year)
                     check_and_record_if_in_breeding_conditions_window(year_to_worm_index_info[year],
-                                                                      aer_to_year_to_week_to_histogram_data[aer][week_year][week],
+                                                                      histogram_data,
                                                                       days_in_window)
 
                     # additionally record the worm index and count the number of windows
                     # only for the cropping season, so when day of year is between sowing and harvest
                     if s_doy <= doy <= h_doy:
-                        if cm_count_to_worm_index_info[cmc]["year"] is None:
-                            cm_count_to_worm_index_info[cmc]["year"] = year
-                        if cm_count_to_worm_index_info[cmc]["crop"] is None:
-                            cm_count_to_worm_index_info[cmc]["crop"] = crop
+                        cm_count_to_worm_index_info[cmc].setdefault("year", year)
+                        cm_count_to_worm_index_info[cmc].setdefault("crop", crop)
                         check_and_record_if_in_breeding_conditions_window(cm_count_to_worm_index_info[cmc],
                                                                           defaultdict(int),
                                                                           days_in_window)
@@ -223,20 +213,14 @@ def calculate_index_data(data_sections, aer):
                     hot = tmax > 36
 
                     # during the whole year record the stresses
-                    if year_to_stresses[year]["year"] is None:
-                        year_to_stresses[year]["year"] = vals["year"]
-                    check_and_record_stresses(year_to_stresses[year],
-                                              aer_to_year_to_week_to_histogram_data[aer][week_year][week],
-                                              dry, wet, cold, hot)
+                    year_to_stresses[year].setdefault("year", vals["year"])
+                    check_and_record_stresses(year_to_stresses[year], histogram_data, dry, wet, cold, hot)
 
                     # and record the same stresses just in the cropping season
                     if s_doy <= doy <= h_doy:
-                        if cm_count_to_stresses[cmc]["year"] is None:
-                            cm_count_to_stresses[cmc]["year"] = year
-                        if cm_count_to_stresses[cmc]["crop"] is None:
-                            cm_count_to_stresses[cmc]["crop"] = crop
-                        check_and_record_stresses(cm_count_to_stresses[cmc], defaultdict(int),
-                                                  dry, wet, cold, hot)
+                        cm_count_to_stresses[cmc].setdefault("year", year)
+                        cm_count_to_stresses[cmc].setdefault("crop", crop)
+                        check_and_record_stresses(cm_count_to_stresses[cmc], defaultdict(int), dry, wet, cold, hot)
 
     cm_count_to_vals = defaultdict(dict)
     for year, wii in year_to_worm_index_info.items():
@@ -426,7 +410,9 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
         "out_dir_exists": False,
         "row_col_data": defaultdict(lambda: defaultdict(list)),
         "cols@row_received": {},
-        "next_row": None
+        "next_row": None,
+        "no_of_envs_expected": None,
+        "envs_received": 0,
     })
 
     aer_to_year_to_week_to_histogram_data = defaultdict(  # aer
@@ -438,100 +424,95 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
     )
     cached_hist_data = []
 
-    def process_message(msg):
-        if len(msg["errors"]) > 0:
-            print("There were errors in message:", msg, "\nSkipping message!")
-            return
+    while True:
+        try:
+            msg = socket.recv_json()  # encoding="latin-1"
 
-        if not hasattr(process_message, "wnof_count"):
-            process_message.wnof_count = 0
-            process_message.setup_count = 0
+            if len(msg["errors"]) > 0:
+                print("There were errors in message:", msg, "\nSkipping message!")
+                continue
 
-        leave = False
+            custom_id = msg["customId"]
+            setup_id = custom_id["setup_id"]
+            data = setup_id_to_data[setup_id]
 
-        custom_id = msg["customId"]
-        setup_id = custom_id["setup_id"]
-        region = custom_id["region"]
-        planting = custom_id["planting"]
-        nitrogen = custom_id["nitrogen"]
-        crop = custom_id["crop"]
-        aer = custom_id["aer"]
+            if "no_of_sent_envs" in custom_id:
+                data["no_of_envs_expected"] = custom_id["no_of_sent_envs"]
+            else:
+                region = custom_id["region"]
+                planting = custom_id["planting"]
+                nitrogen = custom_id["nitrogen"]
+                crop = custom_id["crop"]
+                aer = custom_id["aer"]
 
-        data = setup_id_to_data[setup_id]
+                row = custom_id["s_row"]
+                col = custom_id["s_col"]
+                no_of_cols = custom_id["no_of_s_cols"]
+                no_of_rows = custom_id["no_of_s_rows"]
+                row_0 = custom_id["s_row_0"]
+                col_0 = custom_id["s_col_0"]
+                if row not in data["cols@row_received"]:
+                    data["cols@row_received"][row] = 0
+                if data["next_row"] is None:
+                    data["next_row"] = row_0
+                if data["header"] is None:
+                    # noinspection PyTypeChecker
+                    data["header"] = \
+                        f"ncols        {no_of_cols}\n" + \
+                        f"nrows        {no_of_rows}" + \
+                        f"xllcorner    {custom_id['b_lon_0']}" + \
+                        f"yllcorner    {custom_id['b_lat_0'] - (no_of_rows * custom_id['s_resolution'])}" + \
+                        f"cellsize     {custom_id['s_resolution']}" + \
+                        f"NODATA_value -9999\n"
 
-        row = custom_id["s_row"]
-        col = custom_id["s_col"]
-        no_of_cols = custom_id["no_of_s_cols"]
-        no_of_rows = custom_id["no_of_s_rows"]
-        row_0 = custom_id["s_row_0"]
-        col_0 = custom_id["s_col_0"]
-        if row not in data["cols@row_received"]:
-            data["cols@row_received"][row] = 0
-        if data["next_row"] is None:
-            data["next_row"] = row_0
-        if data["header"] is None:
-            data["header"] = f"""ncols        {no_of_cols}
-nrows        {no_of_rows}
-xllcorner    {custom_id["b_lon_0"]}
-yllcorner    {custom_id["b_lat_0"] - (no_of_rows * custom_id["s_resolution"])}
-cellsize     {custom_id["s_resolution"]}
-NODATA_value -9999
-"""
-        is_nodata = custom_id["nodata"]
+                is_nodata = custom_id["nodata"]
 
-        debug_msg = "received work result " + str(process_message.received_env_count) \
-                    + " customId: " + str(msg.get("customId", "")) \
-                    + " next row: " + str(data["next_row"]) \
-                    + " cols@row to go: " + str(no_of_cols - data["cols@row_received"][row]) + "@" \
-                    + str(row) + " cols_per_row: " + str(no_of_cols)
-        print(debug_msg)
-        # debug_file.write(debug_msg + "\n")
-        if is_nodata:
-            data["row_col_data"][row][col] = -9999
-        else:
-            grid_data, histogram_data = calculate_index_data(msg.get("data", []), aer)
-            cached_hist_data.append(histogram_data)
-            data["row_col_data"][row][col].append(grid_data)
-        data["cols@row_received"][row] += 1
-
-        #process_message.received_env_count = process_message.received_env_count + 1
-
-        while (data["next_row"] in data["row_col_data"] and
-               data["cols@row_received"][data["next_row"]] == no_of_cols):   #\
-                #or (len(data["cols@row_received"]) > data["next_row"] and
-                #    data["cols@row_received"][data["next_row"]] == 0):
-
-            path_to_out_dir = f"{config['out']}{setup_id}_reg-{aer}_{crop}_plant-{planting}_{nitrogen}-N/"
-            print(path_to_out_dir)
-            if not data["out_dir_exists"]:
-                if os.path.isdir(path_to_out_dir) and os.path.exists(path_to_out_dir):
-                    data["out_dir_exists"] = True
+                debug_msg = f"received work result {data['envs_received']} " + \
+                            f"customId: {msg.get('customId', '')} " + \
+                            f"next row: {data['next_row']} " + \
+                            f"cols@row to go: {no_of_cols - data['cols@row_received'][row]}@{row} " + \
+                            f"cols_per_row: {no_of_cols}"
+                print(debug_msg)
+                # debug_file.write(debug_msg + "\n")
+                if is_nodata:
+                    data["row_col_data"][row][col] = -9999
                 else:
-                    try:
-                        os.makedirs(path_to_out_dir)
-                        data["out_dir_exists"] = True
-                    except OSError:
-                        print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
-                        exit(1)
+                    grid_data, histogram_data = calculate_index_data(msg.get("data", []), aer)
+                    cached_hist_data.append(histogram_data)
+                    data["row_col_data"][row][col].append(grid_data)
+                data["cols@row_received"][row] += 1
 
-            write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols, data["header"],
-                               path_to_out_dir, setup_id)
+                data["envs_received"] += 1
 
-            debug_msg = "wrote row: " + str(data["next_row"]) \
-                        + " next_row: " + str(data["next_row"] + 1) \
-                        + " rows unwritten: " + str(list(data["row_col_data"].keys()))
-            print(debug_msg)
-            # debug_file.write(debug_msg + "\n")
+                while (data["next_row"] in data["row_col_data"] and
+                       data["cols@row_received"][data["next_row"]] == no_of_cols):
 
-            data["next_row"] += 1  # move to next row (to be written)
+                    path_to_out_dir = f"{config['out']}{setup_id}_reg-{region}_{crop}_plant-{planting}_{nitrogen}-N/"
+                    print(path_to_out_dir)
+                    if not os.path.exists(path_to_out_dir):
+                        try:
+                            os.makedirs(path_to_out_dir)
+                        except OSError:
+                            print("c: Couldn't create dir:", path_to_out_dir, "! Exiting.")
+                            exit(1)
+
+                    write_row_to_grids(data["row_col_data"], data["next_row"], col_0, no_of_cols,
+                                       data["header"], path_to_out_dir, setup_id)
+
+                    debug_msg = "wrote row: " + str(data["next_row"]) \
+                                + " next_row: " + str(data["next_row"] + 1) \
+                                + " rows unwritten: " + str(list(data["row_col_data"].keys()))
+                    print(debug_msg)
+
+                    data["next_row"] += 1  # move to next row (to be written)
 
             # this setup is finished
-            #if leave_after_finished_run and data["next_row"] > (row_0 + no_of_rows):
-            if leave_after_finished_run and data["next_row"] > (row_0 + 40):
+            if data["no_of_envs_expected"] and data["no_of_envs_expected"] == data["envs_received"]:
+
                 # write histogram csv files
                 print("writing histogram csv files")
 
-                # tranform cached data
+                # transform cached data
                 for hist_data in cached_hist_data:
                     for aer, d in hist_data.items():
                         for y, d2 in d.items():
@@ -557,32 +538,18 @@ NODATA_value -9999
                             for week, hist_data in week_to_hist_data.items():
                                 writer.writerow([year, week] + [sum(hist_data[k]) for k in histogram_keys])
 
-                process_message.setup_count += 1
+                # remove setup
+                del setup_id_to_data[setup_id]
+                if len(setup_id_to_data) == 0:
+                    break
 
-        process_message.received_env_count = process_message.received_env_count + 1
-        return leave
-
-    process_message.received_env_count = 1
-
-    while not leave:
-        try:
-            # start_time_recv = timeit.default_timer()
-            msg = socket.recv_json()  # encoding="latin-1"
-            # elapsed = timeit.default_timer() - start_time_recv
-            # print("time to receive message" + str(elapsed))
-            # start_time_proc = timeit.default_timer()
-            leave = process_message(msg)
-            # elapsed = timeit.default_timer() - start_time_proc
-            # print("time to process message" + str(elapsed))
         except zmq.error.Again as _e:
             print('no response from the server (with "timeout"=%d ms) ' % socket.RCVTIMEO)
             return
         except Exception as e:
             print("Exception:", e)
-            # continue
 
     print("exiting run_consumer()")
-    # debug_file.close()
 
 
 if __name__ == "__main__":
