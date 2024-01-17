@@ -533,11 +533,15 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                     path_to_csv_file = f"{path_to_csv_out_dir}{setup_id}_aer-{aer}.csv"
                     with open(path_to_csv_file, "w") as csv_file:
                         writer = csv.writer(csv_file, delimiter=",")
-                        writer.writerow(["year", "week"] + [f"{k}/avg" for k in histogram_keys] +
-                                        [f"{k}/sum" for k in histogram_keys])
+                        writer.writerow(["year", "week"] +
+                                        [f"{k}|sum|1-week" for k in histogram_keys] +
+                                        [f"{k}|avg|7-days" for k in histogram_keys] +
+                                        [f"{k}|sum|7-days" for k in histogram_keys])
                         for year, week_to_hist_data in year_to_week_to_hist_data.items():
                             for week, hist_data in week_to_hist_data.items():
                                 writer.writerow([year, week] +
+                                                [sum(map(lambda c: 1 if c > 0 else 0, hist_data[k]))
+                                                 for k in histogram_keys] +
                                                 [sum(hist_data[k])/len(hist_data[k]) for k in histogram_keys] +
                                                 [sum(hist_data[k]) for k in histogram_keys])
 
