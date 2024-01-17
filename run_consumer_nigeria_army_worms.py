@@ -459,10 +459,10 @@ def run_consumer(leave_after_finished_run=True, server={"server": None, "port": 
                     # noinspection PyTypeChecker
                     data["header"] = \
                         f"ncols        {no_of_cols}\n" + \
-                        f"nrows        {no_of_rows}" + \
-                        f"xllcorner    {custom_id['b_lon_0']}" + \
-                        f"yllcorner    {custom_id['b_lat_0'] - (no_of_rows * custom_id['s_resolution'])}" + \
-                        f"cellsize     {custom_id['s_resolution']}" + \
+                        f"nrows        {no_of_rows}\n" + \
+                        f"xllcorner    {custom_id['b_lon_0']}\n" + \
+                        f"yllcorner    {custom_id['b_lat_0'] - (no_of_rows * custom_id['s_resolution'])}\n" + \
+                        f"cellsize     {custom_id['s_resolution']}\n" + \
                         f"NODATA_value -9999\n"
 
                 is_nodata = custom_id["nodata"]
