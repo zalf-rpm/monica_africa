@@ -174,8 +174,8 @@ def calculate_index_data(data_sections, aer):
 
                 histogram_data = aer_to_year_to_week_to_histogram_data[aer][week_year][week]
 
-                # breeding condition met
-                if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
+                # breeding condition met (Growth Index (GI))
+                if 0.15 <= sm <= 0.25 and 16 <= tmax <= 36:
                     # add one day to the window count
                     days_in_window["index"] += 1
 
@@ -193,7 +193,15 @@ def calculate_index_data(data_sections, aer):
                                                                           defaultdict(int),
                                                                           days_in_window["index"])
 
-                # stress conditions might apply
+                # stress conditions might apply - original
+                 #else:
+                     #days_in_window = 0
+
+                     #dry = sm < 0.15
+                     #wet = sm > 0.2
+                     #cold = tmin < 15
+                     #hot = tmax > 36
+                # stress conditions might apply - modified
                 else:
                     days_in_window["index"] = 0
 
@@ -205,7 +213,7 @@ def calculate_index_data(data_sections, aer):
                         days_in_window["dry_and_hot"] = 0
                         days_in_window["dry_and_cold"] = 0
 
-                    wet = sm > 0.2
+                    wet = sm > 0.25
                     if wet:
                         days_in_window["wet"] += 1
                     else:
