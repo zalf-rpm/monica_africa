@@ -123,31 +123,11 @@ def calculate_index_data(data_sections, aer):
             store["worm_index"] += 1./7.
             hist_data["days_in_breeding_window"] += 1
 
-    def check_and_record_stresses(store, hist_data, dry_, wet_, cold_, hot_):
-        if dry_:
-            store["dry"] += 1
-            hist_data["dry"] += 1
-            if hot_:
-                store["dry_and_hot"] += 1
-                hist_data["dry_and_hot"] += 1
-            if cold_:
-                store["dry_and_cold"] += 1
-                hist_data["dry_and_cold"] += 1
-        if wet_:
-            store["wet"] += 1
-            hist_data["wet"] += 1
-            if hot_:
-                store["wet_and_hot"] += 1
-                hist_data["wet_and_hot"] += 1
-            if cold_:
-                store["wet_and_cold"] += 1
-                hist_data["wet_and_cold"] += 1
-        if hot_:
-            store["hot"] += 1
-            hist_data["hot"] += 1
-        if cold_:
-            store["cold"] += 1
-            hist_data["cold"] += 1
+    def check_and_record_stresses(store, hist_data, days_in_window):
+        for key in set(days_in_window.keys()) - set("index"):
+            if days_in_window[key] == 7:
+                store[key] += 1
+                hist_data[key] += 1
 
     for data in data_sections:
         results = data.get("results", [])
@@ -155,7 +135,17 @@ def calculate_index_data(data_sections, aer):
         is_daily_section = data.get("origSpec", "") == '"daily"'
         is_crop_section = data.get("origSpec", "") == '"crop"'
 
-        days_in_window = 0
+        days_in_window = {
+            "index": 0,
+            "dry": 0,
+            "dry_and_hot": 0,
+            "dry_and_cold": 0,
+            "wet": 0,
+            "wet_and_hot": 0,
+            "wet_and_cold": 0,
+            "cold": 0,
+            "hot": 0,
+        }
         for vals in results:
             if "CM-count" not in vals or "year" not in vals:
                 continue
@@ -187,12 +177,12 @@ def calculate_index_data(data_sections, aer):
                 # breeding condition met
                 if 0.15 <= sm <= 0.2 and 25 <= tmax <= 36:
                     # add one day to the window count
-                    days_in_window += 1
+                    days_in_window["index"] += 1
 
                     year_to_worm_index_info[year].setdefault("year", year)
                     check_and_record_if_in_breeding_conditions_window(year_to_worm_index_info[year],
                                                                       histogram_data,
-                                                                      days_in_window)
+                                                                      days_in_window["index"])
 
                     # additionally record the worm index and count the number of windows
                     # only for the cropping season, so when day of year is between sowing and harvest
@@ -201,26 +191,67 @@ def calculate_index_data(data_sections, aer):
                         cm_count_to_worm_index_info[cmc].setdefault("crop", crop)
                         check_and_record_if_in_breeding_conditions_window(cm_count_to_worm_index_info[cmc],
                                                                           defaultdict(int),
-                                                                          days_in_window)
+                                                                          days_in_window["index"])
 
                 # stress conditions might apply
                 else:
-                    days_in_window = 0
+                    days_in_window["index"] = 0
 
                     dry = sm < 0.15
+                    if dry:
+                        days_in_window["dry"] += 1
+                    else:
+                        days_in_window["dry"] = 0
+                        days_in_window["dry_and_hot"] = 0
+                        days_in_window["dry_and_cold"] = 0
+
                     wet = sm > 0.2
+                    if wet:
+                        days_in_window["wet"] += 1
+                    else:
+                        days_in_window["wet"] = 0
+                        days_in_window["wet_and_hot"] = 0
+                        days_in_window["wet_and_cold"] = 0
+
                     cold = tmin < 15
+                    if cold:
+                        days_in_window["cold"] += 1
+                    else:
+                        days_in_window["cold"] = 0
+                        days_in_window["dry_and_cold"] = 0
+                        days_in_window["wet_and_cold"] = 0
+
                     hot = tmax > 36
+                    if hot:
+                        days_in_window["hot"] += 1
+                    else:
+                        days_in_window["hot"] = 0
+                        days_in_window["dry_and_hot"] = 0
+                        days_in_window["wet_and_hot"] = 0
+
+                    if dry and hot:
+                        days_in_window["dry_and_hot"] += 1
+                    if wet and hot:
+                        days_in_window["wet_and_hot"] += 1
+                    if dry and cold:
+                        days_in_window["dry_and_cold"] += 1
+                    if wet and cold:
+                        days_in_window["wet_and_cold"] += 1
 
                     # during the whole year record the stresses
                     year_to_stresses[year].setdefault("year", vals["year"])
-                    check_and_record_stresses(year_to_stresses[year], histogram_data, dry, wet, cold, hot)
+                    check_and_record_stresses(year_to_stresses[year], histogram_data, days_in_window)
 
                     # and record the same stresses just in the cropping season
                     if s_doy <= doy <= h_doy:
                         cm_count_to_stresses[cmc].setdefault("year", year)
                         cm_count_to_stresses[cmc].setdefault("crop", crop)
-                        check_and_record_stresses(cm_count_to_stresses[cmc], defaultdict(int), dry, wet, cold, hot)
+                        check_and_record_stresses(cm_count_to_stresses[cmc], defaultdict(int), days_in_window)
+
+                # reset days in windows for the stresses >= 7 days
+                for key in set(days_in_window.keys()) - set("index"):
+                    if days_in_window[key] == 7:
+                        days_in_window[key] = 0
 
     cm_count_to_vals = defaultdict(dict)
     for year, wii in year_to_worm_index_info.items():
