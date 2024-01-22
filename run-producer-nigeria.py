@@ -146,11 +146,12 @@ def run_producer(server={"server": None, "port": None}):
 
     global_soil_dataset = shared.GlobalSoilDataSet(paths["path-to-soil-dir"], config["resolution"])
 
-    sent_env_count = 0
+    all_sent_envs_count = 0
     start_time = time.perf_counter()
-
     # run calculations for each setup
     for _, setup_id in enumerate(run_setups):
+
+        sent_envs_count = 0
 
         if setup_id not in setups:
             continue
@@ -354,22 +355,22 @@ def run_producer(server={"server": None, "port": None}):
                     print("sent nodata env ", sec, " customId: ", env_template["customId"])
 
                 if mgmt is None or not valid_mgmt:
-                    send_nodata_msg(sent_env_count)
-                    sent_env_count += 1
+                    send_nodata_msg(sent_envs_count)
+                    sent_envs_count += 1
                     continue
 
                 soil_profile = global_soil_dataset.create_soil_profile(s_row, s_col)
                 if not soil_profile:
-                    send_nodata_msg(sent_env_count)
-                    sent_env_count += 1
+                    send_nodata_msg(sent_envs_count)
+                    sent_envs_count += 1
                     continue
 
                 dem_col = int((lon - dem_ll0r["lon_0"]) / dem_ll0r["res"])
                 dem_row = int((dem_ll0r["lat_0"] - lat) / dem_ll0r["res"])
                 height_nn = dem_grid[dem_row, dem_col]
                 if "nodata_value" in dem_metadata and height_nn == dem_metadata["nodata_value"]:
-                    send_nodata_msg(sent_env_count)
-                    sent_env_count += 1
+                    send_nodata_msg(sent_envs_count)
+                    sent_envs_count += 1
                     continue
 
                 slope_col = int((lon - slope_ll0r["lon_0"]) / slope_ll0r["res"])
@@ -450,7 +451,7 @@ def run_producer(server={"server": None, "port": None}):
                     "no_of_s_rows": no_of_lats,
                     "c_row": int(c_row),
                     "c_col": int(c_col),
-                    "env_id": sent_env_count + 1,
+                    "env_id": sent_envs_count + 1,
                     "planting": planting,
                     "nitrogen": nitrogen,
                     "region": region,
@@ -460,9 +461,9 @@ def run_producer(server={"server": None, "port": None}):
                 }
 
                 socket.send_json(env_template)
-                print("sent env ", sent_env_count+1, " customId: ", env_template["customId"])
+                print("sent env ", sent_envs_count+1, " customId: ", env_template["customId"])
 
-                sent_env_count += 1
+                sent_envs_count += 1
 
             #if sent_env_count > 300:
             #    break
@@ -472,19 +473,21 @@ def run_producer(server={"server": None, "port": None}):
             env_template["pathToClimateCSV"] = ""
             env_template["customId"] = {
                 "setup_id": setup_id,
-                "no_of_sent_envs": sent_env_count,
+                "no_of_sent_envs": sent_envs_count,
                 "nodata": True
             }
             socket.send_json(env_template)
 
         stop_setup_time = time.perf_counter()
-        print("Setup ", (sent_env_count - 1), " envs took ", (stop_setup_time - start_setup_time), " seconds")
+        print("Setup ", (sent_envs_count - 1), " envs took ", (stop_setup_time - start_setup_time), " seconds")
+
+        all_sent_envs_count += sent_envs_count
 
     stop_time = time.perf_counter()
 
     # write summary of used json files
     try:
-        print("sending ", (sent_env_count - 1), " envs took ", (stop_time - start_time), " seconds")
+        print("sending all ", (all_sent_envs_count - 1), " envs took ", (stop_time - start_time), " seconds")
         print("exiting run_producer()")
     except Exception:
         raise
