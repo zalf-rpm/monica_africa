@@ -99,11 +99,10 @@
         },
         "cultivar": {
           "=": ["include-from-file", "crops/cultivars/moderately-early-potato.json"],
-          "CropSpecificMaxRootingDepth": 0.4,
-          "PlantDensity": 2.28,
+          "CropSpecificMaxRootingDepth": 0.9,
+          "PlantDensity": 8.08,
           "_StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
           "StageTemperatureSum":[70,250,275,395,195,360,25]
-          
         }
       },
       "residueParams": ["include-from-file", "crops/residues/potato.json"]
