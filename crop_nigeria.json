@@ -98,7 +98,7 @@
           "FieldConditionModifier": 0.95
         },
         "cultivar": {
-          "=": ["include-from-file", "crops/cultivars/moderately-early-potato_sustag.json"],
+          "=": ["include-from-file", "crops/cultivars/moderately-early-potato.json"],
           "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.08,
           "StageTemperatureSum": [68, 284, 190, 250, 200, 400, 25],
