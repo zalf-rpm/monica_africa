@@ -102,7 +102,7 @@
           "CropSpecificMaxRootingDepth": 0.9,
           "PlantDensity": 8.08,
           "_StageTemperatureSum": [68, 284, 250, 400, 400, 400, 25],
-          "StageTemperatureSum":[70,250,275,395,195,360,25]
+          "StageTemperatureSum":[68,210,215,200,225,360,25]
         }
       },
       "residueParams": ["include-from-file", "crops/residues/potato.json"]
