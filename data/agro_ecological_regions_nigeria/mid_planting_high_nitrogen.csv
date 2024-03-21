@@ -1,8 +1,8 @@
 id,AEZ,Tillage date,Sowing date,Harvest date,Planting density,N 1st application (kg/ha),N 1st date,N 2nd application (kg/ha),N 2nd date,N 3rd application (kg/ha),N 3rd date,Maize seed variety
-1,Guinea Savannah,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun
-2,Sudan Savannah,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun
-3,Rain forest,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun
+1,Guinea Savannah,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun,SAMMAZ 15 (IWDC2Syn-F2-W
+2,Sudan Savannah,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun,SAMMAZ 15 (IWDC2Syn-F2-W
+3,Rain forest,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun,SAMMAZ 15 (IWDC2Syn-F2-W
 4,Sahel Savannah,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill
-5,Fresh Water swamp,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun
-6,Mangrove,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun
+5,Fresh Water swamp,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun,SAMMAZ 15 (IWDC2Syn-F2-W
+6,Mangrove,03-May,03-May,03-Aug,0.355,9.1,03-May,5.7,01-Jun,3.4,28-Jun,SAMMAZ 15 (IWDC2Syn-F2-W
 7,Lake Chad,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill,Nill
